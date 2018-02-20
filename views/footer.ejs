@@ -38,16 +38,32 @@ var btns_i18n = {
   '测试数据': 'Test data',
   '返回比赛': 'Return to contest',
   '添加标签': 'Create tag',
-  '添加题目': 'Create problem'
+  '添加题目': 'Create problem',
+  '查找用户': 'Find user',
+  '题目板块': 'Problems',
+  '全局板块': 'Global',
+  '发帖': 'Create post',
+  '修改资料': 'Edit profile',
+  '修改': 'Save changes',
+  '返回个人资料': 'Return to profile'
 };
 var ths_i18n = {
   '：': '',
+  '邮箱': 'E-mail',
+  '性别': 'Gender',
+  '公开': 'Publicize',
+  '密码': 'Password',
+  '确认密码': 'Confirm password',
   '提交状态': 'Status',
   '状态': 'Status',
+  '题目描述': 'Problem statement',
+  '题目编号': 'Problem ID',
   '题目': 'Problem',
   '名称': ' title',
   '统计': 'Statistics',
   '用户名': 'Username',
+  '罚时': 'Penalty',
+  '总分': 'Total',
   '编号': 'ID',
   '分数': 'Score',
   '总时间': 'Exec. Time',
@@ -71,7 +87,15 @@ var ths_i18n = {
   '时间': 'Time',
   '作者': 'Author',
   '回复数': 'Replies',
-  '最新回复': 'Last activity'
+  '最新回复': 'Last activity',
+  '内容': 'Content',
+  '链接': ' link',
+  '输入格式': 'Input specification',
+  '输出格式': 'Output specification',
+  '样例': 'Samples',
+  '数据范围与提示': 'Constraints and hints',
+  '标签': 'Tags',
+  '匿名上传': 'Anonymous'
 };
 var uilbls_i18n = {
   '内存限制：': 'Memory limit: ',
@@ -104,13 +128,21 @@ var h4s_i18n = {
   '输入格式': 'Input specification',
   '输出格式': 'Output specification',
   '样例': 'Samples',
-  '数据范围与提示': 'Constraints and hints'
+  '数据范围与提示': 'Constraints and hints',
+  '用户名': 'Username',
+  '个性签名': 'Signature',
+  '注册于': 'Registered',
+  '通过的题目': 'Solved problems',
+  '帖子': 'Posts',
+  '比赛': 'Contests',
+  '统计': 'Statistics',
+  '名次': 'Rank'
 };
 var accs_i18n = {
   '子任务': 'Subtask',
+  '得分率': 'Score rate',
   '得分': 'Score',
   '测试点': 'Test',
-  '得分率': 'Score rate',
   '用时': 'Time',
   '内存': 'Memory',
   '输入文件': 'Input file',
@@ -121,6 +153,28 @@ var accs_i18n = {
   '（': ' (',
   '）': ')'
 };
+var misc_i18n = {
+  '用户名': 'Username',
+  '密码': 'Password',
+  '注册': 'Sign up',
+  '忘记密码': '| Forgot password?',
+  '登录': 'Log in',
+  '其它': 'Other',
+  '男': 'Male',
+  '女': 'Female',
+  '不限': 'Any',
+  '提交答案': 'Output only',
+  '编辑': 'Edit',
+  '预览': 'Preview',
+  '新建题目': 'Create new',
+  '导入题目': 'Import',
+  '题目描述': 'Problem statement',
+  '输入格式': 'Input specification',
+  '输出格式': 'Output specification',
+  '样例': 'Samples',
+  '数据范围与提示': 'Constraints and hints'
+};
+
 function replaceAll(str, _) {
   var re = new RegExp(Object.keys(_).join("|"), "gi");
   return str.replace(re, function(matched) { return _[matched.toLowerCase()]; });
@@ -151,6 +205,22 @@ if (lang.substring(0, 2) !== 'zh') {
   var accs = document.getElementsByClassName('fluid accordion');
   for (var i = 0; i < accs.length; ++i) {
     accs[i].innerHTML = replaceAll(accs[i].innerHTML, accs_i18n);
+  }
+  var h1s = document.getElementsByTagName('h1');
+  for (var i = 0; i < h1s.length; ++i) {
+    h1s[i].innerHTML = replaceAll(h1s[i].innerHTML, misc_i18n);
+  }
+  var h2s = document.getElementsByTagName('h2');
+  for (var i = 0; i < h2s.length; ++i) {
+    h2s[i].innerHTML = replaceAll(h2s[i].innerHTML, misc_i18n);
+  }
+  var as = document.getElementsByTagName('a');
+  for (var i = 0; i < as.length; ++i) {
+    as[i].innerHTML = replaceAll(as[i].innerHTML, misc_i18n);
+  }
+  var dds = document.getElementsByClassName('ui dropdown');
+  for (var i = 0; i < dds.length; ++i) {
+    dds[i].innerHTML = replaceAll(dds[i].innerHTML, misc_i18n);
   }
 }
 </script>
