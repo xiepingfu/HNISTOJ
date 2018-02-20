@@ -8,5 +8,106 @@
 <script src="/libs/semantic-ui/semantic.min.js"></script>
 <script src="/libs/Chart.js/Chart.bundle.min.js"></script>
 <script src="/script.js?20170710"></script>
+<script>
+var lang = navigator.language || navigator.userLanguage;
+var menu_i18n = {
+  '首页': 'Home',
+  '题库': 'Problems',
+  '比赛': 'Contests',
+  '评测': 'Status',
+  '排名': 'Ranking',
+  '讨论': 'Discussions',
+  '帮助': 'Help',
+  '返回比赛': 'Return to Contest',
+  '修改资料': 'Edit profile',
+  '后台管理': 'Admin panel',
+  '注销': 'Log out'
+};
+var btns_i18n = {
+  '注册': 'Sign up',
+  '登录': 'Log in',
+  '排行榜': 'Ranklist',
+  '提交记录': 'Submission history',
+  '编辑比赛': 'Edit contest',
+  '查询': 'Search',
+  '我的提交': 'Mine',
+  '附加文件': 'Additional files',
+  '提交': 'Submit',
+  '返回比赛': 'Return to contest',
+  '添加标签': 'Create tag',
+  '添加题目': 'Create problem'
+};
+var ths_i18n = {
+  '：': '',
+  '提交状态': 'Status',
+  '状态': 'Status',
+  '题目': 'Problem',
+  '名称': ' title',
+  '统计': 'Statistics',
+  '用户名': 'Username',
+  '编号': 'ID',
+  '分数': 'Score',
+  '总时间': 'Exec. Time',
+  '内存': 'Exec. Mem.',
+  '代码 / 答案文件': 'Length',
+  '提交者': 'User',
+  '提交时间': 'Submission Time',
+  '语言': 'Language',
+  '或者，上传代码文件': 'Or upload file',
+  '通过率': 'Ac. rate',
+  '通过': 'Ac.',
+  '提交': 'Subm.',
+  '显示分类标签': 'Show tags'
+};
+var uilbls_i18n = {
+  '内存限制：': 'Memory limit: ',
+  '时间限制：': 'Time limit: ',
+  '输入文件: ': 'Input file: ',
+  '输出文件: ': 'Output file: ',
+  '标准输入输出': 'Standard input/output',
+  '题目类型：': 'Type: ',
+  '传统': 'Traditional',
+  '提交答案': 'Output only',
+  '交互': 'Interactive',
+  '评测方式：': 'Judgement: ',
+  '文本比较': 'Text diff',
+};
+var h4s_i18n = {
+  '信息与公告': 'Information and announcements',
+  '题目描述': 'Problem statement',
+  '输入格式': 'Input specification',
+  '输出格式': 'Output specification',
+  '样例': 'Samples',
+  '数据范围与提示': 'Constraints and hints'
+};
+function replaceAll(str, _) {
+  var re = new RegExp(Object.keys(_).join("|"), "gi");
+  return str.replace(re, function(matched) { return _[matched.toLowerCase()]; });
+}
+if (lang.substring(0, 2) !== 'zh') {
+  var menu = document.getElementsByClassName('borderless menu')[0];
+  menu.innerHTML = replaceAll(menu.innerHTML, menu_i18n);
+  var btns = document.getElementsByClassName('ui button');
+  for (var i = 0; i < btns.length; ++i) {
+    btns[i].innerHTML = replaceAll(btns[i].innerHTML, btns_i18n);
+  }
+  var ths = document.getElementsByTagName('th');
+  for (var i = 0; i < ths.length; ++i) {
+    ths[i].innerHTML = replaceAll(ths[i].innerHTML, ths_i18n);
+  }
+  var lbls = document.getElementsByTagName('label');
+  for (var i = 0; i < lbls.length; ++i) {
+    lbls[i].innerHTML = replaceAll(lbls[i].innerHTML, ths_i18n);
+  }
+  var ui_lbls = document.getElementsByClassName('ui label');
+  for (var i = 0; i < ui_lbls.length; ++i) {
+    ui_lbls[i].innerHTML = replaceAll(ui_lbls[i].innerHTML, uilbls_i18n);
+  }
+  var h4s = document.getElementsByClassName('top attached block header');
+  for (var i = 0; i < h4s.length; ++i) {
+    h4s[i].innerHTML = replaceAll(h4s[i].innerHTML, h4s_i18n);
+  }
+}
+</script>
 </body>
 </html>
