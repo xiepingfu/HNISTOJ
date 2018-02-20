@@ -33,6 +33,9 @@ var btns_i18n = {
   '我的提交': 'Mine',
   '附加文件': 'Additional files',
   '提交': 'Submit',
+  '统计': 'Statistics',
+  '讨论': 'Discussion',
+  '测试数据': 'Test data',
   '返回比赛': 'Return to contest',
   '添加标签': 'Create tag',
   '添加题目': 'Create problem'
@@ -55,9 +58,20 @@ var ths_i18n = {
   '语言': 'Language',
   '或者，上传代码文件': 'Or upload file',
   '通过率': 'Ac. rate',
+  '通过数量': 'Solved',
   '通过': 'Ac.',
   '提交': 'Subm.',
-  '显示分类标签': 'Show tags'
+  '显示分类标签': 'Show tags',
+  '个性签名': 'Signature',
+  '比赛': 'Contest',
+  '开始时间': 'Start time',
+  '结束时间': 'End time',
+  '描述': 'Description',
+  '标题': 'Title',
+  '时间': 'Time',
+  '作者': 'Author',
+  '回复数': 'Replies',
+  '最新回复': 'Last activity'
 };
 var uilbls_i18n = {
   '内存限制：': 'Memory limit: ',
@@ -71,14 +85,41 @@ var uilbls_i18n = {
   '交互': 'Interactive',
   '评测方式：': 'Judgement: ',
   '文本比较': 'Text diff',
+  '上传者：': 'Uploaded by: ',
+  '公开者：': 'Publicized by: ',
+  '未开始': 'Upcoming',
+  '进行中': 'Running',
+  '已结束': 'Finished'
 };
 var h4s_i18n = {
+  '公告': 'Announcements',
+  '一言（ヒトコト）': 'Hitokoto',
+  '排名': 'Ranking',
+  '今日运势': 'Fortune',
+  '搜索题目': 'Search problems',
+  '近期比赛': 'Recent contests',
+  '友情链接': 'Links',
   '信息与公告': 'Information and announcements',
   '题目描述': 'Problem statement',
   '输入格式': 'Input specification',
   '输出格式': 'Output specification',
   '样例': 'Samples',
   '数据范围与提示': 'Constraints and hints'
+};
+var accs_i18n = {
+  '子任务': 'Subtask',
+  '得分': 'Score',
+  '测试点': 'Test',
+  '得分率': 'Score rate',
+  '用时': 'Time',
+  '内存': 'Memory',
+  '输入文件': 'Input file',
+  '答案文件': 'Answer file',
+  '用户输出': 'Participant\'s output',
+  'Special Judge 信息': 'Checker\'s comments',
+  '系统信息': 'System status',
+  '（': ' (',
+  '）': ')'
 };
 function replaceAll(str, _) {
   var re = new RegExp(Object.keys(_).join("|"), "gi");
@@ -106,6 +147,10 @@ if (lang.substring(0, 2) !== 'zh') {
   var h4s = document.getElementsByClassName('top attached block header');
   for (var i = 0; i < h4s.length; ++i) {
     h4s[i].innerHTML = replaceAll(h4s[i].innerHTML, h4s_i18n);
+  }
+  var accs = document.getElementsByClassName('fluid accordion');
+  for (var i = 0; i < accs.length; ++i) {
+    accs[i].innerHTML = replaceAll(accs[i].innerHTML, accs_i18n);
   }
 }
 </script>
