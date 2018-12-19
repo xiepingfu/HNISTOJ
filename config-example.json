@@ -119,5 +119,6 @@
   "google_fonts": {
     "type": "like-google-fonts",
     "url": "https://fonts.loli.net"
-  }
+  },
+  "restart_interval": 5000
 }

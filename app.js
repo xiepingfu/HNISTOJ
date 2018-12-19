@@ -27,15 +27,6 @@ global.syzoj = {
     let winstonLib = require('./libs/winston');
     winstonLib.configureWinston(!syzoj.production);
 
-    app.server = require('http').createServer(app);
-
-    if (!module.parent) {
-      // Loaded by `require()`, not node CLI.
-      app.server.listen(parseInt(syzoj.config.port), syzoj.config.hostname, () => {
-        this.log(`SYZOJ is listening on ${syzoj.config.hostname}:${parseInt(syzoj.config.port)}...`);
-      });
-    }
-
     // Set assets dir
     app.use(Express.static(__dirname + '/static', { maxAge: syzoj.production ? '1y' : 0 }));
 
@@ -71,6 +62,53 @@ global.syzoj = {
       await this.lib('judger').connect();
     }
     this.loadModules();
+
+    // Ready to start HTTP server here.
+    console.log('Ready to start HTTP server.');
+    app.server = require('http').createServer(app);
+
+    if (!module.parent) {
+      // Loaded by node CLI, not by `require()`.
+
+      let startServer = () => {
+        console.log('Will now start HTTP server.');
+        app.server.listen(parseInt(syzoj.config.port), syzoj.config.hostname, () => {
+          this.log(`SYZOJ is listening on ${syzoj.config.hostname}:${parseInt(syzoj.config.port)}...`);
+        });
+
+        if (syzoj.config.restart_interval > 0) {
+          console.log('Restart scheduled in ' + syzoj.config.restart_interval + ' ms.');
+          setTimeout(() => {
+            console.log('Will now fork a new process.');
+            let child = require('child_process').fork(__filename, ['-c', options.config]);
+            child.on('message', (message) => {
+              if (message !== 'will-listen') return;
+
+              console.log('Child process requested will-listen.')
+              app.server.close();
+              console.log('Parent process\'s HTTP server closed.');
+              child.send('can-listen');
+              console.log('Sent can-listen response.');
+
+              setTimeout(() => process.exit(), syzoj.config.restart_interval * 10);
+            });
+          }, syzoj.config.restart_interval);
+        }
+      };
+
+      if (!process.send) {
+        // Not loaded by child_process.fork().
+        startServer();
+      } else {
+        process.on('message', (message) => {
+          if (message !== 'can-listen') return;
+          console.log('Received can-listen from parent process.');
+          startServer();
+        });
+        process.send('will-listen');
+        console.log('Requested will-listen.');
+      }
+    }
   },
   async connectDatabase() {
     let Sequelize = require('sequelize');
@@ -122,7 +160,7 @@ global.syzoj = {
     global.Promise = Sequelize.Promise;
     this.db.countQuery = async (sql, options) => (await this.db.query(`SELECT COUNT(*) FROM (${sql}) AS \`__tmp_table\``, options))[0][0]['COUNT(*)'];
 
-    this.loadModels();
+    await this.loadModels();
   },
   loadModules() {
     fs.readdir('./modules/', (err, files) => {
@@ -134,7 +172,7 @@ global.syzoj = {
            .forEach((file) => this.modules.push(require(`./modules/${file}`)));
     });
   },
-  loadModels() {
+  async loadModels() {
     fs.readdir('./models/', (err, files) => {
       if (err) {
         this.log(err);
@@ -142,9 +180,8 @@ global.syzoj = {
       }
       files.filter((file) => file.endsWith('.js'))
            .forEach((file) => require(`./models/${file}`));
-
-      this.db.sync();
     });
+    await this.db.sync();
   },
   lib(name) {
     return require(`./libs/${name}`);
