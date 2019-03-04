@@ -69,7 +69,8 @@
               data: {
                 username: $("#username").val(),
                 password: password,
-                email: $("#email").val(),
+                realname: $("#realname").val(),
+                phone: $("#phone").val(),
                 prevUrl: <%- serializejs(req.query.url || '/') %>
               },
               success: function(data) {
