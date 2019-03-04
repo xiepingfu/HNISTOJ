@@ -40,7 +40,7 @@
       
       function success() {
           alert("注册成功！");
-          window.location.href = '/reception/register';
+          window.location.href = <%= syzoj.utils.makeUrl(['reception', user.id, 'edit']) %>;
       }
       
       function mail_required() {
@@ -63,7 +63,7 @@
           password = md5($("#password1").val() + "syzoj2_xxx")
           $("#sign_up").addClass("loading");
           $.ajax({
-              url: '/api/reception_sign_up',
+              url: '/api_reception/reception_sign_up',
               type: 'POST',
               async: true,
               data: {
