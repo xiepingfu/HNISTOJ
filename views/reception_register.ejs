@@ -52,6 +52,10 @@
       }
       
       function submit() {
+          if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
+              show_error("请输入正确的手机号");
+              return;
+          }
           if ($("#password1").val() != $("#password2").val()) {
               show_error("两次输入的密码不一致");
               return;
