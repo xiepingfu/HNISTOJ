@@ -264,7 +264,7 @@ module.exports = {
     return /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/.test(s);
   },
   isValidPhone(s) {
-    return /^0?1[3|4|5|6|7|8][0-9]\d{8}$/.test(s);
+    return /^1(3|4|5|7|8)\d{9}$/.test(s);
   },
   locks: [],
   lock(key, cb) {
