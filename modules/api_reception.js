@@ -4,8 +4,12 @@ let File = syzoj.model('file');
 const Email = require('../libs/email');
 const jwt = require('jsonwebtoken');
 
+function setLoginCookie(username, password, res) {
+    res.cookie('login', JSON.stringify([username, password]));
+}
+
 // Reception Sign up
-app.post('/api/reception_sign_up', async (req, res) => {
+app.post('/api_reception/reception_sign_up', async (req, res) => {
     try {
       res.setHeader('Content-Type', 'application/json');
       let user = await User.fromName(req.body.username);
