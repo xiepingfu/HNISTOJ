@@ -263,6 +263,9 @@ module.exports = {
   isValidRealname(s) {
     return /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/.test(s);
   },
+  isValidPhone(s) {
+    return /^0?1[3|4|5|6|7|8][0-9]\d{8}$/.test(s);
+  },
   locks: [],
   lock(key, cb) {
     let s = JSON.stringify(key);
