@@ -173,6 +173,7 @@ app.post('/api/reception_sign_up', async (req, res) => {
         username: req.body.username,
         password: req.body.password,
         realname: req.body.realname,
+        phone: req.body.phone,
         public_email: true
       });
       await user.save();
