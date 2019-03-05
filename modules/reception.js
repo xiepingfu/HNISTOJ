@@ -54,7 +54,7 @@ app.get('/reception/register', async (req, res) => {
             username = parseInt(parseInt(date.getFullYear().toString())%100)*10000;
         }
         res.render('reception_register', {
-            username: username
+            username: username,
         });
       } catch (e) {
         syzoj.log(e);
@@ -80,7 +80,7 @@ app.get('/reception/:id/edit', async (req, res) => {
 
     res.locals.user.allowedManage = await res.locals.user.hasPrivilege('manage_user');
 
-    res.render('user_edit', {
+    res.render('reception_user_edit', {
       edited_user: user,
       error_info: null
     });

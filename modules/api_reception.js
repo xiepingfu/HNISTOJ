@@ -9,7 +9,7 @@ function setLoginCookie(username, password, res) {
 }
 
 // Reception Sign up
-app.get('/api/reception_sign_up', async (req, res) => {
+app.post('/api_reception/reception_sign_up', async (req, res) => {
     try {
       res.setHeader('Content-Type', 'application/json');
       let user = await User.fromName(req.body.username);
@@ -60,7 +60,7 @@ app.get('/api/reception_sign_up', async (req, res) => {
         });
         await user.save();
   
-        res.send(JSON.stringify({ error_code: 1 }));
+        res.send(JSON.stringify({ error_code: 1, new_user_id: user.id }));
       }
     } catch (e) {
       syzoj.log(e);

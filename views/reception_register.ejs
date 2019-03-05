@@ -38,9 +38,9 @@
           $("#error").show();
       }
       
-      function success() {
+      function success(new_user_id) {
           alert("注册成功！");
-          window.location.href = <%= syzoj.utils.makeUrl(['reception', user.id, 'edit']) %>;
+          window.location.href = "/reception/" + new_user_id + "/edit";
       }
       
       function mail_required() {
@@ -107,7 +107,7 @@
                           show_error("验证邮件发送失败：\n" + data.message);
                           break;
                       case 1:
-                          success();
+                          success(data.new_user_id);
                           break;
                       case 2:
                           mail_required();
