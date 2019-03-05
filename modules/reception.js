@@ -64,7 +64,6 @@ app.get('/reception/register', async (req, res) => {
       }
 });
 
-
 app.get('/reception/:id/edit', async (req, res) => {
   try {
     let id = parseInt(req.params.id);
@@ -83,9 +82,13 @@ app.get('/reception/:id/edit', async (req, res) => {
     let School = syzoj.model('school');
     let schools = await School.query(null, null, [['id', 'asc']]);
 
+    let UserApply = syzoj.model('user_apply');
+    let user_applys = await UserApply.query(null, null, [['apply_time', 'desc']]);
+
     res.render('reception_user_edit', {
       edited_user: user,
       schools: schools,
+      user_applys: user_applys,
       error_info: null
     });
   } catch (e) {
@@ -142,4 +145,31 @@ app.post('/reception/:id/edit', async (req, res) => {
       error_info: e.message
     });
   }
+});
+
+app.get('/reception/manage', async (req, res) => {
+  try {
+      if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+
+      const sort = req.query.sort || syzoj.config.sorting.reception.field;
+      const order = req.query.order || syzoj.config.sorting.reception.order;
+      if (!['realname', 'id', 'username', 'register_time'].includes(sort) || !['asc', 'desc'].includes(order)) {
+        throw new ErrorMessage('错误的排序参数。');
+      }
+      let paginate = syzoj.utils.paginate(await User.count({ is_show: true }), req.query.page, syzoj.config.page.reception);
+      let users = await User.query(paginate, { is_show: true }, [[sort, order]]);
+      await users.forEachAsync(async x => x.renderInformation());
+
+      res.render('reception_manage', {
+        users: users,
+        paginate: paginate,
+        curSort: sort,
+        curOrder: order === 'asc'
+      });
+    } catch (e) {
+      syzoj.log(e);
+      res.render('error', {
+        err: e
+      })
+    }
 });

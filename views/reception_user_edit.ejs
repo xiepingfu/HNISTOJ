@@ -38,7 +38,7 @@
       let allowedManagePrivilege = user && user.is_admin;
       %>
 
-<div class="ui horizontal divider">培训信息</div>
+<div class="ui horizontal divider">新建培训记录</div>
 <div class="two fields" id="training_info">
         <div class="field">
           <label for="sex">报名时就读学校</label>
@@ -63,12 +63,51 @@
         <input type="text" placeholder="" id="training_class" name="training_class">
         </div>
       </div>
-<div class="ui horizontal divider"></div>
       <div style="text-align: center; margin-top: 30px; ">
         <button type="submit" class="ui blue labeled icon button"><i class="ui icon edit"></i>修改</button>
         <a href="<%= syzoj.utils.makeUrl(['user', edited_user.id]) %>" class="ui labeled icon button"><i class="ui icon angle left"></i>返回</a>
       </div>
 		</form>
+    <div class="ui horizontal divider">历史培训记录</div>
+    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
+	        <thead>
+	        <tr>
+              <th>#</th>
+              <th>报名时就读学校</th>
+              <th>报名时就读班级</th>
+              <th>培训类型</th>
+              <th>培训班级</th>
+              <th>报名时间</th>
+          </tr>
+	        </thead>
+          <script>
+          var lineHeight = 0;
+          (function () {
+            var div = document.createElement('div');
+            div.style.position = 'fixed';
+            div.style.left = -10000;
+            div.style.visibility = 'hidden';
+            div.innerText = '测试，Test.';
+            document.body.appendChild(div);
+            lineHeight = div.clientHeight;
+          })();
+          </script>
+	        <tbody>
+	        <%
+            let i = 0;
+            for (let user_apply of user_applys) {
+              ++i;
+            %>
+            <tr>
+		        	<td><%= i%></td>
+		        	<td><%= user_apply.school%></td>
+		        	<td><%= user_apply.cur_class%></td>
+		        	<td><%= user_apply.training_type%></td>
+		        	<td><%= user_apply.training_class%></td>
+		        </tr>
+		    <% } %>
+	        </tbody>
+	    </table>
 	</div>
 </div>
 <script src="<%- lib('blueimp-md5/2.10.0/js/md5.min.js') %>"></script>

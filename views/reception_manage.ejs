@@ -1,0 +1,43 @@
+<% this.receptionPage = 'manage'; %>
+<% include reception_header %>
+<table class="ui very basic center aligned table" style="table-layout: fixed; ">
+	        <thead>
+	        <tr>
+	            <th>#</th>
+	            <th><%- createSortableTitle('username', '用户名', true) %></th>
+	            <th><%- createSortableTitle('realname', '真实姓名', false) %></th>
+	            <th>手机号</th>
+	            <th><%- createSortableTitle('register_time', '注册时间', false) %></th>
+	        </tr>
+	        </thead>
+          <script>
+            var lineHeight = 0;
+            (function () {
+                var div = document.createElement('div');
+                div.style.position = 'fixed';
+                div.style.left = -10000;
+                div.style.visibility = 'hidden';
+                div.innerText = '测试，Test.';
+                document.body.appendChild(div);
+                lineHeight = div.clientHeight;
+            })();
+          </script>
+	        <tbody>
+                <%
+                let i = (paginate.currPage - 1) * paginate.perPage;
+                for (let user of users) {
+                ++i;
+                %>
+                <tr>
+                    <td><b><%= i %></b></td>
+                    <td><a href="<%= syzoj.utils.makeUrl(['reception', 'manage', user.id]) %>"><%= user.username %></a></td>
+                    <td><%= user.realname %></td>
+                    <td><%= user.phone %></td>
+                    <td><%= syzoj.utils.formatDate(user.register_time) %></td>
+                </tr>
+                <% } %>
+	        </tbody>
+        </table>
+        <br>
+<% include page %>
+<% include reception_footer %>
