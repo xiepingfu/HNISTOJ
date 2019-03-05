@@ -1,4 +1,4 @@
-<% this.receptionPage = 'info'; %>
+<% this.receptionPage = 'manage'; %>
 <% include reception_header %>
 <div class="padding">
     <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error" <% if (error_info === null) { %>hidden<% } %>>
@@ -39,6 +39,31 @@
       %>
 
 <div class="ui horizontal divider">培训信息</div>
+<div class="two fields" id="training_info">
+        <div class="field">
+          <label for="sex">报名时就读学校</label>
+          <select class="ui dropdown" name="school">
+          <% for (let school of schools) { %>
+            <option value="<%= school.id %>"><%= school.name %></option>
+          <% } %>
+          </select>
+        </div>
+        <div class="field">
+        <label>报名时就读班级</label>
+        <input type="text" placeholder="" id="cur_class" name="cur_class">
+        </div>
+      </div>
+      <div class="two fields" id="new_password_field">
+        <div class="field">
+        <label>培训类型</label>
+        <input type="text" placeholder="" id="training_type" name="training_type">
+        </div>
+        <div class="field">
+        <label>培训班级</label>
+        <input type="text" placeholder="" id="training_class" name="training_class">
+        </div>
+      </div>
+<div class="ui horizontal divider"></div>
       <div style="text-align: center; margin-top: 30px; ">
         <button type="submit" class="ui blue labeled icon button"><i class="ui icon edit"></i>修改</button>
         <a href="<%= syzoj.utils.makeUrl(['user', edited_user.id]) %>" class="ui labeled icon button"><i class="ui icon angle left"></i>返回</a>
@@ -96,7 +121,7 @@ function check() {
 </script>
 <script>
 $(function () {
-	$('.ui.dropdown:not(.simple)').dropdown();
+  $('.ui.dropdown:not(.simple)').dropdown();
 });
 </script>
 <% include reception_footer %>

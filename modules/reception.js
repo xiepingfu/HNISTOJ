@@ -80,8 +80,12 @@ app.get('/reception/:id/edit', async (req, res) => {
 
     res.locals.user.allowedManage = await res.locals.user.hasPrivilege('manage_user');
 
+    let School = syzoj.model('school');
+    let schools = await School.query(null, null, [['id', 'asc']]);
+
     res.render('reception_user_edit', {
       edited_user: user,
+      schools: schools,
       error_info: null
     });
   } catch (e) {

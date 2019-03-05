@@ -90,3 +90,34 @@ app.apiRouter.post('/api/v2/markdown', async (req, res) => {
     res.send(e);
   }
 });
+
+app.get('/api/v2/search/school/:keyword*?', async (req, res) => {
+  try {
+    let School = syzoj.model('school');
+
+    let keyword = req.params.keyword || '';
+    let conditions = [];
+    const sid = parseInt(keyword);
+    if (sid != null && !isNaN(sid)) {
+      conditions.push({ id: sid });
+    }
+    if (keyword != null && String(keyword).length >= 2) {
+      conditions.push({ name: { $like: `%${req.params.keyword}%` } });
+    }
+    if (conditions.length === 0) {
+      res.send({ success: true, results: [] });
+    } else {
+      let users = await User.query(null, {
+        $or: conditions
+      }, [['name', 'asc']]);
+
+      let result = [];
+
+      result = users.map(x => ({ name: `${x.name}`, value: x.id, url: syzoj.utils.makeUrl(['school', x.id]) }));
+      res.send({ success: true, results: result });
+    }
+  } catch (e) {
+    syzoj.log(e);
+    res.send({ success: false });
+  }
+});
