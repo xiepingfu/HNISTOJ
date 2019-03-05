@@ -114,9 +114,9 @@ app.post('/reception/:id/edit', async (req, res) => {
     if (res.locals.user && await res.locals.user.hasPrivilege('manage_user')) {
       if (!syzoj.utils.isValidUsername(req.body.username)) throw new ErrorMessage('无效的用户名。');
       user.username = req.body.username;
-      user.email = req.body.email;
-      user.phone = req.phone;
     }
+    user.realname = req.body.realname;
+    user.phone = req.body.phone.toString();
 
     await user.save();
 
