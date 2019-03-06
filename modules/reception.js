@@ -81,8 +81,6 @@ app.get('/reception/:id/edit', async (req, res) => {
 
     let School = syzoj.model('school');
     let schools = await School.query(null, null, [['id', 'asc']]);
-
-    let UserApply = syzoj.model('user_apply');
     let user_applys = await UserApply.query(null, null, [['apply_time', 'desc']]);
 
     res.render('reception_user_edit', {
@@ -172,4 +170,75 @@ app.get('/reception/manage', async (req, res) => {
         err: e
       })
     }
+});
+
+app.get('/reception/manage/:id', async (req, res) => {
+  try {
+    let id = parseInt(req.params.id);
+    let user = await User.fromID(id);
+    if (!user) throw new ErrorMessage('无此用户。');
+
+    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    if (!allowedEdit) {
+      throw new ErrorMessage('您没有权限进行此操作。');
+    }
+
+    user.privileges = await user.getPrivileges();
+
+    res.locals.user.allowedManage = await res.locals.user.hasPrivilege('manage_user');
+
+    let School = syzoj.model('school');
+    let schools = await School.query(null, null, [['id', 'asc']]);
+    let TrainingType = syzoj.model('training_type');
+    let training_types =  await TrainingType.query(null, null, [['id', 'asc']]);
+    let TrainigClass = syzoj.model('training_class');
+    let training_classs = await TrainigClass.query(null, null, [['id', 'asc']]);
+    let user_applys = await UserApply.query(null, {'user_id': id}, [['apply_time', 'desc']]);
+
+    res.render('reception_user', {
+      show_user: user,
+      schools: schools,
+      training_types: training_types,
+      training_classs: training_classs,
+      user_applys: user_applys,
+      error_info: null
+    });
+  } catch (e) {
+      syzoj.log(e);
+      res.render('error', {
+        err: e
+      });
+    }
+  });
+
+  app.get('/forget', async (req, res) => {
+  res.render('forget');
+});
+
+app.post('/reception/manage/:id/add_training', async (req, res) => {
+  let user;
+  try {
+    res.setHeader('Content-Type', 'application/json');
+    let id = parseInt(req.params.id);
+    user = await User.fromID(id);
+    if (!user) throw 2001;
+
+    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    if (!allowedEdit) throw 2002;
+
+    user_apply = await UserApply.create({
+      user_id: id,
+      school: req.body.school,
+      cur_class: req.body.cur_class,
+      training_type_id: req.body.training_type,
+      training_class_id: req.body.training_class
+    });
+    await user_apply.save();
+
+    res.send(JSON.stringify({ error_code: 1 }));
+  } catch (e) {
+    syzoj.log(e);
+    res.send(JSON.stringify({ error_code: e }));
+  }
+  
 });
