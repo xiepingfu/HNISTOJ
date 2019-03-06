@@ -2,36 +2,38 @@
 <% include reception_header %>
 <div class="padding">
     <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error" <% if (error_info === null) { %>hidden<% } %>>
-      <% if (error_info !== null) {
-          if (error_info === '') error_info = '修改成功。';
-      %>
-      	<p id="error_info"><%= error_info %></p>
-      <% } %>
+      	<p id="error_info"></p>
     </div>
-		<form id="form" class="ui form" method="post">
-            <div class="ui horizontal divider">基本信息</div>
-      <div class="field">
-	    	<label for="username">用户名</label>
-	    	<input type="text" id="username" name="username" value="<%= show_user.username %>" readonly>
-        </div>
-        <div class="field">
-	    	<label for="realname">真实姓名</label>
-	    	<input type="text" id="realname" name="realname" value="<%= show_user.realname %>" readonly>
-	    </div>
-	    <div class="field">
-	    	<label for="phone">手机号</label>
-	    	<input class="font-content" type="number" id="phone" name="phone" value="<%= parseInt(show_user.phone) %>" readonly>
-        </div>
-        <div class="field">
-	    	<label for="register_time">注册时间</label>
-	    	<input class="font-content" type="text" id="register_time" name="register_time" value="<%= syzoj.utils.formatDate(show_user.register_time) %>" readonly>
-	    </div>
-      <%
-      let allowedManagePrivilege = user && user.is_admin;
-      %>
-		</form>
+    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
+        <thead>
+            <tr>
+                <th>用户名</th>
+                <th>真实姓名</th>
+                <th>手机号</th>
+                <th>注册时间</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><%= show_user.username %></td>
+                <td><%= show_user.realname %></td>
+                <td><%= show_user.phone %></td>
+                <td><%= syzoj.utils.formatDate(show_user.register_time) %></td>
+                <td>
+                <a href="javascript:model_show();" class="ui primary labeled icon button">
+                    <i class="ui icon write"></i>
+                        添加报名
+                </a>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+    <%
+    let allowedManagePrivilege = user && user.is_admin;
+    %>
     <div class="ui horizontal divider">培训报名记录</div>
-
+    <br>
     <% if (user_applys.length) { %>
     <table class="ui very basic center aligned table" style="table-layout: fixed; ">
 	        <thead>
@@ -66,8 +68,9 @@
 		        	<td><%= i%></td>
 		        	<td><%= user_apply.school%></td>
 		        	<td><%= user_apply.cur_class%></td>
-		        	<td><%= user_apply.training_type%></td>
-		        	<td><%= user_apply.training_class%></td>
+		        	<td><%= user_apply.training_type_id%></td>
+		        	<td><%= user_apply.training_class_id%></td>
+		        	<td><%= syzoj.utils.formatDate(user_apply.apply_time) %></td>
 		        </tr>
 		    <% } %>
 	        </tbody>
@@ -227,6 +230,11 @@ function success() {
 }
 
 function submit_training() {
+    if(!$("#training_type").val())
+    {
+        show_error("培训类型不能为空");
+        return;
+    }
     $("#add_training").addClass("loading");
     $.ajax({
         url: '<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id, 'add_training']) %>',
@@ -249,11 +257,9 @@ function submit_training() {
                     show_error("无此用户");
                     break;
                 case 2002:
-                    alert("您没有权限进行此操作");
                     show_error("您没有权限进行此操作");
                     break;
                 default:
-                    alert("您没有权限进行此操作");
                     show_error("未知错误：" + JSON.stringify(data));
                     break;
             }

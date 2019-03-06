@@ -193,7 +193,28 @@ app.get('/reception/manage/:id', async (req, res) => {
     let training_types =  await TrainingType.query(null, null, [['id', 'asc']]);
     let TrainigClass = syzoj.model('training_class');
     let training_classs = await TrainigClass.query(null, null, [['id', 'asc']]);
+
     let user_applys = await UserApply.query(null, {'user_id': id}, [['apply_time', 'desc']]);
+    if (user_applys) {
+      for (let user_apply of user_applys) {
+          for (school of schools) {
+              if (parseInt(user_apply.school) == parseInt(school.id))
+                user_apply.school = school.name.toString();
+          }
+          for (let training_type of training_types) {
+              if (parseInt(user_apply.training_type_id) == parseInt(training_type.id))
+              {
+                  user_apply.training_type_id = training_type.name;
+              }
+          }
+          for (let training_class of training_classs) {
+            if (parseInt(user_apply.training_class_id) == parseInt(training_class.id))
+            {
+                user_apply.training_class_id = training_class.name;
+            }
+        }
+      }
+    }
 
     res.render('reception_user', {
       show_user: user,
@@ -201,7 +222,6 @@ app.get('/reception/manage/:id', async (req, res) => {
       training_types: training_types,
       training_classs: training_classs,
       user_applys: user_applys,
-      error_info: null
     });
   } catch (e) {
       syzoj.log(e);
@@ -228,10 +248,10 @@ app.post('/reception/manage/:id/add_training', async (req, res) => {
 
     user_apply = await UserApply.create({
       user_id: id,
-      school: req.body.school,
-      cur_class: req.body.cur_class,
-      training_type_id: req.body.training_type,
-      training_class_id: req.body.training_class
+      school: req.body.school?req.body.school:null,
+      cur_class: req.body.cur_class?req.body.cur_class:null,
+      training_type_id: req.body.training_type?req.body.training_type:null,
+      training_class_id: req.body.training_class?req.body.training_class:null
     });
     await user_apply.save();
 
