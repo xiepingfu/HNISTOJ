@@ -355,6 +355,8 @@ app.get('/contest/:id/submissions', async (req, res) => {
     where.type = 1;
     where.type_info = contest_id;
 
+    let isFiltered = !!(where.problem_id || where.user_id || where.score || where.language || where.status);
+
     let paginate = syzoj.utils.paginate(await JudgeState.count(where), req.query.page, syzoj.config.page.judge_state);
     let judge_state = await JudgeState.query(paginate, where, [['submit_time', 'desc']]);
 
@@ -380,7 +382,8 @@ app.get('/contest/:id/submissions', async (req, res) => {
       paginate: paginate,
       form: req.query,
       displayConfig: displayConfig,
-      pushType: pushType
+      pushType: pushType,
+      isFiltered: isFiltered
     });
   } catch (e) {
     syzoj.log(e);
@@ -423,8 +426,10 @@ app.get('/contest/submission/:id', async (req, res) => {
       info: getSubmissionInfo(judge, displayConfig),
       roughResult: getRoughResult(judge, displayConfig),
       code: (displayConfig.showCode && judge.problem.type !== 'submit-answer') ? judge.code.toString("utf8") : '',
+      formattedCode: judge.formattedCode ? judge.formattedCode.toString("utf8") : null,
+      preferFormattedCode: res.locals.user ? res.locals.user.prefer_formatted_code : false,
       detailResult: processOverallResult(judge.result, displayConfig),
-      socketToken: (displayConfig.showDetailResult && judge.pending && x.task_id != null) ? jwt.sign({
+      socketToken: (displayConfig.showDetailResult && judge.pending && judge.task_id != null) ? jwt.sign({
         taskId: judge.task_id,
         displayConfig: displayConfig,
         type: 'detail'
