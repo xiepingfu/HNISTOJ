@@ -1,8 +1,9 @@
 <% this.receptionPage = 'manage'; %>
 <% include reception_header %>
 <div class="padding">
-    <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error" <% if (error_info === null) { %>hidden<% } %>>
-      	<p id="error_info"></p>
+    <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error"
+        <% if (error_info === null) { %>hidden<% } %>>
+        <p id="error_info"></p>
     </div>
     <table class="ui very basic center aligned table" style="table-layout: fixed; ">
         <thead>
@@ -21,11 +22,11 @@
                 <td><%= show_user.phone %></td>
                 <td><%= syzoj.utils.formatDate(show_user.register_time) %></td>
                 <td>
-                <a href="javascript:model_show();" class="ui primary labeled icon button">
-                    <i class="ui icon write"></i>
-                        添加报名
-                </a>
-            </td>
+                    <a href="<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id, 'edit']) %>" class="ui green labeled icon button">
+                        <i class="ui icon write"></i>
+                        修改信息
+                    </a>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -36,241 +37,240 @@
     <br>
     <% if (user_applys.length) { %>
     <table class="ui very basic center aligned table" style="table-layout: fixed; ">
-	        <thead>
-	        <tr>
-              <th>#</th>
-              <th>报名时就读学校</th>
-              <th>报名时就读班级</th>
-              <th>培训类型</th>
-              <th>培训班级</th>
-              <th>报名时间</th>
-          </tr>
-	        </thead>
-          <script>
-          var lineHeight = 0;
-          (function () {
-            var div = document.createElement('div');
-            div.style.position = 'fixed';
-            div.style.left = -10000;
-            div.style.visibility = 'hidden';
-            div.innerText = '测试，Test.';
-            document.body.appendChild(div);
-            lineHeight = div.clientHeight;
-          })();
-          </script>
-	        <tbody>
-	        <%
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>报名时就读学校</th>
+                <th>报名时就读班级</th>
+                <th>培训类型</th>
+                <th>培训班级</th>
+                <th>报名时间</th>
+            </tr>
+        </thead>
+        <script>
+            var lineHeight = 0;
+            (function () {
+                var div = document.createElement('div');
+                div.style.position = 'fixed';
+                div.style.left = -10000;
+                div.style.visibility = 'hidden';
+                div.innerText = '测试，Test.';
+                document.body.appendChild(div);
+                lineHeight = div.clientHeight;
+            })();
+        </script>
+        <tbody>
+            <%
             let i = 0;
             for (let user_apply of user_applys) {
               ++i;
             %>
             <tr>
-		        	<td><%= i%></td>
-		        	<td><%= user_apply.school%></td>
-		        	<td><%= user_apply.cur_class%></td>
-		        	<td><%= user_apply.training_type_id%></td>
-		        	<td><%= user_apply.training_class_id%></td>
-		        	<td><%= syzoj.utils.formatDate(user_apply.apply_time) %></td>
-		        </tr>
-		    <% } %>
-	        </tbody>
-        </table>
-        <div class="ui grid">
-    <div class="row">
-      <div class="ten wide column">
-      </div>
-      <div class="six wide right aligned column" style="margin-bottom: 10px; ">
+                <td><%= i%></td>
+                <td><%= user_apply.school%></td>
+                <td><%= user_apply.cur_class%></td>
+                <td><%= user_apply.training_type_id%></td>
+                <td><%= user_apply.training_class_id%></td>
+                <td><%= syzoj.utils.formatDate(user_apply.apply_time) %></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <div class="ui grid">
+        <div class="row">
+            <div class="ten wide column">
+            </div>
+            <div class="six wide right aligned column" style="margin-bottom: 10px; ">
+                <% if (user && user.is_admin) { %>
+                <a href="javascript:add_apply_show();" class="ui primary labeled icon button">
+                    <i class="ui icon write"></i>
+                    添加报名
+                </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+    <div class="ui placeholder segment">
+        <div class="ui icon header">
+            <i class="calendar icon" style="margin-bottom: 20px; "></i>
+            暂无报名记录
+        </div>
         <% if (user && user.is_admin) { %>
-        <a href="javascript:model_show();" class="ui primary labeled icon button">
-        <i class="ui icon write"></i>
+        <a href="javascript:add_apply_show();" class="ui primary labeled icon button">
+            <i class="ui icon write"></i>
             添加报名
         </a>
         <% } %>
-      </div>
     </div>
-  </div>
-    <% } else { %>
-        <div class="ui placeholder segment">
-            <div class="ui icon header">
-            <i class="calendar icon" style="margin-bottom: 20px; "></i>
-                暂无报名记录
-            </div>
-            <% if (user && user.is_admin) { %>
-            <a href="javascript:model_show();" class="ui primary labeled icon button">
-            <i class="ui icon write"></i>
-                添加报名
-            </a>
-            <% } %>
-        </div>
     <% } %>
-	</div>
 </div>
-        <form id="form" class="ui form modal" action="" method="post">
-            <i class="close icon"></i>
-            <div class="header">
-                添加报名记录
+</div>
+<form id="form" class="ui form modal" action="" method="post">
+    <i class="close icon"></i>
+    <div class="header">
+        添加报名记录
+    </div>
+    <div class="content">
+        <div class="two fields" id="training_info">
+            <div class="field">
+                <label for="sex">报名时就读学校</label>
+                <select class="ui dropdown" name="school" id="school">
+                    <option value="" selected>未选择</option>
+                    <% for (let school of schools) { %>
+                    <option value="<%= school.id %>"><%= school.name %></option>
+                    <% } %>
+                </select>
             </div>
-            <div class="content">
-                <div class="two fields" id="training_info">
-                    <div class="field">
-                        <label for="sex">报名时就读学校</label>
-                        <select class="ui dropdown" name="school" id="school">
-                            <option value="" selected>未选择</option>
-                            <% for (let school of schools) { %>
-                            <option value="<%= school.id %>"><%= school.name %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>报名时就读班级</label>
-                        <input type="text" placeholder="" id="cur_class" name="cur_class">
-                    </div>
-                </div>
-                <div class="two fields" id="new_password_field">
-                    <div class="field">
-                        <label>培训类型</label>
-                        <select class="ui dropdown" id="training_type" name="training_type">
-                            <option value="" selected>未选择</option>
-                            <% for (let training_type of training_types) { %>
-                            <option value="<%= training_type.id %>"><%= training_type.name %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label>培训班级</label>
-                        <select class="ui dropdown" id="training_class" name="training_class">
-                            <option value="" selected>未选择</option>
-                            <% for (let training_class of training_classs) { %>
-                            <option value="<%= training_class.id %>"><%= training_class.name %></option>
-                            <% } %>
-                        </select>
-                    </div>
-                </div>
+            <div class="field">
+                <label>报名时就读班级</label>
+                <input type="text" placeholder="" id="cur_class" name="cur_class">
             </div>
-            <div class="actions">
-                <div class="ui black deny button">
-                    取消
-                </div>
-                <a class="ui positive right labeled icon button" id="add_training" href="javascript:submit_training();">
-                    确认添加
-                    <i class="checkmark icon"></i>
-                </a>
-                </div>
+        </div>
+        <div class="two fields" id="new_password_field">
+            <div class="field">
+                <label>培训类型</label>
+                <select class="ui dropdown" id="training_type" name="training_type">
+                    <option value="" selected>未选择</option>
+                    <% for (let training_type of training_types) { %>
+                    <option value="<%= training_type.id %>"><%= training_type.name %></option>
+                    <% } %>
+                </select>
             </div>
-        </form>
+            <div class="field">
+                <label>培训班级</label>
+                <select class="ui dropdown" id="training_class" name="training_class">
+                    <option value="" selected>未选择</option>
+                    <% for (let training_class of training_classs) { %>
+                    <option value="<%= training_class.id %>"><%= training_class.name %></option>
+                    <% } %>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            取消
+        </div>
+        <a class="ui positive right labeled icon button" id="add_training" href="javascript:submit_training();">
+            确认添加
+            <i class="checkmark icon"></i>
+        </a>
+    </div>
+    </div>
+</form>
 <script>
-          function model_show() {
-            $('.ui.modal')
+    function add_apply_show() {
+        $('.ui.modal')
             .modal('show')
-          ;
-          }
+            ;
+    }
 </script>
 <script src="<%- lib('blueimp-md5/2.10.0/js/md5.min.js') %>"></script>
 <script type="text/javascript">
-function make_md5(tag) {
-	if (tag.val()) {
-		tag.val(md5(tag.val() + "syzoj2_xxx"));
-	}
-}
-function check_info() {
-  if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
-		$("#error").removeClass("success");
-		$("#error").removeClass("error");
-		$("#error").addClass("error");
-		$("#error_info").html("请输入正确的手机号");
-		$("#error").show();
-		return false;
-  }
-	old_password = $("#old_password");
-	password1 = $("#password1");
-	password2 = $("#password2");
-	if ($("#old_password").val() && password1.val() != password2.val()) {
-		$("#error").removeClass("success");
-		$("#error").removeClass("error");
-		$("#error").addClass("error");
-		$("#error_info").html("两次输入的密码不一致。");
-		$("#error").show();
-		return false;
-	}
-	make_md5(old_password);
-	make_md5(password1);
-	make_md5(password2);
+    function make_md5(tag) {
+        if (tag.val()) {
+            tag.val(md5(tag.val() + "syzoj2_xxx"));
+        }
+    }
+    function check_info() {
+        if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
+            $("#error").removeClass("success");
+            $("#error").removeClass("error");
+            $("#error").addClass("error");
+            $("#error_info").html("请输入正确的手机号");
+            $("#error").show();
+            return false;
+        }
+        old_password = $("#old_password");
+        password1 = $("#password1");
+        password2 = $("#password2");
+        if ($("#old_password").val() && password1.val() != password2.val()) {
+            $("#error").removeClass("success");
+            $("#error").removeClass("error");
+            $("#error").addClass("error");
+            $("#error_info").html("两次输入的密码不一致。");
+            $("#error").show();
+            return false;
+        }
+        make_md5(old_password);
+        make_md5(password1);
+        make_md5(password2);
 
 <% if (allowedManagePrivilege) { %>
-  $('.checkbox_privilege').each(function () {
-    if ($(this).checkbox('is checked')) {
-      var name = $(this).data('name');
+            $('.checkbox_privilege').each(function () {
+                if ($(this).checkbox('is checked')) {
+                    var name = $(this).data('name');
 
-      var elem = document.createElement('input');
-      elem.type = 'hidden';
-      elem.value = name;
-      elem.name = 'privileges';
-      document.getElementById('form').appendChild(elem);
-    }
-  });
+                    var elem = document.createElement('input');
+                    elem.type = 'hidden';
+                    elem.value = name;
+                    elem.name = 'privileges';
+                    document.getElementById('form').appendChild(elem);
+                }
+            });
 <% } %>
 
 	return true;
-}
+    }
 </script>
 <script>
-$(function () {
-  $('.ui.dropdown:not(.simple)').dropdown();
-});
+    $(function () {
+        $('.ui.dropdown:not(.simple)').dropdown();
+    });
 </script>
 <script type="text/javascript">
-function show_error(error) {
-    $("#error_info").text(error);
-    $("#error").show();
-}
-
-function success() {
-    alert("添加成功");
-    window.location.href = '<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id]) %>';
-}
-
-function submit_training() {
-    if(!$("#training_type").val())
-    {
-        show_error("培训类型不能为空");
-        return;
+    function show_error(error) {
+        $("#error_info").text(error);
+        $("#error").show();
     }
-    $("#add_training").addClass("loading");
-    $.ajax({
-        url: '<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id, 'add_training']) %>',
-        type: 'POST',
-        async: true,
-        data: {
-            school: $("#school").val(),
-            cur_class: $("#cur_class").val(),
-            training_type: $("#training_type").val(),
-            training_class: $("#training_class").val(),
-        },
-        success: function(data) {
-            error_code = data.error_code;
-            switch(error_code){
-                case 1:
-                    success();
-                    break;
-                case 2001:
-                    alert("无此用户");
-                    show_error("无此用户");
-                    break;
-                case 2002:
-                    show_error("您没有权限进行此操作");
-                    break;
-                default:
-                    show_error("未知错误：" + JSON.stringify(data));
-                    break;
-            }
-            $("#add_training").removeClass("loading");
-        },
-        error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert(XMLHttpRequest.responseText);
-            show_error("未知错误");
-            $("#add_training").removeClass("loading");
+
+    function success() {
+        alert("添加成功");
+        window.location.href = '<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id]) %>';
+    }
+
+    function submit_training() {
+        if (!$("#training_type").val()) {
+            show_error("培训类型不能为空");
+            return;
         }
-    });
-}
+        $("#add_training").addClass("loading");
+        $.ajax({
+            url: '<%= syzoj.utils.makeUrl(['reception', 'manage', show_user.id, 'add_training']) %>',
+            type: 'POST',
+            async: true,
+            data: {
+                school: $("#school").val(),
+                cur_class: $("#cur_class").val(),
+                training_type: $("#training_type").val(),
+                training_class: $("#training_class").val(),
+            },
+            success: function (data) {
+                error_code = data.error_code;
+                switch (error_code) {
+                    case 1:
+                        success();
+                        break;
+                    case 2001:
+                        alert("无此用户");
+                        show_error("无此用户");
+                        break;
+                    case 2002:
+                        show_error("您没有权限进行此操作");
+                        break;
+                    default:
+                        show_error("未知错误：" + JSON.stringify(data));
+                        break;
+                }
+                $("#add_training").removeClass("loading");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest.responseText);
+                show_error("未知错误");
+                $("#add_training").removeClass("loading");
+            }
+        });
+    }
 </script>
 <% include reception_footer %>

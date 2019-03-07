@@ -1,166 +1,104 @@
 <% this.receptionPage = 'manage'; %>
 <% include reception_header %>
 <div class="padding">
-    <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error" <% if (error_info === null) { %>hidden<% } %>>
-      <% if (error_info !== null) {
+  <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error"
+    <% if (error_info === null) { %>hidden<% } %>>
+    <% if (error_info !== null) {
           if (error_info === '') error_info = '修改成功。';
       %>
-      	<p id="error_info"><%= error_info %></p>
-      <% } %>
+    <% } %>
+    <p id="error_info"><%= error_info %></p>
+  </div>
+  <form id="form" class="ui form" action="<%= syzoj.utils.makeUrl(['reception', 'manage', edited_user.id, 'edit']) %>"
+    method="post" onsubmit="return check()">
+    <div class="ui horizontal divider">基本信息</div>
+    <div class="field">
+      <label for="username">用户名</label>
+      <input type="text" id="username" name="username" value="<%= edited_user.username %>"
+        <% if (!user.allowedManage) { %> readonly<% } %>>
     </div>
-		<form id="form" class="ui form" action="<%= syzoj.utils.makeUrl(['reception', edited_user.id, 'edit']) %>" method="post" onsubmit="return check()">
-            <div class="ui horizontal divider">基本信息</div>
-      <div class="field">
-	    	<label for="username">用户名</label>
-	    	<input type="text" id="username" name="username" value="<%= edited_user.username %>"<% if (!user.allowedManage) { %> readonly<% } %>>
-        </div>
-        <div class="field">
-	    	<label for="realname">真实姓名</label>
-	    	<input type="text" id="realname" name="realname" value="<%= edited_user.realname %>">
-	    </div>
-	    <div class="field">
-	    	<label for="phone">手机号</label>
-	    	<input class="font-content" type="number" id="phone" name="phone" value="<%= parseInt(edited_user.phone) %>">
-	    </div>
-      <div class="field">
+    <div class="field">
+      <label for="realname">真实姓名</label>
+      <input type="text" id="realname" name="realname" value="<%= edited_user.realname %>">
+    </div>
+    <div class="field">
+      <label for="phone">手机号</label>
+      <input class="font-content" type="number" id="phone" name="phone" value="<%= parseInt(edited_user.phone) %>">
+    </div>
+    <div class="field">
       <label class="ui header">密码</label>
-        <input type="password" placeholder="原密码（留空则不修改）" name="old_password" id="old_password">
+      <input type="password" placeholder="原密码（留空则不修改）" name="old_password" id="old_password">
+    </div>
+    <div class="two fields" id="new_password_field">
+      <div class="field">
+        <input type="password" placeholder="新密码" name="new_password" id="password1">
       </div>
-      <div class="two fields" id="new_password_field">
-        <div class="field">
-          <input type="password" placeholder="新密码" name="new_password" id="password1">
-        </div>
-        <div class="field">
-          <input type="password" placeholder="确认密码" id="password2">
-        </div>
+      <div class="field">
+        <input type="password" placeholder="确认密码" id="password2">
       </div>
-      <%
+    </div>
+    <%
       let allowedManagePrivilege = user && user.is_admin;
       %>
-
-<div class="ui horizontal divider">新建培训记录</div>
-<div class="two fields" id="training_info">
-        <div class="field">
-          <label for="sex">报名时就读学校</label>
-          <select class="ui dropdown" name="school">
-          <% for (let school of schools) { %>
-            <option value="<%= school.id %>"><%= school.name %></option>
-          <% } %>
-          </select>
-        </div>
-        <div class="field">
-        <label>报名时就读班级</label>
-        <input type="text" placeholder="" id="cur_class" name="cur_class">
-        </div>
-      </div>
-      <div class="two fields" id="new_password_field">
-        <div class="field">
-        <label>培训类型</label>
-        <input type="text" placeholder="" id="training_type" name="training_type">
-        </div>
-        <div class="field">
-        <label>培训班级</label>
-        <input type="text" placeholder="" id="training_class" name="training_class">
-        </div>
-      </div>
-      <div style="text-align: center; margin-top: 30px; ">
-        <button type="submit" class="ui blue labeled icon button"><i class="ui icon edit"></i>修改</button>
-        <a href="<%= syzoj.utils.makeUrl(['user', edited_user.id]) %>" class="ui labeled icon button"><i class="ui icon angle left"></i>返回</a>
-      </div>
-		</form>
-    <div class="ui horizontal divider">历史培训记录</div>
-    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
-	        <thead>
-	        <tr>
-              <th>#</th>
-              <th>报名时就读学校</th>
-              <th>报名时就读班级</th>
-              <th>培训类型</th>
-              <th>培训班级</th>
-              <th>报名时间</th>
-          </tr>
-	        </thead>
-          <script>
-          var lineHeight = 0;
-          (function () {
-            var div = document.createElement('div');
-            div.style.position = 'fixed';
-            div.style.left = -10000;
-            div.style.visibility = 'hidden';
-            div.innerText = '测试，Test.';
-            document.body.appendChild(div);
-            lineHeight = div.clientHeight;
-          })();
-          </script>
-	        <tbody>
-	        <%
-            let i = 0;
-            for (let user_apply of user_applys) {
-              ++i;
-            %>
-            <tr>
-		        	<td><%= i%></td>
-		        	<td><%= user_apply.school%></td>
-		        	<td><%= user_apply.cur_class%></td>
-		        	<td><%= user_apply.training_type%></td>
-		        	<td><%= user_apply.training_class%></td>
-		        </tr>
-		    <% } %>
-	        </tbody>
-	    </table>
-	</div>
+    <div style="text-align: center; margin-top: 30px; ">
+      <button type="submit" class="ui blue labeled icon button"><i class="ui icon edit"></i>修改</button>
+      <a href="<%= syzoj.utils.makeUrl(['reception', 'manage', edited_user.id]) %>" class="ui labeled icon button"><i
+          class="ui icon angle left"></i>返回</a>
+    </div>
+  </form>
+</div>
 </div>
 <script src="<%- lib('blueimp-md5/2.10.0/js/md5.min.js') %>"></script>
 <script type="text/javascript">
-function make_md5(tag) {
-	if (tag.val()) {
-		tag.val(md5(tag.val() + "syzoj2_xxx"));
-	}
-}
-function check() {
-  if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
-		$("#error").removeClass("success");
-		$("#error").removeClass("error");
-		$("#error").addClass("error");
-		$("#error_info").html("请输入正确的手机号");
-		$("#error").show();
-		return false;
+  function make_md5(tag) {
+    if (tag.val()) {
+      tag.val(md5(tag.val() + "syzoj2_xxx"));
+    }
   }
-	old_password = $("#old_password");
-	password1 = $("#password1");
-	password2 = $("#password2");
-	if ($("#old_password").val() && password1.val() != password2.val()) {
-		$("#error").removeClass("success");
-		$("#error").removeClass("error");
-		$("#error").addClass("error");
-		$("#error_info").html("两次输入的密码不一致。");
-		$("#error").show();
-		return false;
-	}
-	make_md5(old_password);
-	make_md5(password1);
-	make_md5(password2);
+  function check() {
+    if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
+      $("#error").removeClass("success");
+      $("#error").removeClass("error");
+      $("#error").addClass("error");
+      $("#error_info").html("请输入正确的手机号");
+      $("#error").show();
+      return false;
+    }
+    old_password = $("#old_password");
+    password1 = $("#password1");
+    password2 = $("#password2");
+    if ($("#old_password").val() && password1.val() != password2.val()) {
+      $("#error").removeClass("success");
+      $("#error").removeClass("error");
+      $("#error").addClass("error");
+      $("#error_info").html("两次输入的密码不一致。");
+      $("#error").show();
+      return false;
+    }
+    make_md5(old_password);
+    make_md5(password1);
+    make_md5(password2);
 
 <% if (allowedManagePrivilege) { %>
-  $('.checkbox_privilege').each(function () {
-    if ($(this).checkbox('is checked')) {
-      var name = $(this).data('name');
+      $('.checkbox_privilege').each(function () {
+        if ($(this).checkbox('is checked')) {
+          var name = $(this).data('name');
 
-      var elem = document.createElement('input');
-      elem.type = 'hidden';
-      elem.value = name;
-      elem.name = 'privileges';
-      document.getElementById('form').appendChild(elem);
-    }
-  });
+          var elem = document.createElement('input');
+          elem.type = 'hidden';
+          elem.value = name;
+          elem.name = 'privileges';
+          document.getElementById('form').appendChild(elem);
+        }
+      });
 <% } %>
 
 	return true;
-}
+  }
 </script>
 <script>
-$(function () {
-  $('.ui.dropdown:not(.simple)').dropdown();
-});
+  $(function () {
+    $('.ui.dropdown:not(.simple)').dropdown();
+  });
 </script>
 <% include reception_footer %>

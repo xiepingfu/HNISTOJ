@@ -64,7 +64,7 @@ app.get('/reception/register', async (req, res) => {
       }
 });
 
-app.get('/reception/:id/edit', async (req, res) => {
+app.get('/reception/manage/:id/edit', async (req, res) => {
   try {
     let id = parseInt(req.params.id);
     let user = await User.fromID(id);
@@ -101,7 +101,7 @@ app.get('/reception/:id/edit', async (req, res) => {
   res.render('forget');
 });
 
-app.post('/reception/:id/edit', async (req, res) => {
+app.post('/reception/manage/:id/edit', async (req, res) => {
   let user;
   try {
     let id = parseInt(req.params.id);
@@ -222,6 +222,7 @@ app.get('/reception/manage/:id', async (req, res) => {
       training_types: training_types,
       training_classs: training_classs,
       user_applys: user_applys,
+      error_info: null
     });
   } catch (e) {
       syzoj.log(e);
