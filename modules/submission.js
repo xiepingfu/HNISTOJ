@@ -13,10 +13,11 @@ const displayConfig = {
   showCode: true,
   showResult: true,
   showOthers: true,
-  showTestdata: true,
+  showTestdata: false,
   showDetailResult: true,
   inContest: false,
-  showRejudge: false
+  showRejudge: false,
+  showDetailCode: false
 };
 
 // s is JudgeState
