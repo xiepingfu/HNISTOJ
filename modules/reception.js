@@ -182,21 +182,21 @@ app.get('/reception/manage', async (req, res) => {
         };
       }
     }
-
+/*
     let training_type_id = parseInt(req.query.training_type);
     if (!isNaN(training_type_id))
       where.training_type_id = training_type_id;
     let training_class_id = parseInt(req.query.training_class);
     if (!isNaN(training_class_id))
       where.training_class_id = training_class_id;
-        
+        */
     const sort = req.query.sort || syzoj.config.sorting.reception.field;
     const order = req.query.order || syzoj.config.sorting.reception.order;
     if (!['realname', 'id', 'username', 'register_time'].includes(sort) || !['asc', 'desc'].includes(order)) {
       throw new ErrorMessage('错误的排序参数。');
     }
     let paginate = syzoj.utils.paginate(await User.count(where), req.query.page, syzoj.config.page.reception);
-    let users = await User.query(null, null, [[sort, order]]);
+    let users = await User.query(paginate, where, [[sort, order]]);
     
     let training_classs = await TrainigClass.query(null, null, [['id', 'asc']]);
     let training_types = await TrainingType.query(null, null, [['id', 'asc']]);
