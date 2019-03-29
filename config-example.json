@@ -41,6 +41,10 @@
     "problem": {
       "field": "id",
       "order": "asc"
+    },
+    "reception": {
+      "field": "id",
+      "order": "asc"
     }
   },
   "limit": {
@@ -63,7 +67,8 @@
     "article_comment": 10,
     "contest": 10,
     "edit_contest_problem_list": 10,
-    "edit_problem_tag_list": 10
+    "edit_problem_tag_list": 10,
+    "reception": 20
   },
   "enabled_languages": [
     "cpp",
