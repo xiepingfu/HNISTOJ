@@ -4,6 +4,9 @@ let ContestPlayer = syzoj.model('contest_player');
 let Problem = syzoj.model('problem');
 let JudgeState = syzoj.model('judge_state');
 let User = syzoj.model('user');
+let School = syzoj.model("school");
+let TrainingClass = syzoj.model("training_class");
+let TrainingType = syzoj.model("training_type");
 
 const jwt = require('jsonwebtoken');
 const { getSubmissionInfo, getRoughResult, processOverallResult } = require('../libs/submissions_process');
@@ -44,14 +47,22 @@ app.get('/contest/:id/edit', async (req, res) => {
       await contest.loadRelationships();
     }
 
-    let problems = [], admins = [];
+    let problems = [], admins = [], schools = [], participants = [], classes = [], training_types = [];
     if (contest.problems) problems = await contest.problems.split('|').mapAsync(async id => await Problem.fromID(id));
     if (contest.admins) admins = await contest.admins.split('|').mapAsync(async id => await User.fromID(id));
+    if (contest.schools) schools = await contest.schools.split('|').mapAsync(async id => await School.fromID(id));
+    if (contest.participants) participants = await contest.participants.split('|').mapAsync(async id => await User.fromID(id));
+    if (contest.classes) classes = await contest.classes.split('|').mapAsync(async id => await TrainingClass.fromID(id));
+    if (contest.training_types) training_types = await contest.training_types.split('|').mapAsync(async id => await TrainingType.fromID(id));
 
     res.render('contest_edit', {
       contest: contest,
       problems: problems,
-      admins: admins
+      admins: admins,
+      schools: schools,
+      classes: classes,
+      participants: participants,
+      training_types: training_types
     });
   } catch (e) {
     syzoj.log(e);
@@ -96,8 +107,16 @@ app.post('/contest/:id/edit', async (req, res) => {
     contest.subtitle = req.body.subtitle;
     if (!Array.isArray(req.body.problems)) req.body.problems = [req.body.problems];
     if (!Array.isArray(req.body.admins)) req.body.admins = [req.body.admins];
+    if (!Array.isArray(req.body.schools)) req.body.schools = [req.body.schools];
+    if (!Array.isArray(req.body.participants)) req.body.participants = [req.body.participants];
+    if (!Array.isArray(req.body.classes)) req.body.classes = [req.body.classes];
+    if (!Array.isArray(req.body.training_types)) req.body.training_types = [req.body.training_types];
     contest.problems = req.body.problems.join('|');
     contest.admins = req.body.admins.join('|');
+    contest.schools = req.body.schools.join('|');
+    contest.participants = req.body.participants.join('|');
+    contest.classes = req.body.classes.join('|');
+    contest.training_types = req.body.training_types.join('|');
     contest.information = req.body.information;
     contest.start_time = syzoj.utils.parseDate(req.body.start_time);
     contest.end_time = syzoj.utils.parseDate(req.body.end_time);

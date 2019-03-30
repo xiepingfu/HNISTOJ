@@ -26,6 +26,38 @@
                 <% } %>
                 </select>
             </div>
+            <div class="field">
+                <label>particate school</label>
+                <select class="ui fluid search dropdown" multiple="" id="search_schools" name="schools">
+                <% for (let school of schools) { %>
+                <option value="<%= school.id %>" selected><%= school.name %></option>
+                <% } %>
+                </select>
+            </div>
+            <div class="field">
+                <label>particate type</label>
+                <select class="ui fluid search dropdown" multiple="" id="search_training_types" name="training_types">
+                <% for (let training_type of training_types) { %>
+                <option value="<%= training_type.id %>" selected><%= training_type.name %></option>
+                <% } %>
+                </select>
+            </div>
+            <div class="field">
+                <label>particate class</label>
+                <select class="ui fluid search dropdown" multiple="" id="search_classes" name="classes">
+                <% for (let class_item of classes) { %>
+                <option value="<%= class_item.id %>" selected><%= class_item.name %></option>
+                <% } %>
+                </select>
+            </div>
+            <div class="field">
+                <label>particate user</label>
+                <select class="ui fluid search dropdown" multiple="" id="search_participants" name="participants">
+                <% for (let participant of participants) { %>
+                <option value="<%= participant.id %>" selected><%= participant.username %></option>
+                <% } %>
+                </select>
+            </div>
             <div class="inline fields">
               <label>赛制</label>
               <div class="field">
@@ -111,6 +143,66 @@ $(function () {
         cache: false
       }
     });
+  $('#search_schools')
+  .dropdown({
+    debug: true,
+    apiSettings: {
+      url: '/api/v2/search/schools/{query}',
+      onResponse: function (response) {
+        var a = $('#search_schools').val().map(function (x) { return parseInt(x) });
+        if (response.results) {
+          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
+        }
+        return response;
+      },
+      cache: false
+    }
+  });
+  $('#search_classes')
+  .dropdown({
+    debug: true,
+    apiSettings: {
+      url: '/api/v2/search/classes/{query}',
+      onResponse: function (response) {
+        var a = $('#search_classes').val().map(function (x) { return parseInt(x) });
+        if (response.results) {
+          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
+        }
+        return response;
+      },
+      cache: false
+    }
+  });
+  $('#search_participants')
+  .dropdown({
+    debug: true,
+    apiSettings: {
+      url: '/api/v2/search/users/{query}',
+      onResponse: function (response) {
+        var a = $('#search_participants').val().map(function (x) { return parseInt(x) });
+        if (response.results) {
+          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
+        }
+        return response;
+      },
+      cache: false
+    }
+  });
+  $('#search_training_types')
+  .dropdown({
+    debug: true,
+    apiSettings: {
+      url: '/api/v2/search/training_types/{query}',
+      onResponse: function (response) {
+        var a = $('#search_training_types').val().map(function (x) { return parseInt(x) });
+        if (response.results) {
+          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
+        }
+        return response;
+      },
+      cache: false
+    }
+  });
 });
 </script>
 <% include footer %>

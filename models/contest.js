@@ -5,6 +5,7 @@ let User = syzoj.model('user');
 let Problem = syzoj.model('problem');
 let ContestRanklist = syzoj.model('contest_ranklist');
 let ContestPlayer = syzoj.model('contest_player');
+let UserApply = syzoj.model('user_apply');
 
 let model = db.define('contest', {
   id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
@@ -26,6 +27,11 @@ let model = db.define('contest', {
   information: { type: Sequelize.TEXT },
   problems: { type: Sequelize.TEXT },
   admins: { type: Sequelize.TEXT },
+  schools: { type: Sequelize.TEXT },
+  classes: { type: Sequelize.TEXT },
+  participants: { type: Sequelize.TEXT },
+  training_types: { type: Sequelize.TEXT },
+
 
   ranklist_id: {
     type: Sequelize.INTEGER,
@@ -58,6 +64,10 @@ class Contest extends Model {
       subtitle: '',
       problems: '',
       admins: '',
+      schools: '',
+      classes: '',
+      participants: '',
+      training_types: '',
       information: '',
       type: 'noi',
       start_time: 0,
@@ -76,6 +86,18 @@ class Contest extends Model {
 
   async isSupervisior(user) {
     return user && (user.is_admin || this.holder_id === user.id || this.admins.split('|').includes(user.id.toString()));
+  }
+
+  async isParticipant(user) {
+    let flag=false;
+    let user_applys = await UserApply.query(null, {user_id: user.id}, null);
+    await user_applys.forEachAsync(async obj => {
+      if (this.schools.split('|').includes(obj.school.toString()) || this.training_types.split('|').includes(obj.training_type_id.toString()) || this.classes.split('|').includes(obj.training_class_id.toString()) ) {
+        flag=true;
+        break;
+      }
+    });
+    return user && (user.is_admin || this.holder_id === user.id || flag || this.participants.split('|').includes(user.id.toString()));
   }
 
   allowedSeeingOthers() {

@@ -29,6 +29,87 @@ app.get('/api/v2/search/users/:keyword*?', async (req, res) => {
   }
 });
 
+app.get('/api/v2/search/schools/:keyword*?', async (req, res) => {
+  try {
+    let School = syzoj.model('school');
+
+    let keyword = req.params.keyword || '';
+    let conditions = [];
+    if (keyword != null && String(keyword).length >= 2) {
+      conditions.push({ name: { $like: `%${req.params.keyword}%` } });
+    }
+    if (conditions.length === 0) {
+      res.send({ success: true, results: [] });
+    } else {
+      let schools = await School.query(null, {
+        $or: conditions
+      }, [['id', 'asc']]);
+
+      let result = [];
+
+      result = schools.map(x => ({ name: `${x.name}`, value: x.id }));
+      res.send({ success: true, results: result });
+    }
+  } catch (e) {
+    syzoj.log(e);
+    res.send({ success: false });
+  }
+});
+
+app.get('/api/v2/search/classes/:keyword*?', async (req, res) => {
+  try {
+    let TrainingClass = syzoj.model('training_class');
+
+    let keyword = req.params.keyword || '';
+    let conditions = [];
+    if (keyword != null && String(keyword).length >= 2) {
+      conditions.push({ name: { $like: `%${req.params.keyword}%` } });
+    }
+    if (conditions.length === 0) {
+      res.send({ success: true, results: [] });
+    } else {
+      let classes = await TrainingClass.query(null, {
+        $or: conditions
+      }, [['id', 'asc']]);
+
+      let result = [];
+
+      result = classes.map(x => ({ name: `${x.name}`, value: x.id }));
+      res.send({ success: true, results: result });
+    }
+  } catch (e) {
+    syzoj.log(e);
+    res.send({ success: false });
+  }
+});
+
+app.get('/api/v2/search/training_types/:keyword*?', async (req, res) => {
+  try {
+    let TrainingType = syzoj.model('training_type');
+
+    let keyword = req.params.keyword || '';
+    let conditions = [];
+    if (keyword != null && String(keyword).length >= 2) {
+      conditions.push({ name: { $like: `%${req.params.keyword}%` } });
+    }
+    if (conditions.length === 0) {
+      res.send({ success: true, results: [] });
+    } else {
+      let training_types = await TrainingType.query(null, {
+        $or: conditions
+      }, [['id', 'asc']]);
+
+      let result = [];
+
+      result = training_types.map(x => ({ name: `${x.name}`, value: x.id }));
+      res.send({ success: true, results: result });
+    }
+  } catch (e) {
+    syzoj.log(e);
+    res.send({ success: false });
+  }
+});
+
 app.get('/api/v2/search/problems/:keyword*?', async (req, res) => {
   try {
     let Problem = syzoj.model('problem');
