@@ -72,7 +72,7 @@ app.get('/reception/manage/:id/edit', async (req, res) => {
     let user = await User.fromID(id);
     if (!user) throw new ErrorMessage('无此用户。');
 
-    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    let allowedEdit = await res.locals.user.hasPrivilege('manage_user');
     if (!allowedEdit) {
       throw new ErrorMessage('您没有权限进行此操作。');
     }
@@ -110,7 +110,7 @@ app.post('/reception/manage/:id/edit', async (req, res) => {
     user = await User.fromID(id);
     if (!user) throw new ErrorMessage('无此用户。');
 
-    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    let allowedEdit = await res.locals.user.hasPrivilege('manage_user');
     if (!allowedEdit) throw new ErrorMessage('您没有权限进行此操作。');
 
     if (req.body.old_password && req.body.new_password) {
@@ -225,7 +225,7 @@ app.get('/reception/manage/:id', async (req, res) => {
     let user = await User.fromID(id);
     if (!user) throw new ErrorMessage('无此用户。');
 
-    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    let allowedEdit = await res.locals.user.hasPrivilege('manage_user');
     if (!allowedEdit) {
       throw new ErrorMessage('您没有权限进行此操作。');
     }
@@ -287,7 +287,7 @@ app.post('/reception/manage/:id/add_training', async (req, res) => {
     user = await User.fromID(id);
     if (!user) throw 2001;
 
-    let allowedEdit = await user.isAllowedEditBy(res.locals.user);
+    let allowedEdit = await res.locals.user.hasPrivilege('manage_user');
     if (!allowedEdit) throw 2002;
 
     user_apply = await UserApply.create({

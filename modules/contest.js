@@ -139,9 +139,14 @@ app.get('/contest/:id', async (req, res) => {
     const curUser = res.locals.user;
     let contest_id = parseInt(req.params.id);
 
+    if(!curUser) throw new ErrorMessage('请先登陆。');
+
     let contest = await Contest.fromID(contest_id);
     if (!contest) throw new ErrorMessage('无此比赛。');
     if (!contest.is_public && (!res.locals.user || !res.locals.user.is_admin)) throw new ErrorMessage('比赛未公开，请耐心等待 (´∀ `)');
+
+    const isParticipant = await contest.isParticipant(curUser);
+    if(!isParticipant) throw new ErrorMessage('您没有权限参加此比赛，如有疑问请联系管理员。');
 
     const isSupervisior = await contest.isSupervisior(curUser);
     contest.running = contest.isRunning();

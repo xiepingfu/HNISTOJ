@@ -89,12 +89,12 @@ class Contest extends Model {
   }
 
   async isParticipant(user) {
+    if (!user) return false;
     let flag=false;
-    let user_applys = await UserApply.query(null, {user_id: user.id}, null);
+    let user_applys = await UserApply.query(null, {'user_id': user.id}, null);
     await user_applys.forEachAsync(async obj => {
       if (this.schools.split('|').includes(obj.school.toString()) || this.training_types.split('|').includes(obj.training_type_id.toString()) || this.classes.split('|').includes(obj.training_class_id.toString()) ) {
         flag=true;
-        break;
       }
     });
     return user && (user.is_admin || this.holder_id === user.id || flag || this.participants.split('|').includes(user.id.toString()));

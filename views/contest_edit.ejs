@@ -14,7 +14,7 @@
                 <label>试题列表</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_problems" name="problems">
                 <% for (let problem of problems) { %>
-                <option value="<%= problem.id %>" selected>#<%= problem.id %>. <%= problem.title %></option>
+                  <option value="<%= problem.id %>" selected>#<%= problem.id %>. <%= problem.title %></option>
                 <% } %>
                 </select>
             </div>
