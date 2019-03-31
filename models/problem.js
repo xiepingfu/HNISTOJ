@@ -181,6 +181,7 @@ let db = syzoj.db;
 
 let User = syzoj.model('user');
 let File = syzoj.model('file');
+let UserApply = syzoj.model('user_apply');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -224,6 +225,12 @@ let model = db.define('problem', {
   file_io_output_name: { type: Sequelize.TEXT },
 
   publicize_time: { type: Sequelize.DATE },
+
+  schools: { type: Sequelize.TEXT },
+  classes: { type: Sequelize.TEXT },
+  participants: { type: Sequelize.TEXT },
+  training_types: { type: Sequelize.TEXT },
+  is_all: { type: Sequelize.BOOLEAN },
 
   type: {
     type: Sequelize.ENUM,
@@ -271,6 +278,12 @@ class Problem extends Model {
       file_io_input_name: '',
       file_io_output_name: '',
 
+      schools: '',
+      classes: '',
+      participants: '',
+      training_types: '',
+      is_all: true,
+
       type: 'traditional'
     }, val)));
   }
@@ -298,6 +311,19 @@ class Problem extends Model {
     if (!user) return false;
     if (await user.hasPrivilege('manage_problem')) return true;
     return user.is_admin;
+  }
+
+  async isParticipant(user) {
+    if (this.is_all && this.is_public) return true;
+    if (!user) return false;
+    let flag=false;
+    let user_applys = await UserApply.query(null, {'user_id': user.id}, null);
+    await user_applys.forEachAsync(async obj => {
+      if (this.schools.split('|').includes(obj.school.toString()) || this.training_types.split('|').includes(obj.training_type_id.toString()) || this.classes.split('|').includes(obj.training_class_id.toString()) ) {
+        flag=true;
+      }
+    });
+    return user && (user.is_admin || this.holder_id === user.id || flag || this.participants.split('|').includes(user.id.toString()));
   }
 
   getTestdataPath() {

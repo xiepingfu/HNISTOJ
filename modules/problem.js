@@ -8,6 +8,9 @@ let ProblemTag = syzoj.model('problem_tag');
 let ProblemTagMap = syzoj.model('problem_tag_map');
 let Article = syzoj.model('article');
 const Sequelize = require('sequelize');
+let School = syzoj.model("school");
+let TrainingClass = syzoj.model("training_class");
+let TrainingType = syzoj.model("training_type");
 
 let Judger = syzoj.lib('judger');
 let CodeFormatter = syzoj.lib('code_formatter');
@@ -98,7 +101,7 @@ app.get('/problems/search', async (req, res) => {
           $and: [
             where,
             {
-              is_public: 1
+               is_public: 1
             }
           ]
         };
@@ -204,6 +207,10 @@ app.get('/problem/:id', async (req, res) => {
     let id = parseInt(req.params.id);
     let problem = await Problem.fromID(id);
     if (!problem) throw new ErrorMessage('无此题目。');
+
+    let curUser = res.locals.user;
+    const isParticipant = await problem.isParticipant(curUser);
+    if(!isParticipant) throw new ErrorMessage('您没有权限访问此题，如有疑问请联系管理员。');
 
     if (!await problem.isAllowedUseBy(res.locals.user)) {
       throw new ErrorMessage('您没有权限进行此操作。');
@@ -542,6 +549,70 @@ app.post('/problem/:id/manage', app.multer.fields([{ name: 'testdata', maxCount:
     await problem.save();
 
     res.redirect(syzoj.utils.makeUrl(['problem', id, 'manage']));
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+// Set problem privilege
+app.get('/problem/:id/privilege', async (req, res) => {
+  try {
+    let id = parseInt(req.params.id);
+    let problem = await Problem.fromID(id);
+
+    if (!problem) throw new ErrorMessage('无此题目。');
+    if (!await problem.isAllowedEditBy(res.locals.user)) throw new ErrorMessage('您没有权限进行此操作。');
+
+    await problem.loadRelationships();
+
+    let schools = [], participants = [], classes = [], training_types = [];
+    if (problem.schools) schools = await problem.schools.split('|').mapAsync(async id => await School.fromID(id));
+    if (problem.participants) participants = await problem.participants.split('|').mapAsync(async id => await User.fromID(id));
+    if (problem.classes) classes = await problem.classes.split('|').mapAsync(async id => await TrainingClass.fromID(id));
+    if (problem.training_types) training_types = await problem.training_types.split('|').mapAsync(async id => await TrainingType.fromID(id));
+
+
+    res.render('problem_privilege', {
+      problem: problem,
+      schools: schools,
+      participants: participants,
+      classes: classes,
+      training_types: training_types
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.post('/problem/:id/privilege', async (req, res) => {
+  try {
+    let id = parseInt(req.params.id);
+    let problem = await Problem.fromID(id);
+
+    if (!problem) throw new ErrorMessage('无此题目。');
+    if (!await problem.isAllowedEditBy(res.locals.user)) throw new ErrorMessage('您没有权限进行此操作。');
+
+    await problem.loadRelationships();
+
+    problem.is_all = req.body.is_all !== 'on';
+    if (!Array.isArray(req.body.schools)) req.body.schools = [req.body.schools];
+    if (!Array.isArray(req.body.participants)) req.body.participants = [req.body.participants];
+    if (!Array.isArray(req.body.classes)) req.body.classes = [req.body.classes];
+    if (!Array.isArray(req.body.training_types)) req.body.training_types = [req.body.training_types];
+    problem.schools = req.body.schools.join('|');
+    problem.participants = req.body.participants.join('|');
+    problem.classes = req.body.classes.join('|');
+    problem.training_types = req.body.training_types.join('|');
+
+    await problem.save();
+
+    res.redirect(syzoj.utils.makeUrl(['problem', id]));
   } catch (e) {
     syzoj.log(e);
     res.render('error', {

@@ -26,6 +26,13 @@
                 <% } %>
                 </select>
             </div>
+            <div class="inline field">
+                <label class="ui header">启用权限管理（不启用则所有人可访问此题，启用则只有满足以下任一条件的用户才可以访问该题）</label>
+                <div class="ui toggle checkbox">
+                    <input type="checkbox"<% if (!contest.is_all) { %> checked<% } %> name="is_all">
+                    <label><span style="visibility: hidden; ">　</span></label>
+                </div>
+            </div>
             <div class="field">
                 <label>particate school</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_schools" name="schools">

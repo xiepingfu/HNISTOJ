@@ -31,6 +31,7 @@ let model = db.define('contest', {
   classes: { type: Sequelize.TEXT },
   participants: { type: Sequelize.TEXT },
   training_types: { type: Sequelize.TEXT },
+  is_all: { type: Sequelize.BOOLEAN },
 
 
   ranklist_id: {
@@ -75,6 +76,7 @@ class Contest extends Model {
       holder: 0,
       ranklist_id: 0,
       is_public: false,
+      is_all: true,
       hide_statistics: false
     }, val)));
   }
@@ -89,6 +91,7 @@ class Contest extends Model {
   }
 
   async isParticipant(user) {
+    if(this.is_all) return true;
     if (!user) return false;
     let flag=false;
     let user_applys = await UserApply.query(null, {'user_id': user.id}, null);

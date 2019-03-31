@@ -122,6 +122,7 @@ app.post('/contest/:id/edit', async (req, res) => {
     contest.end_time = syzoj.utils.parseDate(req.body.end_time);
     contest.is_public = req.body.is_public === 'on';
     contest.hide_statistics = req.body.hide_statistics === 'on';
+    contest.is_all = req.body.is_all !== 'on';
 
     await contest.save();
 
@@ -138,8 +139,6 @@ app.get('/contest/:id', async (req, res) => {
   try {
     const curUser = res.locals.user;
     let contest_id = parseInt(req.params.id);
-
-    if(!curUser) throw new ErrorMessage('请先登陆。');
 
     let contest = await Contest.fromID(contest_id);
     if (!contest) throw new ErrorMessage('无此比赛。');
@@ -323,6 +322,11 @@ app.get('/contest/:id/submissions', async (req, res) => {
     let contest = await Contest.fromID(contest_id);
     if (!contest.is_public && (!res.locals.user || !res.locals.user.is_admin)) throw new ErrorMessage('比赛未公开，请耐心等待 (´∀ `)');
 
+    const curUser = res.locals.user;
+    
+    const isParticipant = await contest.isParticipant(curUser);
+    if(!isParticipant) throw new ErrorMessage('您没有权限参加此比赛，如有疑问请联系管理员。');
+
     if (contest.isEnded()) {
       res.redirect(syzoj.utils.makeUrl(['submissions'], { contest: contest_id }));
       return;
@@ -330,7 +334,6 @@ app.get('/contest/:id/submissions', async (req, res) => {
 
     const displayConfig = getDisplayConfig(contest);
     let problems_id = await contest.getProblems();
-    const curUser = res.locals.user;
 
     let user = req.query.submitter && await User.fromName(req.query.submitter);
     let where = {
@@ -475,6 +478,9 @@ app.get('/contest/:id/problem/:pid', async (req, res) => {
     let contest = await Contest.fromID(contest_id);
     if (!contest) throw new ErrorMessage('无此比赛。');
     const curUser = res.locals.user;
+
+    const isParticipant = await contest.isParticipant(curUser);
+    if(!isParticipant) throw new ErrorMessage('您没有权限参加此比赛，如有疑问请联系管理员。');
 
     let problems_id = await contest.getProblems();
 
