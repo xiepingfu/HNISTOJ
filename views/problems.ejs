@@ -84,7 +84,6 @@ if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
   <% if (problems.length) { %>
   <div style="margin-bottom: 30px; ">
     <% include page %>
-  </div>
   <table class="ui very basic center aligned table">
     <thead>
       <tr>
@@ -101,7 +100,7 @@ if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
     <tbody>
     <% for (let problem of problems) { %>
         <% if (problem.is_public || problem.allowedEdit) { %>
-        <tr style="height: 44px; ">
+        <tr style="height: 44px; " id="info"<% if (!problem.isParticipant) { %>class=""<% } %> >
             <% if (user) { %>
                 <td>
                 <% if (problem.judge_state) { %>
@@ -117,6 +116,7 @@ if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
             <td class="left aligned">
               <a style="vertical-align: middle; " href="<%= syzoj.utils.makeUrl(['problem', problem.id]) %>"><%= problem.title %>
                 <% if (!problem.is_public) { %><span class="ui header"><span class="ui tiny red label">未公开</span></span><% } %>
+                <% if (!problem.isParticipant) { %><span class="ui header"><span class="ui tiny yellow label" data-tooltip="此题只为特定用户开放">无权访问</span></span><% } %>
               </a>
               <div class="show_tag_controled" style="float: right; ">
                 <%

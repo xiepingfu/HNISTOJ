@@ -43,6 +43,8 @@ app.get('/problems', async (req, res) => {
       }
     }
 
+    let curUser = res.locals.user;
+
     let paginate = syzoj.utils.paginate(await Problem.count(where), req.query.page, syzoj.config.page.problem);
     let problems = await Problem.query(paginate, where, [[sortVal, order]]);
 
@@ -50,6 +52,7 @@ app.get('/problems', async (req, res) => {
       problem.allowedEdit = await problem.isAllowedEditBy(res.locals.user);
       problem.judge_state = await problem.getJudgeState(res.locals.user, true);
       problem.tags = await problem.getTags();
+      problem.isParticipant = await problem.isParticipant(curUser);
     });
 
     res.render('problems', {
