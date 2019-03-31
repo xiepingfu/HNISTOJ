@@ -1,4 +1,17 @@
-<% this.title = '修改资料'; %>
+<% 
+  this.title = '修改资料'; 
+  let privileges = {
+    add_problem: '添加题目',
+    manage_problem: '管理题目',
+    add_problem_tag: '添加题目标签',
+    manage_problem_tag: '管理题目标签',
+    add_contest: '添加比赛',
+    manage_contest: '管理比赛',
+    manage_user: '管理用户（基础）',
+    manage_user_advanced: '管理用户（高级）',
+    manage_blog: '管理讨论区',
+  };
+%>
 <% include header %>
 <div class="padding">
     <div class="ui <% if (error_info === '') { %>success<% } else { %>error<% } %> message" id="error" <% if (error_info === null) { %>hidden<% } %>>
@@ -57,26 +70,33 @@
       </div>
       <%
       let allowedManagePrivilege = user && user.is_admin;
+      if (user.is_admin) {
       %>
-      <div class="inline field">
-        <label class="ui header">权限</label>
-        <div class="ui toggle disabled checkbox" style="margin-right: 20px; ">
-          <input disabled="disabled" type="checkbox" <% if (edited_user.is_admin) { %> checked<% } %>>
-          <label>全站管理员</label>
-        </div>
-        <div class="ui toggle <% if (!allowedManagePrivilege) { %>disabled <% } %>checkbox checkbox_privilege" data-name="manage_problem" style="margin-right: 20px; ">
-          <input <% if (!allowedManagePrivilege) { %>disabled="disabled" <% } %>type="checkbox"<% if (edited_user.privileges.includes('manage_problem')) { %> checked<% } %>>
-          <label>管理题目</label>
-        </div>
-        <div class="ui toggle <% if (!allowedManagePrivilege) { %>disabled <% } %>checkbox checkbox_privilege" data-name="manage_problem_tag" style="margin-right: 20px; ">
-          <input <% if (!allowedManagePrivilege) { %>disabled="disabled" <% } %>type="checkbox"<% if (edited_user.privileges.includes('manage_problem_tag')) { %> checked<% } %>>
-          <label>管理题目标签</label>
-        </div>
-        <div class="ui toggle <% if (!allowedManagePrivilege) { %>disabled <% } %>checkbox checkbox_privilege" data-name="manage_user">
-          <input <% if (!allowedManagePrivilege) { %>disabled="disabled" <% } %>type="checkbox"<% if (edited_user.privileges.includes('manage_user')) { %> checked<% } %>>
-          <label>管理用户</label>
-        </div>
-      </div>
+        <div class="field">
+          <label class="ui header">权限</label>
+          <table class="ui center aligned celled table">
+            <thead>
+              <tr>
+                <% for (let privilege in privileges) { %>
+                  <th><%= privileges[privilege] %></th>
+                <% } %>
+              </tr>
+            </thead>
+            
+            <tbody>
+                <tr>
+                  <% for (let privilege in privileges) { %>
+                    <td>
+                      <div class="ui fitted toggle checkbox checkbox_privilege" data-name="<%= privilege %>">
+                        <input type="checkbox"<% if (edited_user.privileges.includes(privilege)) { %> checked<% } %>>
+                        <label></label>
+                      </div>
+                    </td>
+                    <% } %>
+                </tr>
+            </tbody>
+          </table>
+      <% } %>
       <div style="text-align: center; margin-top: 30px; ">
         <button type="submit" class="ui blue labeled icon button"><i class="ui icon edit"></i>修改</button>
         <a href="<%= syzoj.utils.makeUrl(['user', edited_user.id]) %>" class="ui labeled icon button"><i class="ui icon angle left"></i>返回</a>

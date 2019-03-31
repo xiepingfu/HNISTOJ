@@ -183,6 +183,7 @@ app.get('/submission/:id', async (req, res) => {
         displayConfig: displayConfig
       }, syzoj.config.session_secret) : null,
       displayConfig: displayConfig,
+      showDetailCode: curUser && (curUser.is_admin || judge.user_id === curUser.id)
     });
   } catch (e) {
     syzoj.log(e);

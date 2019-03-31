@@ -57,6 +57,7 @@ app.get('/problems', async (req, res) => {
 
     res.render('problems', {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
+      allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
       problems: problems,
       paginate: paginate,
       curSort: sort,
@@ -127,6 +128,7 @@ app.get('/problems/search', async (req, res) => {
 
     res.render('problems', {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
+      allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
       problems: problems,
       paginate: paginate,
       curSort: sort,
@@ -191,6 +193,7 @@ app.get('/problems/tag/:tagIDs', async (req, res) => {
 
     res.render('problems', {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
+      allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
       problems: problems,
       tags: tags,
       paginate: paginate,
@@ -291,7 +294,8 @@ app.get('/problem/:id/edit', async (req, res) => {
     let problem = await Problem.fromID(id);
 
     if (!problem) {
-      if (!res.locals.user) throw new ErrorMessage('请登录后继续。', { '登录': syzoj.utils.makeUrl(['login'], { 'url': req.originalUrl }) });
+      if (!res.locals.user) throw new ErrorMessage('请登录后继续。', { '登录': syzoj.utils.makeUrl(['login'], { 'url': req.originalUrl }) });      
+      if(!(await res.locals.user.hasPrivilege('add_problem'))) throw new ErrorMessage('您没有权限进行此操作。');
       problem = await Problem.create();
       problem.id = id;
       problem.allowedEdit = true;
@@ -322,7 +326,7 @@ app.post('/problem/:id/edit', async (req, res) => {
     let problem = await Problem.fromID(id);
     if (!problem) {
       if (!res.locals.user) throw new ErrorMessage('请登录后继续。', { '登录': syzoj.utils.makeUrl(['login'], { 'url': req.originalUrl }) });
-
+      if(!(await res.locals.user.hasPrivilege('add_problem'))) throw new ErrorMessage('您没有权限进行此操作。');
       problem = await Problem.create();
 
       if (await res.locals.user.hasPrivilege('manage_problem')) {

@@ -314,8 +314,9 @@ class Problem extends Model {
   }
 
   async isParticipant(user) {
-    if (this.is_all && this.is_public) return true;
+    if (this.is_all) return true;
     if (!user) return false;
+    if (await user.hasPrivilege('manage_problem')) return true;
     let flag=false;
     let user_applys = await UserApply.query(null, {'user_id': user.id}, null);
     await user_applys.forEachAsync(async obj => {

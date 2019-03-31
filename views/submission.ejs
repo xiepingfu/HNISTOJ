@@ -50,7 +50,7 @@
       <tr is="submission-item" v-bind:data="roughData" :config="displayConfig" :show-rejudge="showRejudge" :progress="getProgress()" :compiling="detailResult && !detailResult.compile"></tr>
     </tbody>
   </table>
-<% if (displayConfig.showDetailCode) { %>
+<% if (displayConfig.showDetailCode || showDetailCode) { %>
   <code-box no-escape v-bind:content="code">
     <% if (formattedCode !== null) { %>
       <a onclick="toggleFormattedCode()" class="ui button" style="position: absolute; top: 0px; right: -4px; border-top-left-radius: 0; border-bottom-right-radius: 0; ">

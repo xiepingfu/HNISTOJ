@@ -1374,5 +1374,19 @@
             "file:///opt/syzoj/web"
         ],
         "files2": []
+    },
+    "windowsState": {
+        "lastActiveWindow": {
+            "folder": "file:///opt/syzoj/web",
+            "backupPath": "/opt/syzoj/web/Backups/b31a1d5ede2c22151a29c2ccc6eed6e9",
+            "uiState": {
+                "mode": 0,
+                "x": 67,
+                "y": 55,
+                "width": 1373,
+                "height": 845
+            }
+        },
+        "openedWindows": []
     }
 }

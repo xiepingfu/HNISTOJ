@@ -99,6 +99,7 @@ Vue.component('submission-item', {
     <% } %>
     {{ formatSize(data.info.codeSize, 1) }}
   </td>
+  
   <td><a :href="userLink">{{ data.info.user }}</a></td>
   <td>{{ data.info.submitTime }}</td>
   <td v-if="showRejudge">
