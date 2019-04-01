@@ -93,6 +93,7 @@ app.post('/api_reception/reception_batch_register/preview/:type', async (req, re
     let training_class = req.body.training_class;
     let type = req.params.type;
     let new_users = []
+    let error_code = 0;
 
     if(type == 1) {
       let date = new Date;
@@ -108,7 +109,10 @@ app.post('/api_reception/reception_batch_register/preview/:type', async (req, re
       else {
         username = prefix * 10000;
       }
-      for (var i=0;i<parseInt(amount);i++) { 
+      for (var i=0;i<parseInt(amount);i++) {
+        let isExist = await User.fromName(parseInt(username) + i);
+        if(isExist)
+          error_code = 2008;
         new_users.push({
             username: parseInt(username) + i,
             password: randPassword(),
@@ -118,15 +122,49 @@ app.post('/api_reception/reception_batch_register/preview/:type', async (req, re
             training_class: training_class
         });
       }
-      res.send(JSON.stringify({ error_code: 0, new_users: new_users }));
     }
     else if(type==2) {
-
+      let prefix = req.body.prefix;
+      let n = amount.toString().length;
+      for (var i=0;i<parseInt(amount);i++) { 
+        let isExist =  await User.fromName(prefix + (Array(n).join(0) + i).slice(-n));
+        if(isExist)
+          error_code = 2008;
+        new_users.push({
+          username: prefix + (Array(n).join(0) + i).slice(-n),
+          password: randPassword(),
+          school: school,
+          cur_class: cur_class,
+          training_type: training_type,
+          training_class: training_class
+        });
+      }
     }
     else {
+      let username_array = req.body.usernames;
+      let realname_array = req.body.realnames;
+      let password_array = req.body.passwords;
+      if (username_array.length <= 1 && username_array[0] == '') username_array=[];
+      if (realname_array.length <= 1 && realname_array[0] == '') realname_array=[];
+      if (password_array.length <= 1 && password_array[0] == '') password_array=[];
 
+      await username_array.forEachAsync(async (element, i) => {
+        let isExist =  await User.fromName(element);
+        if(isExist)
+          error_code = 2008;
+        new_users.push({
+          username: element,
+          password: password_array.length>i ? password_array[i]:randPassword(),
+          realname: realname_array.length>i ? realname_array[i]:'',
+          school: school,
+          cur_class: cur_class,
+          training_type: training_type,
+          training_class: training_class
+        });
+      });
     }
     
+    res.send(JSON.stringify({ error_code: error_code, new_users: new_users }));
   } catch (e) {
     syzoj.log(e);
     res.send(JSON.stringify({ error_code: e }));
