@@ -11,6 +11,7 @@ let ContestPlayer = syzoj.model('contest_player');
 const calcRating = require('../libs/rating');
 let TrainingType = syzoj.model('training_type');
 let TrainigClass = syzoj.model('training_class');
+let School = syzoj.model('school');
 
 app.get('/reception/info', async (req, res) => {
   try {
@@ -43,7 +44,9 @@ app.get('/reception/register', async (req, res) => {
   try {
     if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
 
-    let lastuser = await User.query([1, 1], {}, [['id', 'desc']]);
+    let date = new Date;
+    let prefix = parseInt(parseInt(date.getFullYear().toString()) % 100);
+    let lastuser = await User.query([1, 1], {username: { $like: prefix.toString()+`%` }}, [['id', 'desc']]);
     let username;
     if (lastuser) {
       username = lastuser[0].username;
@@ -52,11 +55,31 @@ app.get('/reception/register', async (req, res) => {
       username = parseInt(username) + 1;
     }
     else {
-      let date = new Date;
-      username = parseInt(parseInt(date.getFullYear().toString()) % 100) * 10000;
+      username = prefix * 10000;
     }
     res.render('reception_register', {
       username: username,
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    })
+  }
+});
+
+app.get('/reception/batch_register', async (req, res) => {
+  try {
+    if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+
+    let schools = await School.query(null, null, [['id', 'asc']]);
+    let training_classs = await TrainigClass.query(null, null, [['id', 'asc']]);
+    let training_types = await TrainingType.query(null, null, [['id', 'asc']]);
+
+    res.render('reception_batch_register', {
+      schools: schools,
+      training_classs: training_classs,
+      training_types: training_types
     });
   } catch (e) {
     syzoj.log(e);
@@ -81,7 +104,6 @@ app.get('/reception/manage/:id/edit', async (req, res) => {
 
     res.locals.user.allowedManage = await res.locals.user.hasPrivilege('manage_user');
 
-    let School = syzoj.model('school');
     let schools = await School.query(null, null, [['id', 'asc']]);
     let user_applys = await UserApply.query(null, null, [['apply_time', 'desc']]);
 

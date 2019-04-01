@@ -5,7 +5,8 @@
         <% if (error_info === null) { %>hidden<% } %>>
         <p id="error_info"></p>
     </div>
-    <table class="ui very basic center aligned table" style="table-layout: fixed; ">
+    <div class="ui horizontal divider"><h3>基本信息</h3></div>
+    <table class="ui very basic center aligned table" style="table-layout: fixed; margin-bottom: 50px;">
         <thead>
             <tr>
                 <th>用户名</th>
@@ -33,7 +34,7 @@
     <%
     let allowedManagePrivilege = user && user.is_admin;
     %>
-    <div class="ui horizontal divider">培训报名记录</div>
+    <div class="ui horizontal divider"><h3>培训报名记录</h3></div>
     <br>
     <% if (user_applys.length) { %>
     <table class="ui very basic center aligned table" style="table-layout: fixed; ">

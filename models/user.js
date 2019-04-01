@@ -235,6 +235,7 @@ class User extends Model {
     return null;
   }
 
+
   getModel() { return model; }
 }
 

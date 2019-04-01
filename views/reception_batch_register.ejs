@@ -1,0 +1,552 @@
+<% this.receptionPage = 'batch_register'; %>
+<% include reception_header %>
+
+<div class="ui error message" id="error" data-am-alert hidden>
+    <p id="error_info"></p>
+</div>
+<div class="ui horizontal divider"><h3>方式1</h3>(用户名自动递增，密码随机)</div>
+<form class="ui form" style="margin-bottom:25px;">
+    <div class="field">
+        <label>数量</label>
+        <input type="number" placeholder="" id="amount1" value="0">
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label for="sex">报名时就读学校</label>
+            <select class="ui dropdown" name="school1" id="school1">
+                <option value="" selected>未选择</option>
+                <% for (let school of schools) { %>
+                <option value="<%= school.id %>"><%= school.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>报名时就读班级</label>
+            <input type="text" placeholder="" id="cur_class1" name="cur_class1">
+        </div>
+    </div>
+    <div class="two fields" id="new_password_field">
+        <div class="field">
+            <label>培训类型</label>
+            <select class="ui dropdown" id="training_type1" name="training_type1">
+                <option value="" selected>未选择</option>
+                <% for (let training_type of training_types) { %>
+                <option value="<%= training_type.id %>"><%= training_type.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>培训班级</label>
+            <select class="ui dropdown" id="training_class1" name="training_class1">
+                <option value="" selected>未选择</option>
+                <% for (let training_class of training_classs) { %>
+                <option value="<%= training_class.id %>"><%= training_class.name %></option>
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <a id="sign_up1" class="ui button" href="javascript:submit('1');">预览结果</a>
+</form>
+
+<div class="ui horizontal divider"><h3>方式2</h3>(指定用户名前缀，密码随机)</div>
+<form class="ui form" style="margin-bottom:25px;">
+    <div class="two fields">
+        <div class="field">
+            <label>指定用户名前缀</label>
+            <input type="text" placeholder="" id="prefix" name="prefix">
+        </div>
+        <div class="field">
+            <label for="amount">数量</label>
+            <input type="number" placeholder="" id="amount" value="0">
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label for="sex">报名时就读学校</label>
+            <select class="ui dropdown" name="school" id="school">
+                <option value="" selected>未选择</option>
+                <% for (let school of schools) { %>
+                <option value="<%= school.id %>"><%= school.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>报名时就读班级</label>
+            <input type="text" placeholder="" id="cur_class" name="cur_class">
+        </div>
+    </div>
+    <div class="two fields" id="new_password_field">
+        <div class="field">
+            <label>培训类型</label>
+            <select class="ui dropdown" id="training_type" name="training_type">
+                <option value="" selected>未选择</option>
+                <% for (let training_type of training_types) { %>
+                <option value="<%= training_type.id %>"><%= training_type.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>培训班级</label>
+            <select class="ui dropdown" id="training_class" name="training_class">
+                <option value="" selected>未选择</option>
+                <% for (let training_class of training_classs) { %>
+                <option value="<%= training_class.id %>"><%= training_class.name %></option>
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <a id="sign_up" class="ui button" href="javascript:submit();">预览结果</a>
+</form>
+
+
+<div class="ui horizontal divider"><h3>方式3</h3>(指定用户名、真实姓名和密码)</div>
+<form class="ui form" style="margin-bottom:25px;">
+    <div class="three fields">
+        <div class="field">
+            <label>用户名</label>
+            <textarea class="" rows="5" id="doc-ta-1" name="information" class="markdown-edit"></textarea>
+        </div>
+        <div class="field">
+            <label>真实姓名</label>
+            <textarea class="" rows="5" id="doc-ta-1" name="information" class="markdown-edit"></textarea>
+        </div>
+        <div class="field">
+            <label>密码</label>
+            <textarea class="" rows="5" id="doc-ta-1" name="information" class="markdown-edit"></textarea>
+        </div>
+    </div>
+    <div class="two fields">
+        <div class="field">
+            <label for="sex">报名时就读学校</label>
+            <select class="ui dropdown" name="school" id="school">
+                <option value="" selected>未选择</option>
+                <% for (let school of schools) { %>
+                <option value="<%= school.id %>"><%= school.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>报名时就读班级</label>
+            <input type="text" placeholder="" id="cur_class" name="cur_class">
+        </div>
+    </div>
+    <div class="two fields" id="new_password_field">
+        <div class="field">
+            <label>培训类型</label>
+            <select class="ui dropdown" id="training_type" name="training_type">
+                <option value="" selected>未选择</option>
+                <% for (let training_type of training_types) { %>
+                <option value="<%= training_type.id %>"><%= training_type.name %></option>
+                <% } %>
+            </select>
+        </div>
+        <div class="field">
+            <label>培训班级</label>
+            <select class="ui dropdown" id="training_class" name="training_class">
+                <option value="" selected>未选择</option>
+                <% for (let training_class of training_classs) { %>
+                <option value="<%= training_class.id %>"><%= training_class.name %></option>
+                <% } %>
+            </select>
+        </div>
+    </div>
+    <a id="sign_up" class="ui button" href="javascript:submit();">预览结果</a>
+</form>
+
+<div class="ui longer modal">
+    <i class="close icon"></i>
+    <div class="header">
+        预览结果
+    </div>
+    <div class="scrolling content">
+        <table class="ui celled table" id="modal_table">
+        </table>
+    </div>
+    <div class="actions">
+        <div class="ui black deny button">
+            取消
+        </div>
+        <a class="ui primary right labeled icon button" href="javascript:comfirm(1)">
+            确定并下载excel
+        <i class="checkmark icon"></i>
+        <a class="ui positive right labeled icon button" href="javascript:comfirm(0)">
+            确定
+        <i class="checkmark icon"></i>
+        </a>
+    </div>
+</div>
+<script src="<%- lib('blueimp-md5/2.10.0/js/md5.min.js') %>"></script>
+<script src="<%- lib('jquery/3.3.1/jquery.js') %>"></script>
+<script>
+    /*
+ *  jQuery table2excel - v1.1.1
+ *  jQuery plugin to export an .xls file in browser from an HTML table
+ *  https://github.com/rainabba/jquery-table2excel
+ *
+ *  Made by rainabba
+ *  Under MIT License
+ */
+//table2excel.js
+;(function ( $, window, document, undefined ) {
+    var pluginName = "table2excel",
+
+    defaults = {
+        exclude: ".noExl",
+        name: "Table2Excel",
+        filename: "table2excel",
+        fileext: ".xls",
+        exclude_img: true,
+        exclude_links: true,
+        exclude_inputs: true
+    };
+
+    // The actual plugin constructor
+    function Plugin ( element, options ) {
+            this.element = element;
+            // jQuery has an extend method which merges the contents of two or
+            // more objects, storing the result in the first object. The first object
+            // is generally empty as we don't want to alter the default options for
+            // future instances of the plugin
+            //
+            this.settings = $.extend( {}, defaults, options );
+            this._defaults = defaults;
+            this._name = pluginName;
+            this.init();
+    }
+
+    Plugin.prototype = {
+        init: function () {
+            var e = this;
+
+            var utf8Heading = "<meta http-equiv=\"content-type\" content=\"application/vnd.ms-excel; charset=UTF-8\">";
+            e.template = {
+                head: "<html xmlns:o=\"urn:schemas-microsoft-com:office:office\" xmlns:x=\"urn:schemas-microsoft-com:office:excel\" xmlns=\"http://www.w3.org/TR/REC-html40\">" + utf8Heading + "<head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets>",
+                sheet: {
+                    head: "<x:ExcelWorksheet><x:Name>",
+                    tail: "</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet>"
+                },
+                mid: "</x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body>",
+                table: {
+                    head: "<table>",
+                    tail: "</table>"
+                },
+                foot: "</body></html>"
+            };
+
+            e.tableRows = [];
+
+            // get contents of table except for exclude
+            $(e.element).each( function(i,o) {
+                var tempRows = "";
+                $(o).find("tr").not(e.settings.exclude).each(function (i,p) {
+
+                    tempRows += "<tr>";
+                    $(p).find("td,th").not(e.settings.exclude).each(function (i,q) { // p did not exist, I corrected
+
+                        var rc = {
+                            rows: $(this).attr("rowspan"),
+                            cols: $(this).attr("colspan"),
+                            flag: $(q).find(e.settings.exclude)
+                        };
+
+                        if( rc.flag.length > 0 ) {
+                            tempRows += "<td> </td>"; // exclude it!!
+                        } else {
+                            tempRows += "<td";
+                            if( rc.rows > 0) {
+                                tempRows += " rowspan=\'" + rc.rows + "\' ";
+                            }
+                            if( rc.cols > 0) {
+                                tempRows += " colspan=\'" + rc.cols + "\' ";
+                            }
+                            tempRows += "/>" + $(q).html() + "</td>";
+                        }
+                    });
+
+                    tempRows += "</tr>";
+
+                });
+                // exclude img tags
+                if(e.settings.exclude_img) {
+                    tempRows = exclude_img(tempRows);
+                }
+
+                // exclude link tags
+                if(e.settings.exclude_links) {
+                    tempRows = exclude_links(tempRows);
+                }
+
+                // exclude input tags
+                if(e.settings.exclude_inputs) {
+                    tempRows = exclude_inputs(tempRows);
+                }
+                e.tableRows.push(tempRows);
+            });
+
+            e.tableToExcel(e.tableRows, e.settings.name, e.settings.sheetName);
+        },
+
+        tableToExcel: function (table, name, sheetName) {
+            var e = this, fullTemplate="", i, link, a;
+
+            e.format = function (s, c) {
+                return s.replace(/{(\w+)}/g, function (m, p) {
+                    return c[p];
+                });
+            };
+
+            sheetName = typeof sheetName === "undefined" ? "Sheet" : sheetName;
+
+            e.ctx = {
+                worksheet: name || "Worksheet",
+                table: table,
+                sheetName: sheetName
+            };
+
+            fullTemplate= e.template.head;
+
+            if ( $.isArray(table) ) {
+                 Object.keys(table).forEach(function(i){
+                      //fullTemplate += e.template.sheet.head + "{worksheet" + i + "}" + e.template.sheet.tail;
+                      fullTemplate += e.template.sheet.head + sheetName + i + e.template.sheet.tail;
+                });
+            }
+
+            fullTemplate += e.template.mid;
+
+            if ( $.isArray(table) ) {
+                 Object.keys(table).forEach(function(i){
+                    fullTemplate += e.template.table.head + "{table" + i + "}" + e.template.table.tail;
+                });
+            }
+
+            fullTemplate += e.template.foot;
+
+            for (i in table) {
+                e.ctx["table" + i] = table[i];
+            }
+            delete e.ctx.table;
+
+            var isIE = /*@cc_on!@*/false || !!document.documentMode; // this works with IE10 and IE11 both :)
+            //if (typeof msie !== "undefined" && msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))      // this works ONLY with IE 11!!!
+            if (isIE) {
+                if (typeof Blob !== "undefined") {
+                    //use blobs if we can
+                    fullTemplate = e.format(fullTemplate, e.ctx); // with this, works with IE
+                    fullTemplate = [fullTemplate];
+                    //convert to array
+                    var blob1 = new Blob(fullTemplate, { type: "text/html" });
+                    window.navigator.msSaveBlob(blob1, getFileName(e.settings) );
+                } else {
+                    //otherwise use the iframe and save
+                    //requires a blank iframe on page called txtArea1
+                    txtArea1.document.open("text/html", "replace");
+                    txtArea1.document.write(e.format(fullTemplate, e.ctx));
+                    txtArea1.document.close();
+                    txtArea1.focus();
+                    sa = txtArea1.document.execCommand("SaveAs", true, getFileName(e.settings) );
+                }
+
+            } else {
+                var blob = new Blob([e.format(fullTemplate, e.ctx)], {type: "application/vnd.ms-excel"});
+                window.URL = window.URL || window.webkitURL;
+                link = window.URL.createObjectURL(blob);
+                a = document.createElement("a");
+                a.download = getFileName(e.settings);
+                a.href = link;
+
+                document.body.appendChild(a);
+
+                a.click();
+
+                document.body.removeChild(a);
+            }
+
+            return true;
+        }
+    };
+
+    function getFileName(settings) {
+        return ( settings.filename ? settings.filename : "table2excel" );
+    }
+
+    // Removes all img tags
+    function exclude_img(string) {
+        var _patt = /(\s+alt\s*=\s*"([^"]*)"|\s+alt\s*=\s*'([^']*)')/i;
+        return string.replace(/<img[^>]*>/gi, function myFunction(x){
+            var res = _patt.exec(x);
+            if (res !== null && res.length >=2) {
+                return res[2];
+            } else {
+                return "";
+            }
+        });
+    }
+
+    // Removes all link tags
+    function exclude_links(string) {
+        return string.replace(/<a[^>]*>|<\/a>/gi, "");
+    }
+
+    // Removes input params
+    function exclude_inputs(string) {
+        var _patt = /(\s+value\s*=\s*"([^"]*)"|\s+value\s*=\s*'([^']*)')/i;
+        return string.replace(/<input[^>]*>|<\/input>/gi, function myFunction(x){
+            var res = _patt.exec(x);
+            if (res !== null && res.length >=2) {
+                return res[2];
+            } else {
+                return "";
+            }
+        });
+    }
+
+    $.fn[ pluginName ] = function ( options ) {
+        var e = this;
+            e.each(function() {
+                if ( !$.data( e, "plugin_" + pluginName ) ) {
+                    $.data( e, "plugin_" + pluginName, new Plugin( this, options ) );
+                }
+            });
+
+        // chain jQuery functions
+        return e;
+    };
+
+})( jQuery, window, document );
+
+</script>
+<script>
+    let new_users;
+    function submit(type) {
+        $("#sign_up"+type).addClass("loading");
+        $.ajax({
+              url: '/api_reception/reception_batch_register/preview/'+type,
+              type: 'POST',
+              async: true,
+              data: {
+                amount: $("#amount"+type).val(),
+                school: $("#school"+type).val(),
+                cur_class: $("#cur_class"+type).val(),
+                training_type: $("#training_type"+type).val(),
+                training_class: $("#training_class"+type).val(),
+                prevUrl: <%- serializejs(req.query.url || '/') %>
+              },
+              success: function(data) {
+                  error_code = data.error_code;
+                  switch(error_code){
+                      case 0:
+                        new_users = data.new_users;
+                        preview_success();
+                        break;
+                      case 2001:
+                          show_error("服务器未收到数据");
+                          break;
+                      case 3001:
+                          break;
+                      default:
+                          show_error("未知错误：" + JSON.stringify(data));
+                          break;
+                  }
+                  $("#sign_up"+type).removeClass("loading");
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  alert(XMLHttpRequest.responseText);
+                  show_error("error");
+                  $("#sign_up"+type).removeClass("loading");
+              }
+        });
+        $('.longer.modal').modal('show');
+        $("#sign_up"+type).removeClass("loading");
+    }
+
+    function preview_success() {
+        $("#modal_table").html(get_contaion(new_users));
+    }
+    let table_header_map = {
+        'username': '用户名',
+        'password': '密码',
+        'school': '就读学校',
+        'cur_class': '就读班级',
+        'training_type': '培训类型',
+        'training_class': '培训班级'
+    }
+    function get_contaion(name){
+        var html;
+        $.each(name, function (index, item) {
+            if (index === 0) {
+                html += "<tr>";
+                $.each(item, function (vlaIndex) {
+                    html += "<td>";
+                    html += table_header_map[vlaIndex];
+                    html += "</td>";
+                });
+                html += "</tr>";
+            }
+            html += "<tr>";
+            $.each(item, function (vlaIndex, valItem) {
+                html += "<td>";
+                html += valItem;
+                html += "</td>";
+            });
+            html += "</tr>";
+        });
+        return html;
+    }
+
+    function comfirm(isDownload) {
+        if(new_users.length == 0) {
+            show_error("数量为0");
+            return;
+        }
+        new_users.forEach(element => {
+            element.password = md5(element.password + "syzoj2_xxx");
+        });
+        $.ajax({
+              url: '/api_reception/reception_batch_register/comfirm',
+              type: 'POST',
+              async: true,
+              data: {
+                  new_users: new_users
+              },
+              success: function(data) {
+                  error_code = data.error_code;
+                  switch(error_code){
+                      case 0:
+                        if (isDownload==1) {
+                            $("#modal_table").table2excel({  
+                                exclude: ".noExl",  
+                                name: "Excel Document Name",  
+                                filename: "new_users",  
+                                exclude_img: true,  
+                                exclude_links: true,  
+                                exclude_inputs: true
+                            });  
+                        }
+                        show_error("success");
+                        break;
+                      case 2001:
+                          show_error("服务器未收到数据");
+                          break;
+                      case 3001:
+                          break;
+                      default:
+                          show_error("未知错误：" + JSON.stringify(data));
+                          break;
+                  }
+                  $("#sign_up"+type).removeClass("loading");
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  alert(XMLHttpRequest.responseText);
+              }
+        });
+    }
+    function show_error(error) {
+        $("#error_info").text(error);
+        $("#error").show();
+    }
+    $(function () {
+        $('.ui.dropdown:not(.simple)').dropdown();
+    });
+</script>
+<% include reception_footer %>

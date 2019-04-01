@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="field">
-                <label>particate school</label>
+                <label>参赛学校</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_schools" name="schools">
                 <% for (let school of schools) { %>
                 <option value="<%= school.id %>" selected><%= school.name %></option>
@@ -42,7 +42,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>particate type</label>
+                <label>参赛培训类型</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_training_types" name="training_types">
                 <% for (let training_type of training_types) { %>
                 <option value="<%= training_type.id %>" selected><%= training_type.name %></option>
@@ -50,7 +50,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>particate class</label>
+                <label>参赛班级</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_classes" name="classes">
                 <% for (let class_item of classes) { %>
                 <option value="<%= class_item.id %>" selected><%= class_item.name %></option>
@@ -58,7 +58,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>particate user</label>
+                <label>参赛用户</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_participants" name="participants">
                 <% for (let participant of participants) { %>
                 <option value="<%= participant.id %>" selected><%= participant.username %></option>

@@ -1,14 +1,15 @@
 <%
 let items = {
   info: '统计信息',
-  register: '用户注册',
-  manage: '用户管理',
+  register: '用户单个注册',
+  batch_register: '用户批量注册',
+  manage: '所有用户',
   other: '其他操作'
 };
 %>
-<% this.title = items[this.receptionPage] + ' - 前台工具'; %>
+<% this.title = items[this.receptionPage] + ' - 用户管理'; %>
 <% include header %>
-<h1 style="text-align: center; margin-bottom: 27px; ">前台工具</h1>
+<h1 style="text-align: center; margin-bottom: 27px; ">用户管理</h1>
 <div class="ui grid">
   <div class="three wide column">
     <div class="ui vertical fluid tabular menu" style="height: 100%; ">

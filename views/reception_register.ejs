@@ -5,31 +5,31 @@
         <div class="ui error message" id="error" data-am-alert hidden>
           <p id="error_info"></p>
         </div>
-                <form class="ui form">
-                      <div class="field">
-                          <label for="username">用户名</label>
-                          <input type="text" placeholder="" id="username" value="<%= username %>" readonly>
-                      </div>
-                      <div class="field">
-                            <label for="realname">真实姓名</label>
-                            <input type="text" placeholder="" id="realname">
-                      </div>
-                      <div class="field">
-                        <label for="phone">手机号</label>
-                        <input type="number" placeholder="" id="phone">
-                      </div>
-                      <div class="two fields">
-                          <div class="field">
-                          <label class="ui header">密码</label>
-                            <input type="password" placeholder="" id="password1">
-                          </div>
-                          <div class="field">
-                            <label class="ui header">确认密码</label>
-                            <input type="password" placeholder="" id="password2">
-                          </div>
-                      </div>
-                      <a id="sign_up" class="ui button" href="javascript:submit();">注册</a>
-                  </form>
+            <form class="ui form">
+                <div class="field">
+                    <label for="username">用户名</label>
+                    <input type="text" placeholder="" id="username" value="<%= username %>" readonly>
+                </div>
+                <div class="field">
+                    <label for="realname">真实姓名</label>
+                    <input type="text" placeholder="" id="realname">
+                </div>
+                <div class="field">
+                <label for="phone">手机号</label>
+                <input type="number" placeholder="" id="phone">
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                    <label class="ui header">密码</label>
+                    <input type="password" placeholder="" id="password1">
+                    </div>
+                    <div class="field">
+                    <label class="ui header">确认密码</label>
+                    <input type="password" placeholder="" id="password2">
+                    </div>
+                </div>
+                <a id="sign_up" class="ui button" href="javascript:submit();">注册</a>
+            </form>
       </div>
       <script src="<%- lib('blueimp-md5/2.10.0/js/md5.min.js') %>"></script>
       <script type="text/javascript">
