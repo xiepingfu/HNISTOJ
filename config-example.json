@@ -114,6 +114,7 @@
       "url": "https://loj.ac/"
     }
   ],
+  "start_pages": [],
   "session_secret": "@SESSION_SECRET@",
   "rabbitMQ": "amqp://localhost/",
   "redis": "redis://127.0.0.1:6379",

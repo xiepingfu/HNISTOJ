@@ -1,3 +1,4 @@
+<% this.title = '介绍' %>
 <% include util %>
 <!DOCTYPE html>
 <html lang="zh-CN" style="position: fixed; width: 100%; overflow: hidden; ">
@@ -53,45 +54,72 @@
             <% } else { %>
             <a class="header item" href="/"><span style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><%= syzoj.config.title %></span></a>
             <% } %>
-            <a class="item<% if (active === 'index') { %> active<% } %>" href="/index"><i class="home icon"></i> 首页</a>
-            <a class="item<% if (active.startsWith('problem')) { %> active<% } %>" href="/problems"><i class="list icon"></i> 题库</a>
-            <a class="item<% if (active.startsWith('contest')) { %> active<% } %>" href="/contests"><i class="calendar icon"></i> 比赛</a>
-            <a class="item<% if (active.startsWith('submission')) { %> active<% } %>" href="/submissions"><i class="tasks icon"></i> 评测</a>
-            <a class="item<% if (active.startsWith('ranklist')) { %> active<% } %>" href="/ranklist"><i class="signal icon"></i> 排名</a>
-            <a class="item<% if (active.startsWith('discussion') || active.startsWith('article')) { %> active<% } %>" href="/discussion/global"><i class="comments icon"></i> 讨论</a>
-            <a class="item<% if (active.startsWith('help')) { %> active<% } %>" href="/help"><i class="help circle icon"></i> 帮助</a>
-
-              <% if (typeof contest !== 'undefined' && contest && contest.id) { %>
-              <a id="back_to_contest" class="item" href="<%= syzoj.utils.makeUrl(['contest', contest.id]) %>"><i class="arrow left icon"></i> 返回比赛</a>
+            <% for (let item of start_pages) { %>
+              <a class="item<% if (active === 'index') { %> active<% } %>" href="?id=<%=item.article_id%>"> <%=item.title%></a>
             <% } %>
+            <a class="item<% if (active === 'index') { %> active<% } %>" href="/index"><i class="home icon"></i> 首页</a>
+        
             <div class="right menu">
-              <% if (user) { %>
-              <a href="<%= syzoj.utils.makeUrl(['user', user.id]) %>" style="color: inherit; ">
-              <div class="ui simple dropdown item">
-                <%= user.username %><% if (user.nameplate) { %><%- user.nameplate %><% } %> <i class="dropdown icon"></i>
-                <div class="menu">
-                  <a class="item" href="<%= syzoj.utils.makeUrl(['user', user.id, 'edit']) %>"><i class="edit icon"></i>修改资料</a>
-                  <% if (user.is_admin) { %>
-                    <a class="item" href="<%= syzoj.utils.makeUrl(['admin', 'info']) %>"><i class="settings icon"></i>OJ管理</a>
-                    <a class="item<% if (active === 'reception') { %> active<% } %>" href="/reception/info"><i class="suitcase icon"></i> 用户管理</a>
-                    <a class="item" href-post="<%= syzoj.utils.makeUrl(['admin', 'restart'], { url: req.query['url'] || req.originalUrl }) %>"><i class="redo icon"></i>重启服务</a>
+                <% if (user) { %>
+                <a href="<%= syzoj.utils.makeUrl(['user', user.id]) %>" style="color: inherit; ">
+                <div class="ui simple dropdown item">
+                  <%= user.username %><% if (user.nameplate) { %><%- user.nameplate %><% } %> <i class="dropdown icon"></i>
+                  <div class="menu">
+                    <a class="item" href="<%= syzoj.utils.makeUrl(['user', user.id, 'edit']) %>"><i class="edit icon"></i>修改资料</a>
+                    <% if (user.is_admin) { %>
+                      <a class="item" href="<%= syzoj.utils.makeUrl(['admin', 'info']) %>"><i class="settings icon"></i>OJ管理</a>
+                      <a class="item<% if (active === 'reception') { %> active<% } %>" href="/reception/info"><i class="suitcase icon"></i> 用户管理</a>
+                      <a class="item" href-post="<%= syzoj.utils.makeUrl(['admin', 'restart'], { url: req.query['url'] || req.originalUrl }) %>"><i class="redo icon"></i>重启服务</a>
+                    <% } %>
+                    <a class="item" href-post="<%= syzoj.utils.makeUrl(['logout'], { url: req.originalUrl }) %>"><i class="power icon"></i>注销</a>
+                  </div>
+                </div>
+                </a>
+                  <% } else { %>
+                  <div class="item">
+                      <a class="ui button" style="margin-right: 0.5em; " href="<%= syzoj.utils.makeUrl(['login'], { url: req.query['url'] || req.originalUrl }) %>">
+                          登录
+                      </a>
+                      <a class="ui primary button" href="<%= syzoj.utils.makeUrl(['sign_up'], { url: req.query['url'] || req.originalUrl }) %>">
+                          注册
+                      </a>
+                  </div>
                   <% } %>
-                  <a class="item" href-post="<%= syzoj.utils.makeUrl(['logout'], { url: req.originalUrl }) %>"><i class="power icon"></i>注销</a>
-                </div>
               </div>
-              </a>
-                <% } else { %>
-                <div class="item">
-                    <a class="ui button" style="margin-right: 0.5em; " href="<%= syzoj.utils.makeUrl(['login'], { url: req.query['url'] || req.originalUrl }) %>">
-                        登录
-                    </a>
-                    <a class="ui primary button" href="<%= syzoj.utils.makeUrl(['sign_up'], { url: req.query['url'] || req.originalUrl }) %>">
-                        注册
-                    </a>
-                </div>
-                <% } %>
-            </div>
-        </div>
+        
+          </div>
     </div>
     <div style="margin-top: 28px; ">
     <div class="ui main container">
+
+
+
+        <% if (article) { %>
+            <style type="text/css" xmlns:style="http://www.w3.org/1999/xhtml">
+                .small{
+                  font-size: 0.7em;
+                }
+                </style>
+                <div class="padding">
+                  <div class="ui existing">
+                      <div id="content" class="font-content"><%- article.content %></div>
+                  </div>
+
+            </div>
+            <% } else {%>
+              <div class="ui placeholder segment">
+                  <div class="ui icon header">
+                    <i class="calendar icon" style="margin-bottom: 20px; "></i>
+                    起始页啥都没有
+                  </div>
+                  <a href="<%= syzoj.utils.makeUrl(['index']) %>" class="ui primary labeled icon button">
+                    <i class="home icon"></i>
+                    进入首页
+                  </a>
+                </div>
+              <% } %>
+
+
+
+
+<% include footer %>

@@ -2,13 +2,39 @@ let User = syzoj.model('user');
 let Article = syzoj.model('article');
 let Contest = syzoj.model('contest');
 let Problem = syzoj.model('problem');
+let ArticleComment = syzoj.model('article-comment');
+
 let Divine = require('syzoj-divine');
 let TimeAgo = require('javascript-time-ago');
 let zh = require('../libs/timeago');
+
 TimeAgo.locale(zh);
 const timeAgo = new TimeAgo('zh-CN');
 
 app.get('/', async (req, res) => {
+  try {
+    let start_pages = syzoj.config.start_pages;
+    let id = req.query.id ? parseInt(req.query.id) : (start_pages[0] ? start_pages[0].article_id : 1);
+    let article = await Article.fromID(id);
+    if (article) {
+      await article.loadRelationships();
+      article.allowedEdit = await article.isAllowedEditBy(res.locals.user);
+      article.allowedComment = await article.isAllowedCommentBy(res.locals.user);
+      article.content = await syzoj.utils.markdown(article.content);
+    }
+    res.render('start_page', {
+      article: article,
+      start_pages: start_pages
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.get('/index', async (req, res) => {
   try {
     let ranklist = await User.query([1, syzoj.config.page.ranklist_index], { is_show: true }, [[syzoj.config.sorting.ranklist.field, syzoj.config.sorting.ranklist.order]]);
     await ranklist.forEachAsync(async x => x.renderInformation());

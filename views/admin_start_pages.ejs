@@ -1,0 +1,96 @@
+<%
+this.adminPage = 'start_pages';
+%>
+<% include admin_header %>
+
+<table class="ui center aligned celled table">
+<thead>
+  <tr>
+    <th>标题</th>
+    <th width="50px">删除</th>
+  </tr>
+</thead>
+
+<tbody>
+  <% for (let i = 0; i < start_pages.length; i++) { %>
+    <tr>
+      <td><a href="<%= start_pages[i].url %>"><%= start_pages[i].title %></a></td>
+      <td>
+        <a onclick="$('#modal-remove-<%= i %>').modal('show');" style="color: #000; " href="#"><i class="remove icon"></i></a>
+        <div class="ui basic modal" id="modal-remove-<%= i %>">
+          <div class="ui icon header">
+            <i class="remove icon"></i>
+            <p style="margin-top: 15px; ">移除文章</p>
+          </div>
+          <div class="content" style="text-align: center; ">
+            <p>确认从起始页移除该文章吗？</p>
+          </div>
+          <div class="actions">
+            <div class="ui red basic cancel inverted button">
+              <i class="remove icon"></i>
+              否
+            </div>
+            <a class="ui green ok inverted button remove_link" data-id="<%= i %>">
+              <i class="checkmark icon"></i>
+              是
+            </a>
+          </div>
+        </div>
+      </td>
+    </tr>
+  <% } %>
+</tbody>
+</table>
+
+<div class="ui form">
+  <div class="field">
+      <label>起始页文章</label>
+      <select class="ui fluid search dropdown" multiple="" id="search_articles" name="articles">
+      <% for (let article of articles) { %>
+      <option value="<%= article.id %>" selected><%= article.name %></option>
+      <% } %>
+      </select>
+  </div>
+  <div style="text-align: center; "><div id="add_button" class="ui submit blue labeled icon button"><i class="ui add icon"></i>添加</a></div>
+</div>
+
+<form method="post" id="submit_form">
+  <input type="hidden" name="data" id="submit_data">
+</form>
+
+<script>
+var start_pages = <%- serializejs(start_pages) %>;
+$('.remove_link').click(function () {
+  start_pages.splice($(this).data('id'), 1);
+  $('#submit_data').val(JSON.stringify(start_pages));
+  $('#submit_form').submit();
+});
+
+$('#add_button').click(function () {
+  $('#search_articles').val().forEach(element => {
+    start_pages.push({article_id:element, title:null});
+  });
+  $('#submit_data').val(JSON.stringify(start_pages));
+  $('#submit_form').submit();
+});
+</script>
+<script>
+    $(function () {
+      $('#search_articles')
+        .dropdown({
+          debug: true,
+          apiSettings: {
+            url: '/api/v2/search/articles/{query}',
+            onResponse: function (response) {
+              var a = $('#search_articles').val().map(function (x) { return parseInt(x) });
+              if (response.results) {
+                response.results = response.results;
+              }
+              return response;
+            },
+            cache: false
+          }
+        });
+    });
+    </script>
+<% include admin_footer %>

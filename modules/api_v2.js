@@ -56,6 +56,33 @@ app.get('/api/v2/search/schools/:keyword*?', async (req, res) => {
   }
 });
 
+app.get('/api/v2/search/articles/:keyword*?', async (req, res) => {
+  try {
+    let Article = syzoj.model('article');
+
+    let keyword = req.params.keyword || '';
+    let conditions = [];
+    if (keyword != null && String(keyword).length >= 2) {
+      conditions.push({ title: { $like: `%${req.params.keyword}%` } });
+    }
+    if (conditions.length === 0) {
+      res.send({ success: true, results: [] });
+    } else {
+      let articles = await Article.query(null, {
+        $or: conditions
+      }, [['id', 'asc']]);
+
+      let result = [];
+
+      result = articles.map(x => ({ name: `${x.title}`, value: x.id }));
+      res.send({ success: true, results: result });
+    }
+  } catch (e) {
+    syzoj.log(e);
+    res.send({ success: false });
+  }
+});
+
 app.get('/api/v2/search/classes/:keyword*?', async (req, res) => {
   try {
     let TrainingClass = syzoj.model('training_class');
