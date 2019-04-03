@@ -2,6 +2,9 @@ let User = syzoj.model('user');
 let Problem = syzoj.model('problem');
 let File = syzoj.model('file');
 let UserApply = syzoj.model('user_apply');
+let School = syzoj.model('school');
+let TrainingType = syzoj.model('training_type');
+let TrainingClass = syzoj.model('training_class');
 const Email = require('../libs/email');
 const jwt = require('jsonwebtoken');
 
@@ -202,4 +205,43 @@ app.post('/api_reception/reception_batch_register/comfirm', async (req, res) => 
     res.send(JSON.stringify({ error_code: e }));
   }
 });
-  
+
+app.post('/api_reception/other_add/:type', async (req, res) => {
+  try {
+    res.setHeader('Content-Type', 'application/json');
+
+    let type = parseInt(req.params.type);
+    if(type == 1) {
+      let school_name = req.body.school;
+      let isExist = await School.query(null, {name: school_name}, null);
+      if(isExist.length > 0) throw 1;
+      let new_school = await School.create({
+        name: school_name
+      });
+      new_school.save();
+    }
+    else if(type == 2) {
+      let type_name = req.body.type;
+      let isExist = await TrainingType.query(null, {name: type_name}, null);
+      if(isExist.length > 0) throw 1;
+      let new_training_type = await TrainingType.create({
+        name: type_name
+      });
+      new_training_type.save();
+
+    }
+    else if(type == 3) {
+      let class_name = req.body.tclass;
+      let isExist = await TrainingClass.query(null, {name: class_name}, null);
+      if(isExist.length > 0) throw 1;
+      let new_training_class = await TrainingClass.create({
+        name: class_name
+      });
+      new_training_class.save();
+    }
+    res.send(JSON.stringify({ error_code: 0 }));
+  } catch (e) {
+    syzoj.log(e);
+    res.send(JSON.stringify({ error_code: e }));
+  }
+});

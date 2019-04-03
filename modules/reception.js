@@ -121,8 +121,17 @@ app.get('/reception/manage/:id/edit', async (req, res) => {
   }
 });
 
-app.get('/forget', async (req, res) => {
-  res.render('forget');
+app.get('/reception/other', async (req, res) => {
+  try {
+    
+    res.render('reception_other', {
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
 });
 
 app.post('/reception/manage/:id/edit', async (req, res) => {
@@ -326,9 +335,6 @@ app.get('/reception/manage/:id', async (req, res) => {
   }
 });
 
-app.get('/forget', async (req, res) => {
-  res.render('forget');
-});
 
 app.post('/reception/manage/:id/add_training', async (req, res) => {
   let user;

@@ -1,0 +1,74 @@
+<% this.receptionPage = 'other'; %>
+<% include reception_header %>
+
+<div class="ui error message" id="error" data-am-alert hidden>
+        <p id="error_info"></p>
+      </div>
+      
+<form action="" class="ui mini form" method="get" role="form" id="form">
+        <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
+            <label style="font-size: 1.2em; margin-right: 1px; ">学校：</label>
+            <div class="field"><input id="school" name="school" style="width: 100%; " type="text" value="">
+            </div>
+            <a class="ui labeled icon mini button" href="javascript:submit('1')">
+                <i class="add icon"></i>
+                添加
+            </a>
+        </div>
+    </form>
+    <form action="" class="ui mini form" method="get" role="form" id="form">
+            <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
+                <label style="font-size: 1.2em; margin-right: 1px; ">类型：</label>
+                <div class="field"><input id="type" name="type" style="width: 100%; " type="text" value="">
+                </div>
+                <a class="ui labeled icon mini button" href="javascript:submit('2')">
+                    <i class="add icon"></i>
+                    添加
+                </a>
+            </div>
+        </form>
+        <form action="" class="ui mini form" method="get" role="form" id="form">
+                <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
+                    <label style="font-size: 1.2em; margin-right: 1px; ">班级：</label>
+                    <div class="field"><input id="tclass" name="tclass" style="width: 100%; " type="text" value="">
+                    </div>
+                    <a class="ui labeled icon mini button" href="javascript:submit('3')">
+                        <i class="add icon"></i>
+                        添加
+                    </a>
+                </div>
+            </form>
+<script>
+    function submit(type) {
+        $.ajax({
+              url: '/api_reception/other_add/' + type,
+              type: 'POST',
+              async: true,
+              data: {
+                school: $("#school").val(),
+                type: $("#type").val(),
+                tclass: $("#tclass").val(),
+              },
+              success: function(data) {
+                  error_code = data.error_code;
+                  switch(error_code){
+                      case 0:
+                          alert('添加成功');
+                          break;
+                      case 1:
+                          alert('已存在');
+                          break;
+                      default:
+                          show_error("未知错误：" + JSON.stringify(data));
+                          break;
+                  }
+                  $("#sign_up").removeClass("loading");
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) {
+                  alert(XMLHttpRequest.responseText);
+                  show_error("未知错误");
+              }
+        });
+    };
+</script>
+<% include reception_footer %>
