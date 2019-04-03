@@ -5,7 +5,7 @@ let tagIDs = [];
 if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
 %>
 <div class="padding">
-  <div class="ui grid" style="margin-bottom: 10px; ">
+  <div class="ui grid segment piled raised" style="margin-bottom: 10px; ">
     <div class="row" style="white-space: nowrap; ">
       <div class="seven wide column">
         <% if (typeof tags !== 'undefined') { %>
@@ -85,85 +85,114 @@ if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
 
   <% if (problems.length) { %>
   <div style="margin-bottom: 30px; ">
-    <% include page %>
-  <table class="ui very selectable segment piled raised center aligned table orange">
-    <thead>
-      <tr>
-        <% if (user) { %>
-        <th class="one wide">提交状态</th>
-        <% } %>
-        <th class="one wide"><%- createSortableTitle('id', '编号', true) %></th>
-        <th class="left aligned"><%- createSortableTitle('title', '题目名称', true) %></th>
-        <th class="one wide"><%- createSortableTitle('ac_num', '通过', false) %></th>
-        <th class="one wide"><%- createSortableTitle('submit_num', '提交', false) %></th>
-        <th class="one wide">通过率</th>
-      </tr>
-    </thead>
-    <tbody>
-    <% for (let problem of problems) { %>
-        <% if (problem.is_public || problem.allowedEdit) { %>
-        <tr style="height: 44px; " id="info"<% if (!problem.isParticipant) { %>class=""<% } %> >
-            <% if (user) { %>
-                <td>
-                <% if (problem.judge_state) { %>
-                  <a href="<%= syzoj.utils.makeUrl(['submission', problem.judge_state.id]) %>">
-                    <span class="status <%= problem.judge_state.status.toLowerCase().split(' ').join('_') %>">
-                      <i class="<%= icon[problem.judge_state.status] || 'remove' %> icon"></i>
-                    </span>
-                  </a>
-                <% } %>
-                </td>
-            <% } %>
-            <td><b><%= problem.id %></b></td>
-            <td class="left aligned">
-              <a style="vertical-align: middle; " href="<%= syzoj.utils.makeUrl(['problem', problem.id]) %>"><%= problem.title %>
-                <% if (!problem.is_public) { %><span class="ui header"><span class="ui tiny red label">未公开</span></span><% } %>
-                <% if (!problem.isParticipant) { %><span class="ui header"><span class="ui tiny yellow label" data-tooltip="此题只为特定用户开放">无权访问</span></span><% } %>
-              </a>
-              <div class="show_tag_controled" style="float: right; ">
-                <%
-                if (problem.tags) {
-                  for (let tag of problem.tags) {
-                    let tagListToggledThisTag;
-                    if (!tagIDs.includes(tag.id)) tagListToggledThisTag = tagIDs.concat([tag.id]);
-                    else tagListToggledThisTag = tagIDs.filter(x => x != tag.id);
-                    tagListToggledThisTag = tagListToggledThisTag.sort().join(',');
-
-                    let url = tagListToggledThisTag ? syzoj.utils.makeUrl(['problems', 'tag', tagListToggledThisTag]) : syzoj.utils.makeUrl(['problems']);
-                  %>
-                  <span class="ui header">
-                    <a href="<%= url %>" class="ui tiny <%= tag.color %> label">
-                      <%= tag.name %>
+    <div class="ui stackable three column grid">
+      <div class="twelve wide column">
+        <% include page %>
+        <table class="ui very selectable segment piled raised center aligned table orange">
+          <thead>
+            <tr>
+              <% if (user) { %>
+              <th class="one wide">提交状态</th>
+              <% } %>
+              <th class="one wide"><%- createSortableTitle('id', '编号', true) %></th>
+              <th class="left aligned"><%- createSortableTitle('title', '题目名称', true) %></th>
+              <th class="one wide"><%- createSortableTitle('ac_num', '通过', false) %></th>
+              <th class="one wide"><%- createSortableTitle('submit_num', '提交', false) %></th>
+              <th class="one wide">通过率</th>
+            </tr>
+          </thead>
+          <tbody>
+          <% for (let problem of problems) { %>
+              <% if (problem.is_public || problem.allowedEdit) { %>
+              <tr style="height: 44px; " id="info"<% if (!problem.isParticipant) { %>class=""<% } %> >
+                  <% if (user) { %>
+                      <td>
+                      <% if (problem.judge_state) { %>
+                        <a href="<%= syzoj.utils.makeUrl(['submission', problem.judge_state.id]) %>">
+                          <span class="status <%= problem.judge_state.status.toLowerCase().split(' ').join('_') %>">
+                            <i class="<%= icon[problem.judge_state.status] || 'remove' %> icon"></i>
+                          </span>
+                        </a>
+                      <% } %>
+                      </td>
+                  <% } %>
+                  <td><b><%= problem.id %></b></td>
+                  <td class="left aligned">
+                    <a style="vertical-align: middle; " href="<%= syzoj.utils.makeUrl(['problem', problem.id]) %>"><%= problem.title %>
+                      <% if (!problem.is_public) { %><span class="ui header"><span class="ui tiny red label">未公开</span></span><% } %>
+                      <% if (!problem.isParticipant) { %><span class="ui header"><span class="ui tiny yellow label" data-tooltip="此题只为特定用户开放">无权访问</span></span><% } %>
                     </a>
-                  </span>
-                  <%
-                  }
-                }
-                %>
-              </div>
-            </td>
-            <td><%= problem.ac_num %></td>
-            <td><%= problem.submit_num %></td>
-            <td><%= problem.submit_num != 0 ? (((problem.ac_num / problem.submit_num * 100) || 0).toFixed(2) + '%') : '-' %></td>
-        </tr>
-        <% } %>
-    <% } %>
-    </tbody>
-  </table><br>
-  <% include page  %>
-  <% } else { %>
-  <div class="ui placeholder segment">
-    <div class="ui icon header">
-      <% if (typeof req.query.keyword !== 'undefined') { %>
-      <i class="search icon" style="margin-bottom: 20px; "></i>
-      找不到符合条件的题目
-      <% } else { %>
-      <i class="list icon" style="margin-bottom: 20px; "></i>
-      暂无题目
-      <% } %>
+                    <div class="show_tag_controled" style="float: right; ">
+                      <%
+                      if (problem.tags) {
+                        for (let tag of problem.tags) {
+                          let tagListToggledThisTag;
+                          if (!tagIDs.includes(tag.id)) tagListToggledThisTag = tagIDs.concat([tag.id]);
+                          else tagListToggledThisTag = tagIDs.filter(x => x != tag.id);
+                          tagListToggledThisTag = tagListToggledThisTag.sort().join(',');
+
+                          let url = tagListToggledThisTag ? syzoj.utils.makeUrl(['problems', 'tag', tagListToggledThisTag]) : syzoj.utils.makeUrl(['problems']);
+                        %>
+                        <span class="ui header">
+                          <a href="<%= url %>" class="ui tiny <%= tag.color %> label">
+                            <%= tag.name %>
+                          </a>
+                        </span>
+                        <%
+                        }
+                      }
+                      %>
+                    </div>
+                  </td>
+                  <td><%= problem.ac_num %></td>
+                  <td><%= problem.submit_num %></td>
+                  <td><%= problem.submit_num != 0 ? (((problem.ac_num / problem.submit_num * 100) || 0).toFixed(2) + '%') : '-' %></td>
+              </tr>
+              <% } %>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+      <div class="right floated four wide column">
+        <div class="ui segment piled raised center aligned">
+            <h4 class="ui top header">点击标签筛选题目</h4>
+          <%
+            if (problem_tags) {
+              for (let tag of problem_tags) {
+                let tagListToggledThisTag;
+                if (!tagIDs.includes(tag.id)) tagListToggledThisTag = tagIDs.concat([tag.id]);
+                else tagListToggledThisTag = tagIDs.filter(x => x != tag.id);
+                tagListToggledThisTag = tagListToggledThisTag.sort().join(',');
+
+                let url = tagListToggledThisTag ? syzoj.utils.makeUrl(['problems', 'tag', tagListToggledThisTag]) : syzoj.utils.makeUrl(['problems']);
+              %>
+              <span class="ui header">
+                <a href="<%= url %>" class="ui tiny <%= tag.color %> label">
+                  <%= tag.name %>
+                </a>
+              </span>
+              <%
+              }
+            }
+            %>
+        </div>
+      </div>
     </div>
+    <% include page  %>
+    <% } else { %>
+      <div class="ui placeholder segment">
+        <div class="ui icon header">
+          <% if (typeof req.query.keyword !== 'undefined') { %>
+          <i class="search icon" style="margin-bottom: 20px; "></i>
+          找不到符合条件的题目
+          <% } else { %>
+          <i class="list icon" style="margin-bottom: 20px; "></i>
+          暂无题目
+          <% } %>
+        </div>
+      </div>
+    <% } %>
   </div>
-  <% } %>
 <script>
 document.addEventListener('keydown', function (event) {
   if (event.keyCode === 39) document.getElementById('page_next').click();

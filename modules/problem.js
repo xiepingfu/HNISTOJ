@@ -45,6 +45,8 @@ app.get('/problems', async (req, res) => {
 
     let curUser = res.locals.user;
 
+    let problem_tags = await ProblemTag.model.findAll();
+
     let paginate = syzoj.utils.paginate(await Problem.count(where), req.query.page, syzoj.config.page.problem);
     let problems = await Problem.query(paginate, where, [[sortVal, order]]);
 
@@ -59,6 +61,7 @@ app.get('/problems', async (req, res) => {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
       allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
       problems: problems,
+      problem_tags:problem_tags,
       paginate: paginate,
       curSort: sort,
       curOrder: order === 'asc'
@@ -126,13 +129,15 @@ app.get('/problems/search', async (req, res) => {
       problem.tags = await problem.getTags();
     });
 
+    let problem_tags = await ProblemTag.model.findAll();
     res.render('problems', {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
       allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
       problems: problems,
       paginate: paginate,
       curSort: sort,
-      curOrder: order === 'asc'
+      curOrder: order === 'asc',
+      problem_tags: problem_tags
     });
   } catch (e) {
     syzoj.log(e);
@@ -191,6 +196,8 @@ app.get('/problems/tag/:tagIDs', async (req, res) => {
       problem.tags = await problem.getTags();
     });
 
+    let problem_tags = await ProblemTag.model.findAll();
+
     res.render('problems', {
       allowedManageTag: res.locals.user && await res.locals.user.hasPrivilege('manage_problem_tag'),
       allowedAddProblem: res.locals.user && await res.locals.user.hasPrivilege('add_problem'),
@@ -198,7 +205,8 @@ app.get('/problems/tag/:tagIDs', async (req, res) => {
       tags: tags,
       paginate: paginate,
       curSort: sort,
-      curOrder: order === 'asc'
+      curOrder: order === 'asc',
+      problem_tags: problem_tags
     });
   } catch (e) {
     syzoj.log(e);
@@ -819,6 +827,7 @@ app.get('/problem/:id/testdata', async (req, res) => {
 
     if (!problem) throw new ErrorMessage('无此题目。');
     if (!await problem.isAllowedUseBy(res.locals.user)) throw new ErrorMessage('您没有权限进行此操作。');
+    if (!await problem.isAllowedEditBy(res.locals.user)) throw new ErrorMessage('您没有权限进行此操作。');
 
     let testdata = await problem.listTestdata();
     let testcases = await syzoj.utils.parseTestdata(problem.getTestdataPath(), problem.type === 'submit-answer');
