@@ -17,14 +17,31 @@ app.get('/contests', async (req, res) => {
     if (res.locals.user && res.locals.user.is_admin) where = {}
     else where = { is_public: true };
 
+    let title = req.query.title;
+    let contest_type = req.query.contest_type;
+    if(title) where.title = { $like: `%${title}%` };
+    if(contest_type) where.type = contest_type;
+
+    let qschool = req.query.school;
+    let qpclass = req.query.pclass;
+    if(qschool) where.schools = { $like: `%${qschool}%` };
+    if(qpclass) where.classes = { $like: `%${qpclass}%` };
+
+
     let paginate = syzoj.utils.paginate(await Contest.count(where), req.query.page, syzoj.config.page.contest);
     let contests = await Contest.query(paginate, where, [['start_time', 'desc']]);
+
+    let schools = await School.query(null, null, null);
+    let pclass = await TrainingClass.query(null, null, null);
 
     await contests.forEachAsync(async x => x.subtitle = await syzoj.utils.markdown(x.subtitle));
 
     res.render('contests', {
       contests: contests,
-      paginate: paginate
+      paginate: paginate,
+      form: req.query,
+      pclass: pclass,
+      schools: schools
     })
   } catch (e) {
     syzoj.log(e);

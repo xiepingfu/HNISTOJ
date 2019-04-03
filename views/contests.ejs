@@ -2,16 +2,85 @@
 <% include header %>
 <div class="padding">
     <% if (contests.length) { %>
+<div class="ui stackable three column grid segment piled raised" style="margin-bottom:-30px;">
+    <div class="column">
+  <form action="" class="ui mini form" method="get" role="form" id="form">
+      <div class="inline fields" style="white-space: nowrap; ">
+        <label style="font-size: 1.2em; margin-right: 1px; ">比赛名称：</label>
+        <div class="field"><input name="title" style="width: 100px; " type="text" value="<%= form.title %>"></div>
+        
+        <label style="font-size: 1.2em; margin-right: 1px; ">赛制：</label>
+        <div class="field">
+          <div class="ui fluid selection dropdown" id="select_contest_type" style="width: 100px; ">
+            <input type="hidden" name="contest_type" value="<%= form.contest_type %>">
+            <i class="dropdown icon"></i>
+            <div class="default text"></div>
+            <div class="menu">
+              <div style="font-size: 12.5px; " class="item" data-value="">不限</div>
+              <div style="font-size: 12.5px; " class="item" data-value="acm"><b>acm-icpc</b></div>
+              <div style="font-size: 12.5px; " class="item" data-value="noi"><b>noi</b></div>
+              <div style="font-size: 12.5px; " class="item" data-value="ioi"><b>ioi</b></div>
+            </div>
+          </div>
+        </div>
+
+        <label style="font-size: 1.2em; margin-right: 1px; ">参赛学校：</label>
+        <div class="field">
+          <div class="ui fluid selection dropdown" id="select_school" style="width: 100px; ">
+            <input type="hidden" name="school" value="<%= form.school %>">
+            <i class="dropdown icon"></i>
+            <div class="default text"></div>
+            <div class="menu">
+              <div style="font-size: 12.5px; " class="item" data-value="">不限</div>
+              <% for(let item of schools) { %>
+                <div style="font-size: 12.5px; " class="item" data-value="<%=item.id%>"><b><%=item.name%></b></div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <label style="font-size: 1.2em; margin-right: 1px; ">参赛班级：</label>
+        <div class="field">
+          <div class="ui fluid selection dropdown" id="select_pclass" style="width: 100px; ">
+            <input type="hidden" name="pclass" value="<%= form.pclass %>">
+            <i class="dropdown icon"></i>
+            <div class="default text"></div>
+            <div class="menu">
+              <div style="font-size: 12.5px; " class="item" data-value="">不限</div>
+              <% for(let item of pclass) { %>
+                <div style="font-size: 12.5px; " class="item" data-value="<%=item.id%>"><b><%=item.name%></b></div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+
+        <script>
+          $(function () {
+            $('#select_contest_type').dropdown();
+            $('#select_pclass').dropdown();
+            $('#select_school').dropdown();
+          });
+        </script>
+
+        <button class="ui mini button" type="submit">
+          查询
+        </button>
+      </div>
+    </form>
+    </div>
     <% if (user && user.is_admin) { %>
+      <div class="right floated column">
     <form class="ui mini form">
-      <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
+      <div class="inline fields" style="white-space: nowrap; ">
         <a href="<%= syzoj.utils.makeUrl(['contest', 0, 'edit']) %>" class="ui mini labeled icon right floated button" style="margin-left: auto; ">
           <i class="ui icon write"></i>
           添加比赛
         </a>
      </div>
     </form>
+  </div>
     <% } %>
+  </div>
     <table class="ui very yellow selectable segment piled raised center aligned table">
       <thead>
         <tr>
