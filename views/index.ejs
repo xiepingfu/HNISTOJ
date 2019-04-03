@@ -3,9 +3,9 @@
 <div class="padding">
   <div class="ui three column grid">
     <div class="eleven wide column">
-      <h4 class="ui top attached block header"><i class="ui info icon"></i>公告</h4>
-      <div class="ui bottom attached segment">
-        <table class="ui very basic table">
+      <div class="ui bottom raised segment piled">
+          <h4 class="ui top attached header"><i class="ui info icon"></i>公告</h4>
+        <table class="ui very basic selectable table segment">
           <thead>
             <tr>
               <th>标题</th>
@@ -22,9 +22,9 @@
           </tbody>
         </table>
       </div>
-      <h4 class="ui top attached block header"><i class="ui signal icon"></i>排名</h4>
-      <div class="ui bottom attached segment">
-        <table class="ui very basic center aligned table" style="table-layout: fixed; ">
+      <div class="ui bottom segment piled raised">
+          <h4 class="ui top attached header"><i class="ui signal icon"></i>排名</h4>
+        <table class="ui very basic selectable center aligned table segment" style="table-layout: fixed; ">
           <thead>
             <tr>
 	            <th style="width: 50px; ">#</th>
@@ -76,8 +76,9 @@
       </div>
     </div>
     <div class="right floated five wide column">
-        <h4 class="ui top attached block header"><i class="ui quote left icon"></i>一言（ヒトコト）</h4>
-        <div class="ui bottom attached center aligned segment">
+        
+        <div class="ui bottom center aligned segment piled raised">
+            <h4 class="ui top header"><i class="ui quote left icon"></i>一言（ヒトコト）</h4>
           <div class="ui active centered inline loader" id="hitokoto-loader"></div>
           <script>
           $.get('https://sslapi.hitokoto.cn/?c=a', function (data) {
@@ -92,9 +93,9 @@
           <div style="font-size: 1em; line-height: 1.5em; display: none; " id="hitokoto-content"></div>
           <div style="text-align: right; margin-top: 15px; font-size: 0.9em; color: #666; display: none; " id="hitokoto-from"></div>
         </div>
-      <h4 class="ui top attached block header"><i class="ui rss icon"></i>最近更新</h4>
-      <div class="ui bottom attached segment">
-	<table class="ui very basic center aligned table">
+      <div class="ui bottom segment piled raised">
+          <h4 class="ui top attached header"><i class="ui rss icon"></i>最近更新</h4>
+	<table class="ui very basic selectable center aligned table segment">
           <thead>
             <tr>
               <th width="70%">题目</th>
@@ -120,8 +121,8 @@
             else if (fortune.fortune.indexOf('凶') != -1) color = '#f25e65';
             else color = '#444';
         %>
-        <h4 class="ui top attached block header"><i class="ui magic icon"></i>今日运势</h4>
-        <div class="ui bottom attached segment">
+        <div class="ui bottom segment piled raised">
+            <h4 class="ui top attached header"><i class="ui magic icon"></i>今日运势</h4>
             <div style="height: 15px; "></div>
             <div class="ui two column center aligned padded grid">
                 <div class="one column row">
@@ -166,8 +167,7 @@
             </div>
         </div>
         <% } %>
-      <h4 class="ui top attached block header"><i class="ui search icon"></i>搜索题目</h4>
-      <div class="ui bottom attached segment">
+      <div class="ui bottom segment piled raised">
         <form action="<%= syzoj.utils.makeUrl(['problems', 'search']) %>" method="get">
           <div class="ui search" style="width: 100%; ">
             <div class="ui left icon input" style="width: 100%; ">
@@ -178,12 +178,12 @@
           </div>
         </form>
       </div>
-      <h4 class="ui top attached block header"><i class="ui calendar icon"></i>近期比赛</h4>
-      <div class="ui bottom attached <% if (!contests || !contests.length) { %>center aligned <% } %>segment">
+      <div class="ui bottom center aligned <% if (!contests || !contests.length) { %>center aligned <% } %>segment piled raised">
+        <h4 class="ui top header segment "><i class="ui calendar icon"></i>近期比赛</h4>
         <% if (!contests || !contests.length) { %>
         还没有举行过任何比赛
         <% } else { %>
-        <table class="ui very basic center aligned table">
+        <table class="ui very basic selectable center aligned table segment ">
           <thead>
             <tr>
               <th>比赛名称</th>
@@ -213,13 +213,15 @@
         <% } %>
       </div>
       <% if (typeof links !== 'undefined' && links && links.length) { %>
-      <h4 class="ui top attached block header font-content"><i class="ui linkify icon"></i>友情链接</h4>
-      <div class="ui bottom attached segment">
+      <div class="ui bottom segment piled raised">
+          <h4 class="ui top header font-content segment"><i class="ui linkify icon"></i>友情链接</h4>
+          <div class="ui segment">
         <ul style="margin: 0; padding-left: 20px; ">
           <% for (let link of links) { %>
             <li><a href="<%= link.url %>"><%= link.title %></a></li>
           <% } %>
         </ul>
+      </div>
       </div>
       <% } %>
     </div>
