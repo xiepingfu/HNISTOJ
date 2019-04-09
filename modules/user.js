@@ -79,6 +79,22 @@ app.get('/user/:id', async (req, res) => {
     let user = await User.fromID(id);
     if (!user) throw new ErrorMessage('无此用户。');
     user.ac_problems = await user.getACProblems();
+    let ProblemTagMap = syzoj.model('problem_tag_map');
+    let ProblemTag = syzoj.model('problem_tag');
+    let sequelize = require('sequelize');
+    let tag_num = await ProblemTagMap.model.findAll({
+      attributes: ['tag_id', [sequelize.literal('COUNT(*)'), 'count']],
+      group: 'tag_id',
+    });
+    user.tag_counts = new Set();
+    await tag_num.forEachAsync(async x => {
+      let cur_tag = await ProblemTag.fromID(parseInt(x.get('tag_id')));
+      user.tag_counts.add({
+        tag: cur_tag,
+        count: x.get('count')
+      });
+    });
+
     user.articles = await user.getArticles();
     user.allowedEdit = await user.isAllowedEditBy(res.locals.user);
 
@@ -107,6 +123,7 @@ app.get('/user/:id', async (req, res) => {
     ratingHistories.reverse();
 
     res.render('user', {
+      
       show_user: user,
       statistics: statistics,
       ratingHistories: ratingHistories

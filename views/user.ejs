@@ -35,14 +35,26 @@
                     <a style="float: right; "><i class="star icon"></i>积分 <%= show_user.rating %></a>
                 </div>
             </div>
-
+            <div class="column">
+                <div class="ui grid">
+                  <div class="row">
+                      <div class="column">
+                          <h4 class="ui top attached block header">提交统计</h4>
+                          <div class="ui bottom attached segment">
+                            <div id="pie_chart_legend"></div>
+                            <div style="width: 260px; height: 260px; margin-left: 33.5px; "><canvas style="width: 260px; height: 260px; " id="pie_chart"></canvas></div>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+            </div>
         </div>
         <div class="eleven wide column">
             <div class="ui grid">
                 <div class="row">
                     <div class="sixteen wide column">
                         <div class="ui grid">
-                            <div class="eight wide column">
+                            <div class="column">
                                 <div class="ui grid">
                                     <div class="row">
                                         <div class="column">
@@ -82,49 +94,24 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="row">
+                                        <div class="column">
+                                            <h4 class="ui top attached block header">按标签计数</h4>
+                                            <div class="ui bottom attached segment">
+                                                <% for (let tag_count of show_user.tag_counts) { %>
+                                                    <a href="#" class="ui large <%= tag_count.tag.color %> label" style="margin-top:10px;">
+                                                        <%= tag_count.tag.name %><div class="detail"><%= tag_count.count%></div>
+                                                      </a>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="eight wide column">
-                                <div class="ui grid">
-                                  <div class="row">
-                                      <div class="column">
-                                          <h4 class="ui top attached block header">统计</h4>
-                                          <div class="ui bottom attached segment">
-                                            <div id="pie_chart_legend"></div>
-                                            <div style="width: 260px; height: 260px; margin-left: 33.5px; "><canvas style="width: 260px; height: 260px; " id="pie_chart"></canvas></div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
 
-                </div>
-                <div class="row">
-                    <div class="column">
-                        <h4 class="ui top attached block header">帖子</h4>
-                        <div class="ui bottom attached <% if (!show_user.articles.length) { %>center aligned <% } %>segment">
-													  <% if (!show_user.articles.length) { %>该用户从未发表帖子<% } else { %>
-                            <table class="ui very basic table">
-                                <thead>
-                                    <tr>
-                                        <th>标题</th>
-                                        <th>时间</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% for (let article of show_user.articles) { %>
-                                    <tr>
-																			  <td><a href="<%= syzoj.utils.makeUrl(['article', article.id]) %>"><%= article.title %></a></td>
-                                        <td><%= syzoj.utils.formatDate(article.public_time) %></td>
-                                    </tr>
-                                    <% } %>
-                                </tbody>
-                            </table>
-													  <% } %>
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="column">
@@ -153,6 +140,31 @@
                                     <% } %>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="column">
+                        <h4 class="ui top attached block header">帖子</h4>
+                        <div class="ui bottom attached <% if (!show_user.articles.length) { %>center aligned <% } %>segment">
+													  <% if (!show_user.articles.length) { %>该用户从未发表帖子<% } else { %>
+                            <table class="ui very basic table">
+                                <thead>
+                                    <tr>
+                                        <th>标题</th>
+                                        <th>时间</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for (let article of show_user.articles) { %>
+                                    <tr>
+																			  <td><a href="<%= syzoj.utils.makeUrl(['article', article.id]) %>"><%= article.title %></a></td>
+                                        <td><%= syzoj.utils.formatDate(article.public_time) %></td>
+                                    </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+													  <% } %>
                         </div>
                     </div>
                 </div>

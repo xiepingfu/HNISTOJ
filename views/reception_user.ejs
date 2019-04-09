@@ -18,7 +18,7 @@
         </thead>
         <tbody>
             <tr>
-                <td><%= show_user.username %></td>
+                <td><a href="<%= syzoj.utils.makeUrl(['user', show_user.id]) %>"><%= show_user.username %></a></td>
                 <td><%= show_user.realname %></td>
                 <td><%= show_user.phone %></td>
                 <td><%= syzoj.utils.formatDate(show_user.register_time) %></td>
@@ -107,6 +107,7 @@
     <% } %>
 </div>
 </div>
+
 <form id="form" class="ui form modal" action="" method="post">
     <i class="close icon"></i>
     <div class="header">

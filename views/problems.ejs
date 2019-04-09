@@ -166,11 +166,9 @@ if (typeof tags !== 'undefined') tagIDs = tags.map(x => x.id);
 
                 let url = tagListToggledThisTag ? syzoj.utils.makeUrl(['problems', 'tag', tagListToggledThisTag]) : syzoj.utils.makeUrl(['problems']);
               %>
-              <span class="ui header">
-                <a href="<%= url %>" class="ui tiny <%= tag.color %> label">
-                  <%= tag.name %>
-                </a>
-              </span>
+                  <a href="<%= url %>" class="ui big <%= tag.color %> label" style="margin-top:10px;">
+                    <%= tag.name %>
+                  </a>
               <%
               }
             }
