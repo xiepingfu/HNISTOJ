@@ -85,6 +85,11 @@ app.get('/user/:id', async (req, res) => {
     let tag_num = await ProblemTagMap.model.findAll({
       attributes: ['tag_id', [sequelize.literal('COUNT(*)'), 'count']],
       group: 'tag_id',
+      where: {
+        problem_id:{
+          [sequelize.Op.in]:user.ac_problems
+        }
+      }
     });
     user.tag_counts = new Set();
     await tag_num.forEachAsync(async x => {

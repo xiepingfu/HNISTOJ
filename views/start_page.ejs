@@ -57,6 +57,7 @@
             <% for (let item of start_pages) { %>
               <a class="item<% if (active === 'index') { %> active<% } %>" href="?id=<%=item.article_id%>"> <%=item.title%></a>
             <% } %>
+            <a class="item<% if (active === 'index') { %> active<% } %>" href="/contest">竞赛</a>
             <a class="item<% if (active === 'index') { %> active<% } %>" href="/index">进入站点</a>
         
             <div class="right menu">
