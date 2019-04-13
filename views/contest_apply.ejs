@@ -1,0 +1,80 @@
+<% this.title = '比赛报名' %>
+<% include header %>
+<div class="padding">
+
+        <div class="ui bottom raised segment piled">
+            <% if (error_info) { %>
+            <div class="ui error message" id="error" data-am-alert>
+                <p id="error_info"><%= error_info %></p>
+            </div>
+            <% } %>
+            <h2 class="ui top attached header red"><i class="ui info icon"></i>确认报名信息</h2>
+                <div class="ui horizontal divider"><h3>竞赛信息</h3></div>
+                    <table class="ui very selectable center aligned table">
+                        <thead>
+                            <tr>
+                            <th>比赛名称</th>
+                            <th>赛制</th>
+                            <th>开始时间</th>
+                            <th>结束时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <%
+                                  let now = syzoj.utils.getCurrentDate();
+                                  let tag = '';
+                                %>
+                                <tr>
+                                    <% if (now < contest.start_time) { %>
+                                        <% tag = '<span class="ui header"><div class="ui mini red label">未开始</div></span>' %>
+                                    <% } else if (now >= contest.start_time && now < contest.end_time) { %>
+                                        <% tag = '<span class="ui header"><div class="ui mini green label">进行中</div></span>' %>
+                                    <% } else { %>
+                                        <% tag = '<span class="ui header"><div class="ui mini grey label">已结束</div></span>' %>
+                                    <% } %>
+                            
+                                    <td><a href="<%= syzoj.utils.makeUrl(['contest', contest.id]) %>"><%= contest.title %> <%- tag %></a></td>
+                                    <td><%= contest.type %></td>
+                                    <td><%= syzoj.utils.formatDate(contest.start_time) %></td>
+                                    <td><%= syzoj.utils.formatDate(contest.end_time) %></td>
+                                </tr>
+                        </tbody>
+                        <tfoot class="full-width">
+                                <tr>
+                                    <th colspan="4">比赛公告</th>
+                                </tr>
+                                <tr class="font-content">
+                                    <td colspan="4"><%- contest.subtitle %></td>
+                                </tr>
+                              </tfoot>
+                    </table>
+                    <div class="ui horizontal divider" style="margin-top:30px;"><h3>个人信息 </h3></div>
+            <form action="" method="POST" class="ui form">
+                    <div class="two fields">
+                    <div class="field">
+                        <label for="username">用户名</label>
+                        <input type="text" placeholder="" id="username" value="<%= user.username %>" readonly>
+                    </div>
+                    <div class="field">
+                        <label for="realname">真实姓名</label>
+                        <input type="text" placeholder="" id="realname" value="<%= user.realname %>" readonly>
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                    <label for="phone">手机号</label>
+                    <input type="number" placeholder="" id="phone" value="<%= user.phone %>" readonly>
+                    </div>
+                    <div class="field">
+                    <label for="phone">邮箱</label>
+                    <input type="email" placeholder="" id="email" value="<%= user.email %>" readonly>
+                    </div>
+                </div>
+                <div class="two fields">
+                        <div class="field"><a href="<%= syzoj.utils.makeUrl(['user', user.id, 'edit']) %>" class="ui labeled icon blue button"><i class="ui edit icon"></i>去编辑个人信息</a></div>
+                        <div class="field"><button type="submit" class="ui labeled icon green button"><i class="ui check icon"></i>确认报名</button></div>
+                </div>
+            </form>
+        </div>
+</div>
+<% include footer %>

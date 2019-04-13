@@ -89,6 +89,7 @@
           <th>开始时间</th>
           <th>结束时间</th>
           <th>描述</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -96,9 +97,19 @@
         for (let contest of contests) {
           let now = syzoj.utils.getCurrentDate();
           let tag = '';
+          let apply = '';
         %>
         <tr>
           <% if (now < contest.start_time) { %>
+            <% if (contest.is_apply) {
+              if (now < contest.deadline) { 
+                apply = '<a href="'+syzoj.utils.makeUrl(['contest', contest.id,'apply'])+'"><span class="ui header"><div class="ui green label">报名参赛</div></span></a>'
+                
+              } else {
+                apply = '<span class="ui header"><div class="ui grey label">报名已结束</div></span>'
+              }
+            }
+            %>
             <% tag = '<span class="ui header"><div class="ui mini red label">未开始</div></span>' %>
           <% } else if (now >= contest.start_time && now < contest.end_time) { %>
             <% tag = '<span class="ui header"><div class="ui mini green label">进行中</div></span>' %>
@@ -111,6 +122,7 @@
           <td><%= syzoj.utils.formatDate(contest.start_time) %></td>
           <td><%= syzoj.utils.formatDate(contest.end_time) %></td>
           <td class="font-content"><%- contest.subtitle %></td>
+          <td><%- apply %></td>
         </tr>
         <% } %>
       </tbody>

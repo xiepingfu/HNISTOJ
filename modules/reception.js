@@ -213,6 +213,11 @@ app.get('/reception/manage', async (req, res) => {
         };
       }
     }
+    else
+    {
+      req.query.min_time = '2019-01-01 00:00:00';
+      req.query.max_time = '2050-12-31 00:00:00';
+    }
 
     let Sequelize = require('sequelize');
     let soo = [];
@@ -244,11 +249,8 @@ app.get('/reception/manage', async (req, res) => {
       throw new ErrorMessage('错误的排序参数。');
     }
 
-    let tmp = await User.model.findAll({
-      where: where,
-      include: includes
-    });
-    let paginate = syzoj.utils.paginate(parseInt(tmp.length), req.query.page, syzoj.config.page.reception);
+    let tmp = await User.count();
+    let paginate = syzoj.utils.paginate(parseInt(tmp), req.query.page, syzoj.config.page.reception);
     
     //let users = await User.query(paginate, where, [[sort, order]]);
     let users = await User.model.findAll({
@@ -269,7 +271,6 @@ app.get('/reception/manage', async (req, res) => {
       training_classs: training_classs,
       training_types: training_types,
       form: req.query,
-      min_time: min_time
     });
   } catch (e) {
     syzoj.log(e);

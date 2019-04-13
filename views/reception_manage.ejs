@@ -6,49 +6,52 @@
     <input type="hidden" name="contest" value="" />
     <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
         <label style="font-size: 1.2em; margin-right: 1px; ">用户名：</label>
-        <div class="field"><input name="username" style="width: 75px; " type="text" value="<%= form.username %>">
+        <div class="field"><input name="username" style="width: 125px; " type="text" value="<%= form.username %>">
         </div>
         <label style="font-size: 1.2em; margin-right: 1px; ">真实姓名：</label>
-        <div class="field"><input name="realname" style="width: 75px; " type="text" value="<%= form.realname %>">
+        <div class="field"><input name="realname" style="width: 125px; " type="text" value="<%= form.realname %>">
         </div>
         <label style="font-size: 1.2em; margin-right: 1px; ">注册时间：</label>
-        <div class="field" style="padding-right: 6px; "><input name="min_time" style="width: 75px; " type="text"
+        <div class="field" style="padding-right: 6px; "><input name="min_time" style="width: 125px; " type="text"
                 value="<%= form.min_time %>"></div>
         <label style="font-size: 1.2em; margin-right: 7px; ">～</label>
-        <div class="field"><input name="max_time" style="width: 75px; " type="text" value="<%= form.max_time %>"></div>
-        <label style="font-size: 1.2em; margin-right: 1px; ">报名类型:</label>
-        <div class="field">
-            <div class="ui fluid selection dropdown" id="select_training_type" style="width: 75px; ">
-                <input type="hidden" name="training_type" value="<%= form.training_type %>">
-                <i class="dropdown icon"></i>
-                <div class="default text"></div>
-                <div class="menu">
-                    <div class="item" data-value=""><b>不限</b></div>
-                    <% for (let training_type of training_types) { %>
-                    <div style="font-size: 12.5px; " class="item" data-value="<%= training_type.id %>">
-                        <b><%= training_type.name %></b></div>
-                    <% } %>
+        <div class="field"><input name="max_time" style="width: 125px; " type="text" value="<%= form.max_time %>"></div>
+        
+    </div>
+    <div class="inline fields" style="margin-bottom: 25px; white-space: nowrap; ">
+            <label style="font-size: 1.2em; margin-right: 1px; ">报名类型:</label>
+            <div class="field">
+                <div class="ui fluid selection dropdown" id="select_training_type" style="width: 125px; ">
+                    <input type="hidden" name="training_type" value="<%= form.training_type %>">
+                    <i class="dropdown icon"></i>
+                    <div class="default text"></div>
+                    <div class="menu">
+                        <div class="item" data-value=""><b>不限</b></div>
+                        <% for (let training_type of training_types) { %>
+                        <div style="font-size: 12.5px; " class="item" data-value="<%= training_type.id %>">
+                            <b><%= training_type.name %></b></div>
+                        <% } %>
+                    </div>
                 </div>
             </div>
-        </div>
-        <label style="font-size: 1.2em; margin-right: 1px; ">所在班级:</label>
-        <div class="field">
-            <div class="ui fluid selection dropdown" id="select_training_class" style="width: 75px; ">
-                <input type="hidden" name="training_class" value="<%= form.training_class %>">
-                <i class="dropdown icon"></i>
-                <div class="default text"></div>
-                <div class="menu">
-                    <div class="item" data-value=""><b>不限</b></div>
-                    <% for (let training_class of training_classs) { %>
-                    <div class="item" data-value="<%= training_class.id %>"><b><%= training_class.name%></b></div>
-                    <% } %>
+            <label style="font-size: 1.2em; margin-right: 1px; ">所在班级:</label>
+            <div class="field">
+                <div class="ui fluid selection dropdown" id="select_training_class" style="width: 125px; ">
+                    <input type="hidden" name="training_class" value="<%= form.training_class %>">
+                    <i class="dropdown icon"></i>
+                    <div class="default text"></div>
+                    <div class="menu">
+                        <div class="item" data-value=""><b>不限</b></div>
+                        <% for (let training_class of training_classs) { %>
+                        <div class="item" data-value="<%= training_class.id %>"><b><%= training_class.name%></b></div>
+                        <% } %>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button class="ui labeled icon mini button" type="submit">
-            <i class="search icon"></i>
-            查询
-        </button>
+            <button class="ui labeled icon mini button" type="submit">
+                <i class="search icon"></i>
+                查询
+            </button>
     </div>
 </form>
 <script>

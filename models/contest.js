@@ -13,6 +13,8 @@ let model = db.define('contest', {
   subtitle: { type: Sequelize.TEXT },
   start_time: { type: Sequelize.INTEGER },
   end_time: { type: Sequelize.INTEGER },
+  is_apply: { type: Sequelize.BOOLEAN },
+  deadline: { type: Sequelize.INTEGER },
 
   holder_id: {
     type: Sequelize.INTEGER,
@@ -32,6 +34,7 @@ let model = db.define('contest', {
   participants: { type: Sequelize.TEXT },
   training_types: { type: Sequelize.TEXT },
   is_all: { type: Sequelize.BOOLEAN },
+  is_formal: { type: Sequelize.BOOLEAN },
 
 
   ranklist_id: {
@@ -70,14 +73,17 @@ class Contest extends Model {
       participants: '',
       training_types: '',
       information: '',
-      type: 'noi',
+      type: 'acm',
       start_time: 0,
       end_time: 0,
       holder: 0,
       ranklist_id: 0,
       is_public: false,
       is_all: true,
-      hide_statistics: false
+      is_formal: false,
+      hide_statistics: false,
+      is_apply: false,
+      deadline: 0,
     }, val)));
   }
 

@@ -17,6 +17,48 @@ app.get('/contests', async (req, res) => {
     if (res.locals.user && res.locals.user.is_admin) where = {}
     else where = { is_public: true };
 
+    where.is_formal = false;
+    let title = req.query.title;
+    let contest_type = req.query.contest_type;
+    if(title) where.title = { $like: `%${title}%` };
+    if(contest_type) where.type = contest_type;
+
+    let qschool = req.query.school;
+    let qpclass = req.query.pclass;
+    if(qschool) where.schools = { $like: `%${qschool}%` };
+    if(qpclass) where.classes = { $like: `%${qpclass}%` };
+
+
+    let paginate = syzoj.utils.paginate(await Contest.count(where), req.query.page, syzoj.config.page.contest);
+    let contests = await Contest.query(paginate, where, [['start_time', 'desc']]);
+
+    let schools = await School.query(null, null, null);
+    let pclass = await TrainingClass.query(null, null, null);
+
+    await contests.forEachAsync(async x => x.subtitle = await syzoj.utils.markdown(x.subtitle));
+
+    res.render('contests', {
+      contests: contests,
+      paginate: paginate,
+      form: req.query,
+      pclass: pclass,
+      schools: schools
+    })
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.get('/formal_contests', async (req, res) => {
+  try {
+    let where;
+    if (res.locals.user && res.locals.user.is_admin) where = {}
+    else where = { is_public: true };
+
+    where.is_formal = true;
     let title = req.query.title;
     let contest_type = req.query.contest_type;
     if(title) where.title = { $like: `%${title}%` };
@@ -67,6 +109,7 @@ app.get('/contest/:id/edit', async (req, res) => {
     let problems = [], admins = [], schools = [], participants = [], classes = [], training_types = [];
     if (contest.problems) problems = await contest.problems.split('|').mapAsync(async id => await Problem.fromID(id));
     if (contest.admins) admins = await contest.admins.split('|').mapAsync(async id => await User.fromID(id));
+
     if (contest.schools) schools = await contest.schools.split('|').mapAsync(async id => await School.fromID(id));
     if (contest.participants) participants = await contest.participants.split('|').mapAsync(async id => await User.fromID(id));
     if (contest.classes) classes = await contest.classes.split('|').mapAsync(async id => await TrainingClass.fromID(id));
@@ -119,6 +162,9 @@ app.post('/contest/:id/edit', async (req, res) => {
     await ranklist.save();
     contest.ranklist_id = ranklist.id;
 
+    if (!['0', '1'].includes(req.body.is_formal)) throw new ErrorMessage('无效的模式。');
+    contest.is_formal = req.body.is_formal;
+
     if (!req.body.title.trim()) throw new ErrorMessage('比赛名不能为空。');
     contest.title = req.body.title;
     contest.subtitle = req.body.subtitle;
@@ -137,13 +183,80 @@ app.post('/contest/:id/edit', async (req, res) => {
     contest.information = req.body.information;
     contest.start_time = syzoj.utils.parseDate(req.body.start_time);
     contest.end_time = syzoj.utils.parseDate(req.body.end_time);
+    contest.deadline = syzoj.utils.parseDate(req.body.deadline);
     contest.is_public = req.body.is_public === 'on';
+    contest.is_apply = req.body.is_apply === 'on';
     contest.hide_statistics = req.body.hide_statistics === 'on';
     contest.is_all = req.body.is_all !== 'on';
 
     await contest.save();
 
     res.redirect(syzoj.utils.makeUrl(['contest', contest.id]));
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.get('/contest/:id/apply', async (req, res) => {
+  try {
+    let curUser = res.locals.user;
+    if (!curUser) throw new ErrorMessage('请登录后继续。', { '登录': syzoj.utils.makeUrl(['login'], { 'url': req.originalUrl }) });
+
+    let contest_id = parseInt(req.params.id);
+    let contest = await Contest.fromID(contest_id);
+
+    if (!contest) throw new ErrorMessage('无此比赛。');
+    if (!contest.is_public && (!res.locals.user || !res.locals.user.is_admin)) throw new ErrorMessage('比赛未公开，请耐心等待 (´∀ `)');
+
+    let now = syzoj.utils.getCurrentDate();
+    if (contest.is_apply === 0 || now >= contest.deadline) throw new ErrorMessage('报名已结束或未开放报名。');
+
+    let participants = [];
+    if (contest.participants) participants = contest.participants.split('|');
+    if (!Array.isArray(participants)) participants = [participants];
+    if (participants && participants.indexOf(curUser.id.toString()) > -1) throw new ErrorMessage('您已经报过名了。');
+
+    res.render('contest_apply', {
+      contest: contest,
+      error_info: null
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.post('/contest/:id/apply', async (req, res) => {
+  try {
+    let curUser = res.locals.user;
+    if (!curUser) throw new ErrorMessage('请登录后继续。', { '登录': syzoj.utils.makeUrl(['login'], { 'url': req.originalUrl }) });
+
+    let contest_id = parseInt(req.params.id);
+    let contest = await Contest.fromID(contest_id);
+
+    if (!contest) throw new ErrorMessage('无此比赛。');
+    if (!contest.is_public && (!res.locals.user || !res.locals.user.is_admin)) throw new ErrorMessage('比赛未公开，请耐心等待 (´∀ `)');
+
+    let now = syzoj.utils.getCurrentDate();
+    if (contest.is_apply === 0 || now >= contest.deadline) throw new ErrorMessage('报名已结束或未开放报名。');
+
+    let participants = [];
+    if (contest.participants) participants = contest.participants.split('|');
+    if (!Array.isArray(participants)) participants = [participants];
+    if (participants && participants.indexOf(curUser.id.toString()) > -1) throw new ErrorMessage('您已经报过名了。');
+    participants.push(curUser.id);
+    contest.participants = participants.join('|');
+    contest.save();
+
+    res.render('contest_apply', {
+      contest: contest,
+      error_info: '报名成功！'
+    });
   } catch (e) {
     syzoj.log(e);
     res.render('error', {
