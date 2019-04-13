@@ -21,41 +21,50 @@
       	<p id="error_info"><%= error_info %></p>
       <% } %>
     </div>
-		<form id="form" class="ui form" action="<%= syzoj.utils.makeUrl(['user', edited_user.id, 'edit']) %>" method="post" onsubmit="return check()">
-      <div class="field">
-	    	<label for="username">用户名</label>
-	    	<input type="text" id="username" name="username" value="<%= edited_user.username %>"<% if (!user.allowedManage) { %> readonly<% } %>>
-	    </div>
-      <div class="field">
-	    	<label for="sex">性别</label>
-	    	<select class="ui dropdown" name="sex">
-          <option value="0" <%= edited_user.sex == 0 ? 'selected': '' %>>其它</option>
-          <option value="1" <%= edited_user.sex == 1 ? 'selected': '' %>>男</option>
-          <option value="-1" <%= edited_user.sex == -1 ? 'selected': '' %>>女</option>
-        </select>
-	    </div>
-	    <div class="field">
-	    	<label for="email">Email</label>
-	    	<input class="font-content" type="email" id="email" name="email" value="<%= edited_user.email %>"<% if (!user.allowedManage) { %> readonly<% } %>>
-	    </div>
-      <div class="inline field">
-        <label class="ui header">公开 Email</label>
-        <div class="ui toggle checkbox">
-          <input id="public_email" name="public_email" type="checkbox" <% if (edited_user.public_email) { %> checked<% } %>>
-          <label>　</label>
+    <form id="form" class="ui form" action="<%= syzoj.utils.makeUrl(['user', edited_user.id, 'edit']) %>" method="post" onsubmit="return check()">
+      <div class="five fields">
+          <div class="field">
+            <label for="username">用户名</label>
+            <input type="text" id="username" name="username" value="<%= edited_user.username %>"<% if (!user.allowedManage) { %> readonly<% } %>>
+          </div>
+          <div class="field">
+            <label for="username">真实姓名</label>
+            <input type="text" id="realname" name="realname" value="<%= edited_user.realname %>">
+          </div>
+        <div class="field">
+          <label for="sex">性别</label>
+          <select class="ui dropdown" name="sex">
+            <option value="0" <%= edited_user.sex == 0 ? 'selected': '' %>>其它</option>
+            <option value="1" <%= edited_user.sex == 1 ? 'selected': '' %>>男</option>
+            <option value="-1" <%= edited_user.sex == -1 ? 'selected': '' %>>女</option>
+          </select>
         </div>
-	    </div>
-      <div class="inline field">
-        <label class="ui header">默认显示格式化后的代码（如果可用）</label>
-        <div class="ui toggle checkbox">
-          <input id="prefer_formatted_code" name="prefer_formatted_code" type="checkbox" <% if (edited_user.prefer_formatted_code) { %> checked<% } %>>
-          <label>　</label>
+        <div class="field">
+          <label for="username">手机号</label>
+          <input type="number" id="phone" name="phone" value="<%= edited_user.phone %>">
         </div>
-	    </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input class="font-content" type="email" id="email" name="email" value="<%= edited_user.email %>"<% if (!user.allowedManage) { %> readonly<% } %>>
+        </div>
+      </div>
+      
 	    <div class="field">
 	    	<label for="information">个性签名</label>
 	    	<textarea class="font-content" rows="5" id="information" name="information"><%= edited_user.information %></textarea>
-	    </div>
+      </div>
+      <div class="inline field">
+          <label class="ui header">公开 Email</label>
+          <div class="ui toggle checkbox">
+            <input id="public_email" name="public_email" type="checkbox" <% if (edited_user.public_email) { %> checked<% } %>>
+            <label>　</label>
+          </div>
+          <label class="ui header">默认显示格式化后的代码（如果可用）</label>
+          <div class="ui toggle checkbox">
+            <input id="prefer_formatted_code" name="prefer_formatted_code" type="checkbox" <% if (edited_user.prefer_formatted_code) { %> checked<% } %>>
+            <label>　</label>
+          </div>
+        </div>
       <div class="field">
       <label class="ui header">密码</label>
         <input type="password" placeholder="原密码（留空则不修改）" name="old_password" id="old_password">
@@ -112,15 +121,15 @@ function make_md5(tag) {
 	}
 }
 function check() {
+  if (!(/^1(3|4|5|7|8)\d{9}$/.test($("#phone").val()))) {
+    alert("请输入正确的手机号");
+    return false;
+  }
 	old_password = $("#old_password");
 	password1 = $("#password1");
 	password2 = $("#password2");
 	if ($("#old_password").val() && password1.val() != password2.val()) {
-		$("#error").removeClass("success");
-		$("#error").removeClass("error");
-		$("#error").addClass("error");
-		$("#error_info").html("两次输入的密码不一致。");
-		$("#error").show();
+		alert("两次输入的密码不一致。");
 		return false;
 	}
 	make_md5(old_password);

@@ -1,0 +1,48 @@
+<% this.title = '参赛用户' %>
+<% include header %>
+<div class="padding">
+        <a href="javascript:download_excel()" type="submit" class="mini ui green labeled icon button"><i class="ui icon download"></i>下载 EXCEL</a>
+<table id="participants_table" class="celled ui very green selectable segment piled raised center aligned table" style="table-layout: fixed; ">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>用户名</th>
+            <th>真实姓名</th>
+            <th>手机号</th>
+            <th>邮箱</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% 
+        let index = 0;
+        for(let participant of participants) { 
+        ++index;
+        %>
+        <tr>
+            <td><%= index %></td>
+            <td><%= participant.username %></td>
+            <td><%= participant.realname %></td>
+            <td><%= participant.phone %></td>
+            <td><%= participant.email %></td>
+        </tr>
+        <% } %>
+    </tbody>
+</table>
+
+<script src="<%- lib('jquery/3.3.1/jquery.js') %>"></script>
+<script src="<%- selfLib('jquery.table2excel.js') %>"></script>
+<script>
+
+    function download_excel() {
+        $("#participants_table").table2excel({  
+            exclude: ".noExl",  
+            name: "Excel Document Name",  
+            filename: "participants.xls",  
+            exclude_img: true,  
+            exclude_links: true,  
+            exclude_inputs: true
+        });
+    };
+
+</script>
+<% include footer %>

@@ -172,8 +172,6 @@ app.get('/forget', async (req, res) => {
   res.render('forget');
 });
 
-
-
 app.post('/user/:id/edit', async (req, res) => {
   let user;
   try {
@@ -206,6 +204,8 @@ app.post('/user/:id/edit', async (req, res) => {
       await user.setPrivileges(privileges);
     }
 
+    user.realname = req.body.realname;
+    user.phone = req.body.phone;
     user.information = req.body.information;
     user.sex = req.body.sex;
     user.public_email = (req.body.public_email === 'on');

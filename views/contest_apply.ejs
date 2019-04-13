@@ -17,6 +17,8 @@
                             <th>赛制</th>
                             <th>开始时间</th>
                             <th>结束时间</th>
+                            <th>结束时间</th>
+                            <th>描述</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,6 +39,7 @@
                                     <td><%= contest.type %></td>
                                     <td><%= syzoj.utils.formatDate(contest.start_time) %></td>
                                     <td><%= syzoj.utils.formatDate(contest.end_time) %></td>
+                                    <td colspan="4"><%- contest.subtitle %></td>
                                 </tr>
                         </tbody>
                         <tfoot class="full-width">
@@ -44,7 +47,7 @@
                                     <th colspan="4">比赛公告</th>
                                 </tr>
                                 <tr class="font-content">
-                                    <td colspan="4"><%- contest.subtitle %></td>
+                                    <td colspan="4"><%- contest.information %></td>
                                 </tr>
                               </tfoot>
                     </table>

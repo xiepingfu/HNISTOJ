@@ -12,7 +12,7 @@
             </div>
             <div class="field">
                 <label>试题列表</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_problems" name="problems">
+                <select class="ui fluid search dropdown" multiple="" id="problems_search" name="problems">
                 <% for (let problem of problems) { %>
                   <option value="<%= problem.id %>" selected>#<%= problem.id %>. <%= problem.title %></option>
                 <% } %>
@@ -20,48 +20,9 @@
             </div>
             <div class="field">
                 <label>比赛管理员</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_admins" name="admins">
+                <select class="ui fluid search dropdown" multiple="" id="admins_search" name="admins">
                 <% for (let admin of admins) { %>
                 <option value="<%= admin.id %>" selected><%= admin.username %></option>
-                <% } %>
-                </select>
-            </div>
-            <div class="inline field">
-                <label class="ui header">启用权限管理（不启用则所有人可访问此题，启用则只有满足以下任一条件的用户才可以访问该题）</label>
-                <div class="ui toggle checkbox">
-                    <input type="checkbox"<% if (!contest.is_all) { %> checked<% } %> name="is_all">
-                    <label><span style="visibility: hidden; ">　</span></label>
-                </div>
-            </div>
-            <div class="field">
-                <label>参赛学校</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_schools" name="schools">
-                <% for (let school of schools) { %>
-                <option value="<%= school.id %>" selected><%= school.name %></option>
-                <% } %>
-                </select>
-            </div>
-            <div class="field">
-                <label>参赛培训类型</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_training_types" name="training_types">
-                <% for (let training_type of training_types) { %>
-                <option value="<%= training_type.id %>" selected><%= training_type.name %></option>
-                <% } %>
-                </select>
-            </div>
-            <div class="field">
-                <label>参赛班级</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_classes" name="classes">
-                <% for (let class_item of classes) { %>
-                <option value="<%= class_item.id %>" selected><%= class_item.name %></option>
-                <% } %>
-                </select>
-            </div>
-            <div class="field">
-                <label>参赛用户</label>
-                <select class="ui fluid search dropdown" multiple="" id="search_participants" name="participants">
-                <% for (let participant of participants) { %>
-                <option value="<%= participant.id %>" selected><%= participant.id %>. <%= participant.username %></option>
                 <% } %>
                 </select>
             </div>
@@ -146,13 +107,13 @@
         </form>
 <script>
 $(function () {
-  $('#search_admins')
+  $('#admins_search')
     .dropdown({
       debug: true,
       apiSettings: {
         url: '/api/v2/search/users/{query}',
         onResponse: function (response) {
-          var a = $('#search_admins').val().map(function (x) { return parseInt(x) });
+          var a = $('#admins_search').val().map(function (x) { return parseInt(x) });
           if (response.results) {
             response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
           }
@@ -161,13 +122,13 @@ $(function () {
         cache: false
       }
     });
-  $('#search_problems')
+  $('#problems_search')
     .dropdown({
       debug: true,
       apiSettings: {
         url: '/api/v2/search/problems/{query}',
         onResponse: function (response) {
-          var a = $('#search_problems').val().map(function (x) { return parseInt(x) });
+          var a = $('#problems_search').val().map(function (x) { return parseInt(x) });
           if (response.results) {
             response.results = response.results.filter(function(x) {return !a.includes(parseInt(x.value));});
           }
@@ -176,66 +137,6 @@ $(function () {
         cache: false
       }
     });
-  $('#search_schools')
-  .dropdown({
-    debug: true,
-    apiSettings: {
-      url: '/api/v2/search/schools/{query}',
-      onResponse: function (response) {
-        var a = $('#search_schools').val().map(function (x) { return parseInt(x) });
-        if (response.results) {
-          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
-        }
-        return response;
-      },
-      cache: false
-    }
-  });
-  $('#search_classes')
-  .dropdown({
-    debug: true,
-    apiSettings: {
-      url: '/api/v2/search/classes/{query}',
-      onResponse: function (response) {
-        var a = $('#search_classes').val().map(function (x) { return parseInt(x) });
-        if (response.results) {
-          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
-        }
-        return response;
-      },
-      cache: false
-    }
-  });
-  $('#search_participants')
-  .dropdown({
-    debug: true,
-    apiSettings: {
-      url: '/api/v2/search/users/{query}',
-      onResponse: function (response) {
-        var a = $('#search_participants').val().map(function (x) { return parseInt(x) });
-        if (response.results) {
-          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
-        }
-        return response;
-      },
-      cache: false
-    }
-  });
-  $('#search_training_types')
-  .dropdown({
-    debug: true,
-    apiSettings: {
-      url: '/api/v2/search/training_types/{query}',
-      onResponse: function (response) {
-        var a = $('#search_training_types').val().map(function (x) { return parseInt(x) });
-        if (response.results) {
-          response.results = response.results.filter(function(x){ return !a.includes(parseInt(x.value))});
-        }
-        return response;
-      },
-      cache: false
-    }
-  });
 });
 </script>
 <% include footer %>

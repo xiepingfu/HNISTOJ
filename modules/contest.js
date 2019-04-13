@@ -106,23 +106,14 @@ app.get('/contest/:id/edit', async (req, res) => {
       await contest.loadRelationships();
     }
 
-    let problems = [], admins = [], schools = [], participants = [], classes = [], training_types = [];
+    let problems = [], admins = [];
     if (contest.problems) problems = await contest.problems.split('|').mapAsync(async id => await Problem.fromID(id));
     if (contest.admins) admins = await contest.admins.split('|').mapAsync(async id => await User.fromID(id));
-
-    if (contest.schools) schools = await contest.schools.split('|').mapAsync(async id => await School.fromID(id));
-    if (contest.participants) participants = await contest.participants.split('|').mapAsync(async id => await User.fromID(id));
-    if (contest.classes) classes = await contest.classes.split('|').mapAsync(async id => await TrainingClass.fromID(id));
-    if (contest.training_types) training_types = await contest.training_types.split('|').mapAsync(async id => await TrainingType.fromID(id));
 
     res.render('contest_edit', {
       contest: contest,
       problems: problems,
       admins: admins,
-      schools: schools,
-      classes: classes,
-      participants: participants,
-      training_types: training_types
     });
   } catch (e) {
     syzoj.log(e);
@@ -170,16 +161,8 @@ app.post('/contest/:id/edit', async (req, res) => {
     contest.subtitle = req.body.subtitle;
     if (!Array.isArray(req.body.problems)) req.body.problems = [req.body.problems];
     if (!Array.isArray(req.body.admins)) req.body.admins = [req.body.admins];
-    if (!Array.isArray(req.body.schools)) req.body.schools = [req.body.schools];
-    if (!Array.isArray(req.body.participants)) req.body.participants = [req.body.participants];
-    if (!Array.isArray(req.body.classes)) req.body.classes = [req.body.classes];
-    if (!Array.isArray(req.body.training_types)) req.body.training_types = [req.body.training_types];
     contest.problems = req.body.problems.join('|');
     contest.admins = req.body.admins.join('|');
-    contest.schools = req.body.schools.join('|');
-    contest.participants = req.body.participants.join('|');
-    contest.classes = req.body.classes.join('|');
-    contest.training_types = req.body.training_types.join('|');
     contest.information = req.body.information;
     contest.start_time = syzoj.utils.parseDate(req.body.start_time);
     contest.end_time = syzoj.utils.parseDate(req.body.end_time);
@@ -187,11 +170,36 @@ app.post('/contest/:id/edit', async (req, res) => {
     contest.is_public = req.body.is_public === 'on';
     contest.is_apply = req.body.is_apply === 'on';
     contest.hide_statistics = req.body.hide_statistics === 'on';
-    contest.is_all = req.body.is_all !== 'on';
 
     await contest.save();
 
     res.redirect(syzoj.utils.makeUrl(['contest', contest.id]));
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.get('/contest/:id/participants', async (req, res) => {
+  try {
+    let curUser = res.locals.user;
+    if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+
+    let contest_id = parseInt(req.params.id);
+    let contest = await Contest.fromID(contest_id);
+
+    if (!contest) throw new ErrorMessage('无此比赛。');
+
+    let participants = [];
+    if (contest.participants) participants = await contest.participants.split('|').mapAsync(async id => await User.fromID(id));
+    if (participants && participants.indexOf(curUser.id.toString()) > -1) throw new ErrorMessage('您已经报过名了。');
+
+    res.render('contest_participants', {
+      contest: contest,
+      participants: participants
+    });
   } catch (e) {
     syzoj.log(e);
     res.render('error', {
@@ -223,6 +231,68 @@ app.get('/contest/:id/apply', async (req, res) => {
       contest: contest,
       error_info: null
     });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.get('/contest/:id/privilege', async (req, res) => {
+  try {
+    if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+
+    let contest_id = parseInt(req.params.id);
+    let contest = await Contest.fromID(contest_id);
+
+    if (!contest) throw new ErrorMessage('无此比赛。');
+    
+    let schools = [], participants = [], classes = [], training_types = [];
+
+    if (contest.schools) schools = await contest.schools.split('|').mapAsync(async id => await School.fromID(id));
+    if (contest.participants) participants = await contest.participants.split('|').mapAsync(async id => await User.fromID(id));
+    if (contest.classes) classes = await contest.classes.split('|').mapAsync(async id => await TrainingClass.fromID(id));
+    if (contest.training_types) training_types = await contest.training_types.split('|').mapAsync(async id => await TrainingType.fromID(id));
+
+    res.render('contest_privilege', {
+      contest: contest,
+      schools: schools,
+      classes: classes,
+      participants: participants,
+      training_types: training_types
+    });
+  } catch (e) {
+    syzoj.log(e);
+    res.render('error', {
+      err: e
+    });
+  }
+});
+
+app.post('/contest/:id/privilege', async (req, res) => {
+  try {
+    if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+
+    let contest_id = parseInt(req.params.id);
+    let contest = await Contest.fromID(contest_id);
+
+    if (!contest) throw new ErrorMessage('无此比赛。');
+    
+    if (!Array.isArray(req.body.schools)) req.body.schools = [req.body.schools];
+    if (!Array.isArray(req.body.participants)) req.body.participants = [req.body.participants];
+    if (!Array.isArray(req.body.classes)) req.body.classes = [req.body.classes];
+    if (!Array.isArray(req.body.training_types)) req.body.training_types = [req.body.training_types];
+
+    contest.schools = req.body.schools.join('|');
+    contest.participants = req.body.participants.join('|');
+    contest.classes = req.body.classes.join('|');
+    contest.training_types = req.body.training_types.join('|');
+    contest.is_all = req.body.is_all !== 'on';
+
+    contest.save();
+
+    res.redirect(syzoj.utils.makeUrl(['contest', contest.id]));
   } catch (e) {
     syzoj.log(e);
     res.render('error', {
