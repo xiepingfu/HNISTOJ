@@ -1,7 +1,10 @@
 <% this.title = '参赛用户' %>
 <% include header %>
 <div class="padding">
-        <a href="javascript:download_excel()" type="submit" class="mini ui green labeled icon button"><i class="ui icon download"></i>下载 EXCEL</a>
+    <h1 class="ui center aligned header"><%= contest.title %> 参赛用户
+        <div class="sub header"><a href="javascript:download_excel()"> <i class="ui icon download"></i>下载 Excel</a></div>
+    </h1>
+       
 <table id="participants_table" class="celled ui very green selectable segment piled raised center aligned table" style="table-layout: fixed; ">
     <thead>
         <tr>

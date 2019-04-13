@@ -8,8 +8,9 @@
 }
 </style>
 <div class="padding">
-<h1 class="ui center aligned header" style="margin-bottom: 30px; "><%= contest.title %></h1>
-        <table class="ui very basic center aligned table">
+<h1 class="ui center aligned header" style="margin-bottom: 30px; "><%= contest.title %>
+  <div class="sub header"><a href="javascript:download_excel()"> <i class="ui icon download"></i>下载 Excel</a></div></h1>
+        <table class="ui very basic center aligned table" id="ranklist_table">
             <thead>
             <tr>
                 <th>#</th>
@@ -165,4 +166,21 @@
 </div>
 <% } %>
 </div>
+
+<script src="<%- lib('jquery/3.3.1/jquery.js') %>"></script>
+<script src="<%- selfLib('jquery.table2excel.js') %>"></script>
+<script>
+
+    function download_excel() {
+        $("#ranklist_table").table2excel({  
+            exclude: ".noExl",  
+            name: "Excel Document Name",  
+            filename: "ranklist.xls",  
+            exclude_img: true,  
+            exclude_links: true,  
+            exclude_inputs: true
+        });
+    };
+
+</script>
 <% include footer %>
