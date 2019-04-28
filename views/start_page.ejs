@@ -1,126 +1,351 @@
 <% this.title = '介绍' %>
 <% include util %>
-<!DOCTYPE html>
-<html lang="zh-CN" style="position: fixed; width: 100%; overflow: hidden; ">
-<head>
+
+<!doctype html>
+<html lang="en"><head>
     <meta charset="utf-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta name="viewport" content="width=1200">
-    <title><%= title %> - <%= syzoj.config.title %></title>
-    <link href="<%- lib('semantic-ui/2.4.1/semantic.min.css') %>" rel="stylesheet">
-    <link href="<%- selfLib('tomorrow.css') %>" rel="stylesheet">
-    <link href="<%- selfLib('math.css') %>" rel="stylesheet">
-    <link href="<%- selfLib('style.css') %>?20181212" rel="stylesheet">
-    <link href="<%- lib('morris.js/0.5.1/morris.css') %>" rel="stylesheet">
-    <% if (useLocalLibs || !syzoj.config.google_fonts || !syzoj.config.google_fonts.url || !['like-google-fonts', 'like-local'].includes(syzoj.config.google_fonts.type)) { %>
-      <link href="<%- syzoj.utils.makeUrl(['google-fonts', 'fira-mono.css']) %>" rel="stylesheet">
-      <link href="<%- syzoj.utils.makeUrl(['google-fonts', 'lato.css']) %>" rel="stylesheet">
-      <link href="<%- syzoj.utils.makeUrl(['google-fonts', 'open-sans.css']) %>" rel="stylesheet">
-      <link href="<%- syzoj.utils.makeUrl(['google-fonts', 'exo-2.css']) %>" rel="stylesheet">
-    <% } else if (syzoj.config.google_fonts.type === 'like-local') { %>
-      <link href="<%- syzoj.config.google_fonts.url %>/google-fonts/fira-mono.css" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/google-fonts/lato.css" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/google-fonts/open-sans.css" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/google-fonts/exo-2.css" rel="stylesheet">
-    <% } else { %>
-      <link href="<%- syzoj.config.google_fonts.url %>/css?family=Fira+Mono" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/css?family=Lato:400,700,400italic,700italic&subset=latin" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&amp;subset=latin-ext" rel="stylesheet">
-      <link href="<%- syzoj.config.google_fonts.url %>/css?family=Exo+2:600" rel="stylesheet">
-    <% } %>
-    <script src="<%- lib('jquery/3.3.1/jquery.min.js') %>"></script>
-    <% if (syzoj.config.google_analytics && syzoj.config.google_analytics !== 'UA-XXXXXXXX-X') { %>
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-      ga('create', '<%= syzoj.config.google_analytics %>', 'auto');
-      ga('send', 'pageview');
-
-    </script>
-    <% } %>
+    <title>Bootstrap Admin</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script src="<%- selfLib('script.js') %>?20170710"></script>
+    <link rel="stylesheet" type="text/css" href="<%- selfLib('start_page/css/bootstrap.css') %>">
+    <link rel="stylesheet" href="<%- selfLib('start_page/css/font-awesome.css') %>">
+    <link rel="stylesheet" href="<%- selfLib('start_page/css/theme.css') %>">
+	<script src="<%- selfLib('start_page/js/jquery-1.11.1.min.js') %>" type="text/javascript"></script>
+    <script src="<%- selfLib('start_page/js/bootstrap.js') %>"></script>
+    <!--[if lt IE 9]>
+       <script src="https://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+       <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.js"></script>
+    <![endif]-->
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 7 ]> <body class="ie ie6"> <![endif]-->
+    <!--[if IE 7 ]> <body class="ie ie7 "> <![endif]-->
+    <!--[if IE 8 ]> <body class="ie ie8 "> <![endif]-->
+    <!--[if IE 9 ]> <body class="ie ie9 "> <![endif]-->
+    <!--[if (gt IE 9)|!(IE)]><!--> 
+    <!--<![endif]-->
 </head>
-<body style="position: relative; margin-top: 49px; height: calc(100% - 49px); overflow-y: overlay; ">
-    <div class="ui fixed inverted massive menu" style="position: fixed; height: 49px; ">
-        <div class="ui container">
-            <%
-            if (syzoj.config.logo.url) {
-              let width = syzoj.config.logo.width ? syzoj.config.logo.width + 'px' : 'auto';
-              let height = syzoj.config.logo.height ? syzoj.config.logo.height + 'px' : 'auto';
-            %>
-            <a class="header item" href="/"><img src="<%= syzoj.config.logo.url %>" style="width: <%= width %>; height: <%= height %>; "></a>
-            <% } else { %>
-            <a class="header item" href="/"><span style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><%= syzoj.config.title %></span></a>
-            <% } %>
-            <% for (let item of start_pages) { %>
-              <a class="item<% if (active === 'index') { %> active<% } %>" href="?id=<%=item.article_id%>"> <%=item.title%></a>
-            <% } %>
-            <a class="item<% if (active === 'index') { %> active<% } %>" href="/formal_contests">竞赛</a>
-            <a class="item<% if (active === 'index') { %> active<% } %>" href="/index">进入站点</a>
-        
-            <div class="right menu">
-                <% if (user) { %>
-                <a href="<%= syzoj.utils.makeUrl(['user', user.id]) %>" style="color: inherit; ">
-                <div class="ui simple dropdown item">
-                  <%= user.username %><% if (user.nameplate) { %><%- user.nameplate %><% } %> <i class="dropdown icon"></i>
-                  <div class="menu">
-                    <a class="item" href="<%= syzoj.utils.makeUrl(['user', user.id, 'edit']) %>"><i class="edit icon"></i>修改资料</a>
-                    <% if (user.is_admin) { %>
-                      <a class="item" href="<%= syzoj.utils.makeUrl(['admin', 'info']) %>"><i class="settings icon"></i>OJ管理</a>
-                      <a class="item<% if (active === 'reception') { %> active<% } %>" href="/reception/info"><i class="suitcase icon"></i> 用户管理</a>
-                      <a class="item" href-post="<%= syzoj.utils.makeUrl(['admin', 'restart'], { url: req.query['url'] || req.originalUrl }) %>"><i class="redo icon"></i>重启服务</a>
-                    <% } %>
-                    <a class="item" href-post="<%= syzoj.utils.makeUrl(['logout'], { url: req.originalUrl }) %>"><i class="power icon"></i>注销</a>
-                  </div>
-                </div>
-                </a>
-                  <% } else { %>
-                  <div class="item">
-                      <a class="ui button" style="margin-right: 0.5em; " href="<%= syzoj.utils.makeUrl(['login'], { url: req.query['url'] || req.originalUrl }) %>">
-                          登录
-                      </a>
-                      <a class="ui primary button" href="<%= syzoj.utils.makeUrl(['sign_up'], { url: req.query['url'] || req.originalUrl }) %>">
-                          注册
-                      </a>
-                  </div>
-                  <% } %>
-              </div>
-        
-          </div>
+<title><%= title %> - <%= syzoj.config.title %></title>
+</head>
+
+<body>
+
+<nav class="navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header logo">
+      <a class="navbar-brand" href="#" class="logo"><img src="<%- selfLib('start_page/images/logo.png') %>" width="80"/></a>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
-    <div style="margin-top: 28px; ">
-    <div class="ui main container">
 
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="/index">首页</a></li>
+        <li><a href="/formal_contests">竞赛</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><div><a class="btn btn-default btn-circle btn-short" href="/login" role="button">登陆/注册</a></div></li>
 
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 
-        <% if (article) { %>
-            <style type="text/css" xmlns:style="http://www.w3.org/1999/xhtml">
-                .small{
-                  font-size: 0.7em;
-                }
-                </style>
-                <div class="padding">
-                  <div class="ui existing">
-                      <div id="content" class="font-content"><%- article.content %></div>
-                  </div>
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+    </ol>
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner carousel-height" role="listbox">
+        <div class="item active">
+          <img src="<%- selfLib('start_page/images/carousel/1.jpg')  %>" alt=".1111">
+          <div class="carousel-caption">
+            壁纸
+          </div>
+        </div>
+        <div class="item">
+          <img src="<%- selfLib('start_page/images/carousel/2.jpg')  %>" alt="22222.">
+          <div class="carousel-caption">
+            我是介绍
+          </div>
+        </div>
+        <div class="item">
+          <img src="<%- selfLib('start_page/images/carousel/3.jpg')  %>" alt="333.">
+          <div class="carousel-caption">
+            啊啊啊
+          </div>
+        </div>
+        <div class="item">
+          <img src="<%- selfLib('start_page/images/carousel/4.jpg')  %>" alt="4">
+          <div class="carousel-caption">
+            啊啊啊
+          </div>
+        </div>
+	</div>
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+    	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    	<span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+    	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    	<span class="sr-only">Next</span>
+    </a>
+</div>
 
+<div class="panel-white">
+	<div class="row">
+    	<div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>" />
+          </div>
+          <div class="panel-title">
+          精准能力评估+针对性专项练习
+          </div>
+          <div class="panel-text">
+          要练就练最有用的！
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-2.png')  %>" />
+          </div>
+          <div class="panel-title">
+          互联网公司真题+模考+面经
+          </div>
+          <div class="panel-text">
+          公司靠什么？怎么考？一刷便知！
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-3.png')  %>" />
+          </div>
+          <div class="panel-title">
+          精华专题练习
+          </div>
+          <div class="panel-text">
+          面试经典题在线连吗，还能赢得内推
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-4.png')  %>" />
+          </div>
+          <div class="panel-title">
+          以题会友，涨姿势交朋友
+          </div>
+          <div class="panel-text">
+          你不会的，这里都能找到答案！
+          </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel-grey">
+	<div class="panel-bigtitle">精准能力评估+智能专项练习</div>
+    <div class="panel-bigtext">选择目标职位，测评技能现状，为你定制薄弱知识点专项练习</div>
+    <div class="panel-bigborder"></div>
+    
+	<div class="row">
+    	<div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
             </div>
-            <% } else {%>
-              <div class="ui placeholder segment">
-                  <div class="ui icon header">
-                    <i class="calendar icon" style="margin-bottom: 20px; "></i>
-                    起始页啥都没有
-                  </div>
-                  <a href="<%= syzoj.utils.makeUrl(['index']) %>" class="ui primary labeled icon button">
-                    <i class="home icon"></i>
-                    进入首页
-                  </a>
-                </div>
-              <% } %>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-md-3">
+          <div class="panel-container">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+              	Java工程师能力评估
+              </div>
+              <div class="panel-body">
+                <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>"/>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    
+</div>
 
+<div class="panel-white">
+	<div class="panel-bigtitle">精准能力评估+智能专项练习</div>
+    <div class="panel-bigtext">选择目标职位，测评技能现状，为你定制薄弱知识点专项练习</div>
+    <div class="panel-bigborder"></div>
+	<div class="row">
+    	<div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-1.png')  %>" />
+          </div>
+          <div class="panel-title">
+          精准能力评估+针对性专项练习
+          </div>
+          <div class="panel-text">
+          要练就练最有用的！
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-2.png')  %>" />
+          </div>
+          <div class="panel-title">
+          互联网公司真题+模考+面经
+          </div>
+          <div class="panel-text">
+          公司靠什么？怎么考？一刷便知！
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-3.png')  %>" />
+          </div>
+          <div class="panel-title">
+          精华专题练习
+          </div>
+          <div class="panel-text">
+          面试经典题在线连吗，还能赢得内推
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="panel-icon">
+            <img src="<%- selfLib('start_page/images/icons/1-4.png')  %>" />
+          </div>
+          <div class="panel-title">
+          以题会友，涨姿势交朋友
+          </div>
+          <div class="panel-text">
+          你不会的，这里都能找到答案！
+          </div>
+        </div>
+    </div>
+</div>
 
+<div class="footer">
+	<div class="row">
+    	<div class="col-md-3">
+            <div class="codetext">
+                <img src="<%- selfLib('start_page/images/code.png')  %>"/>
+                <p>扫一扫，把题目装进口袋</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+        	<div class="intro">
+        		<p>牛客网，程序员必备求职神器</p>
+            </div>
+        </div>
+        <div class="col-md-5">
+        	<div class="announce">
+            	<p>关于我们 加入我们 意见反馈 企业服务 联系我们</p>
+                <p>公司地址：北京市朝阳区大屯路东金泉时代3-2708北京牛客科技有限公司</p>
+                <p>联系方式：010-60728802(电话) admin@nowcoder.com</p>
+                <p>牛客科技©2019 All rights reserved</p>
+                <p>京ICP备14055008号-4增值电信业务经营许可证</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<% include footer %>
+</body>
+</html>

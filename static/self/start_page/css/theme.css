@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+.logo{
+  margin:-5px 0;
+}
+.btn-circle {  
+  margin-top:8px;
+  border-radius: 15px;  
+  border-color:#FF411C;
+  color:#FFF;
+  background-color:#FF411C;
+}
+.carousel-height{
+  max-height:300px;
+}
+.carousel-height img{
+  background-size:contain|cover;
+  width:100%;
+  height: auto;
+  max-height:300px;
+}
+.panel-white{
+  padding:2% 10%;
+}
+.panel-grey{
+  padding:5% 10%;
+  background-color:#EEE;
+}
+.panel-icon{
+  text-align:center;
+  padding:15px;
+}
+.panel-icon img{
+  width:70%;
+  height:auto;
+}
+.panel-title{
+  text-align:center;
+  font-weight:bold;
+  font-family:"黑体";
+}
+.panel-bigtitle{
+  font-size:30px;
+  text-align:center;
+  font-weight:bold;
+  font-family:"黑体";
+}
+.panel-text{
+  text-align:center;
+  color:#666;
+  font-size:12px;
+}
+.panel-bigtext{
+  text-align:center;
+  color:#666;
+  font-size:18px;
+  font-family:"黑体";
+}
+.panel-bigborder{
+  border-bottom:1px dashed #666;
+  margin:15px;
+}
+.panel-heading{
+  text-align:center;
+}
+.panel-body img{
+  width:100%;
+  height:auto;
+}
+.panel-container{
+  padding:5px 5px;
+}
+.footer{
+  background-color:#222;
+  padding:50px 8% 30px 8%;
+}
+.codetext{
+  color:#717E8D;
+  text-align:center;
+}
+.intro{
+  font-family:"黑体";
+  font-size:20px;
+  color:#E8E8E8;
+  text-align:center;
+  padding:40px 0;
+}
+.announce{
+  color:#717E8D;
+  text-align:center;
+  font-size:10px;
+  border-left:1px solid #717E8D;
+}
+@media screen and (max-width:1024px) {
+.announce{
+  color:#717E8D;
+  text-align:center;
+  font-size:10px;
+  border-left:0px solid #717E8D;
+}
+}

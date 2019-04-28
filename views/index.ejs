@@ -76,23 +76,17 @@
       </div>
     </div>
     <div class="right floated five wide column">
-        
-        <div class="ui bottom center aligned segment piled raised">
-            <h4 class="ui top header"><i class="ui quote left icon"></i>一言（ヒトコト）</h4>
-          <div class="ui active centered inline loader" id="hitokoto-loader"></div>
-          <script>
-          $.get('https://sslapi.hitokoto.cn/?c=a', function (data) {
-            if (typeof data === 'string') data = JSON.parse(data);
-            $('#hitokoto-loader').removeClass('active');
-            $('#hitokoto-content').css('display', '').text(data.hitokoto);
-            if (data.from) {
-              $('#hitokoto-from').css('display', '').text('——' + data.from);
-            }
-          });
-          </script>
-          <div style="font-size: 1em; line-height: 1.5em; display: none; " id="hitokoto-content"></div>
-          <div style="text-align: right; margin-top: 15px; font-size: 0.9em; color: #666; display: none; " id="hitokoto-from"></div>
-        </div>
+      <div class="ui bottom segment piled raised">
+        <form action="<%= syzoj.utils.makeUrl(['problems', 'search']) %>" method="get">
+          <div class="ui search" style="width: 100%; ">
+            <div class="ui left icon input" style="width: 100%; ">
+              <input class="prompt" style="width: 100%; " type="text" placeholder="ID / 题目名 …" name="keyword">
+              <i class="search icon"></i>
+            </div>
+            <div class="results" style="width: 100%; "></div>
+          </div>
+        </form>
+      </div>
       <div class="ui bottom segment piled raised">
           <h4 class="ui top attached header"><i class="ui rss icon"></i>最近更新</h4>
 	<table class="ui very basic selectable center aligned table segment">
@@ -115,17 +109,6 @@
 	</table>
       </div>
         
-      <div class="ui bottom segment piled raised">
-        <form action="<%= syzoj.utils.makeUrl(['problems', 'search']) %>" method="get">
-          <div class="ui search" style="width: 100%; ">
-            <div class="ui left icon input" style="width: 100%; ">
-              <input class="prompt" style="width: 100%; " type="text" placeholder="ID / 题目名 …" name="keyword">
-              <i class="search icon"></i>
-            </div>
-            <div class="results" style="width: 100%; "></div>
-          </div>
-        </form>
-      </div>
       <div class="ui bottom center aligned <% if (!contests || !contests.length) { %>center aligned <% } %>segment piled raised">
         <h4 class="ui top header segment "><i class="ui calendar icon"></i>近期比赛</h4>
         <% if (!contests || !contests.length) { %>
