@@ -4,10 +4,13 @@ let Article = syzoj.model('article');
 let Contest = syzoj.model('contest');
 let User = syzoj.model('user');
 let UserPrivilege = syzoj.model('user_privilege');
+let File = syzoj.model('file');
 const RatingCalculation = syzoj.model('rating_calculation');
 const RatingHistory = syzoj.model('rating_history');
 let ContestPlayer = syzoj.model('contest_player');
 const calcRating = require('../libs/rating');
+const fs = require('fs-extra');
+const path = require('path');
 
 let db = syzoj.db;
 
@@ -416,9 +419,10 @@ app.get('/admin/start_pages', async (req, res) => {
   try {
     if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
 
+    let start_pages = syzoj.config.start_pages;
+
     res.render('admin_start_pages', {
-      start_pages: syzoj.config.start_pages,
-      articles: []
+      start_pages: start_pages
     });
   } catch (e) {
     syzoj.log(e);
@@ -428,26 +432,27 @@ app.get('/admin/start_pages', async (req, res) => {
   }
 });
 
-app.post('/admin/start_pages', async (req, res) => {
+app.post('/admin/start_pages/add/carousel', app.multer.array('file'), async (req, res) => {
   try {
     if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
 
-    syzoj.config.start_pages = JSON.parse(req.body.data);
-
-    await syzoj.config.start_pages.forEachAsync(async element => {
-      let article = await Article.fromID(element.article_id);
-      element.title = article ? article.title:'None';
-    });
-    await syzoj.utils.saveConfig();
+    if (req.files) {
+      let dir = syzoj.utils.resolvePath('static', 'self', 'start_page', 'images', 'carousel');
+      await fs.ensureDir(dir);
+      for (let file of req.files) {
+        await fs.move(file.path, path.join(dir, file.originalname), { overwrite: true });
+      }
+    }
 
     res.redirect(syzoj.utils.makeUrl(['admin', 'start_pages']));
   } catch (e) {
     syzoj.log(e);
     res.render('error', {
       err: e
-    })
+    });
   }
 });
+
 
 app.get('/admin/raw', async (req, res) => {
   try {

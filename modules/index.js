@@ -14,16 +14,8 @@ const timeAgo = new TimeAgo('zh-CN');
 app.get('/', async (req, res) => {
   try {
     let start_pages = syzoj.config.start_pages;
-    let id = req.query.id ? parseInt(req.query.id) : (start_pages[0] ? start_pages[0].article_id : 1);
-    let article = await Article.fromID(id);
-    if (article) {
-      await article.loadRelationships();
-      article.allowedEdit = await article.isAllowedEditBy(res.locals.user);
-      article.allowedComment = await article.isAllowedCommentBy(res.locals.user);
-      article.content = await syzoj.utils.markdown(article.content);
-    }
+
     res.render('start_page', {
-      article: article,
       start_pages: start_pages
     });
   } catch (e) {
