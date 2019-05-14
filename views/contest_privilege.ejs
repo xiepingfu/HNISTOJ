@@ -11,7 +11,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label>参赛学校</label>
+                    <label>参加的学校</label>
                     <select class="ui fluid search dropdown" multiple="" id="schools_search" name="schools">
                     <% for (let school of schools) { %>
                     <option value="<%= school.id %>" selected><%= school.name %></option>
@@ -19,7 +19,7 @@
                     </select>
                 </div>
                 <div class="field">
-                    <label>参赛培训类型</label>
+                    <label>参加的专业</label>
                     <select class="ui fluid search dropdown" multiple="" id="training_types_search" name="training_types">
                     <% for (let training_type of training_types) { %>
                     <option value="<%= training_type.id %>" selected><%= training_type.name %></option>
@@ -27,7 +27,7 @@
                     </select>
                 </div>
                 <div class="field">
-                    <label>参赛班级</label>
+                    <label>参加的班级</label>
                     <select class="ui fluid search dropdown" multiple="" id="classes_search" name="classes">
                     <% for (let class_item of classes) { %>
                     <option value="<%= class_item.id %>" selected><%= class_item.name %></option>
@@ -35,7 +35,7 @@
                     </select>
                 </div>
                 <div class="field">
-                    <label>参赛用户<a href="<%= syzoj.utils.makeUrl(['contest', contest.id, 'participants']) %>" class="ui labeled icon"> <i class="ui icon eye left"></i>查看参赛用户详情</a></label>
+                    <label>参加的用户<a href="<%= syzoj.utils.makeUrl(['contest', contest.id, 'participants']) %>" class="ui labeled icon"> <i class="ui icon eye left"></i>查看参赛用户详情</a></label>
                     <select class="ui fluid search dropdown" multiple="" id="participants_search" name="participants">
                     <% for (let participant of participants) { %>
                     <option value="<%= participant.id %>" selected><%= participant.id %>. <%= participant.username %></option>

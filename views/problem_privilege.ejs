@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>培训类型</label>
+                <label>专业</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_training_types" name="training_types">
                 <% for (let training_type of training_types) { %>
                 <option value="<%= training_type.id %>" selected><%= training_type.name %></option>
@@ -27,7 +27,7 @@
                 </select>
             </div>
             <div class="field">
-                <label>培训班级</label>
+                <label>班级</label>
                 <select class="ui fluid search dropdown" multiple="" id="search_classes" name="classes">
                 <% for (let class_item of classes) { %>
                 <option value="<%= class_item.id %>" selected><%= class_item.name %></option>
