@@ -7,14 +7,18 @@
   color: #000;
 }
 </style>
+<script>
+  setTimeout(function(){location.reload()},30000);
+</script>
 <div class="padding">
 <h1 class="ui center aligned header" style="margin-bottom: 30px; "><%= contest.title %>
   <div class="sub header"><a href="javascript:download_excel()"> <i class="ui icon download"></i>下载 Excel</a></div></h1>
-        <table class="ui very basic center aligned table" id="ranklist_table">
+        <table class="ui selected striped very center aligned celled table" id="ranklist_table">
             <thead>
             <tr>
                 <th>#</th>
                 <th>用户名</th>
+                <th>RealName</th>
                 <% if (contest.type === 'acm') { %>
                   <th>通过数量</th>
                   <th>罚时</th>
@@ -83,9 +87,10 @@
                   </div>
                 </td>
                 <td><a href="<%= syzoj.utils.makeUrl(['user', item.user.id]) %>"><%= item.user.username %></a><% if (item.user.nameplate) { %><%- item.user.nameplate %><% } %></td>
+                <td><a href="<%= syzoj.utils.makeUrl(['user', item.user.id]) %>"><%= item.user.realname %></a><% if (item.user.nameplate) { %><%- item.user.nameplate %><% } %></td>
                 <% if (contest.type === 'acm') { %>
                   <td>
-                    <span class="score score_<%= parseInt((item.player.score / ranklist[0].player.score * 10) || 0) %>">
+                    <span class="score">
                       <%= item.player.score %>
                     </span>
                   </td>
@@ -95,7 +100,7 @@
                 <% } %>
                 <% for (let problem of problems) { %>
                   <% if (problem.min === i) { %>
-                    <td style="background: rgb(244, 255, 245); ">
+                    <td style="background: rgb(147, 250, 156); ">
                   <% } else { %>
                     <td>
                   <% } %>
@@ -137,7 +142,7 @@
                       <div class="submit_time">
                         <%= syzoj.utils.formatTime(item.player.score_details[problem.id].judge_state.submit_time - contest.start_time) %>
                         <% latest = Math.max(latest, item.player.score_details[problem.id].judge_state.submit_time)  %>
-                      </div>
+                      </div>score_
                     </td>
                   <% } %>
                 <% } %>
