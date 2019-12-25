@@ -9,7 +9,7 @@
     manage_contest: '管理比赛',
     manage_user: '管理用户（基础）',
     manage_user_advanced: '管理用户（高级）',
-    manage_blog: '管理讨论区',
+    manage_blog: '管理员',
   };
 %>
 <% include header %>
@@ -29,7 +29,7 @@
           </div>
           <div class="field">
             <label for="username">真实姓名</label>
-            <input type="text" id="realname" name="realname" value="<%= edited_user.realname %>">
+            <input type="text" id="realname" name="realname" value="<%= edited_user.realname %>"<% if (!user.allowedManage) { %> readonly<% } %>>
           </div>
         <div class="field">
           <label for="sex">性别</label>
@@ -97,7 +97,7 @@
                   <% for (let privilege in privileges) { %>
                     <td>
                       <div class="ui fitted toggle checkbox checkbox_privilege" data-name="<%= privilege %>">
-                        <input type="checkbox"<% if (edited_user.privileges.includes(privilege)) { %> checked<% } %>>
+                        <input type="checkbox"<% if (edited_user.is_admin || edited_user.privileges.includes(privilege)) { %> checked<% } %>>
                         <label></label>
                       </div>
                     </td>

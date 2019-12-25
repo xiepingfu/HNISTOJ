@@ -53,10 +53,10 @@
             <% } else { %>
             <a class="header item" href="/"><span style="font-family: 'Exo 2'; font-size: 1.5em; font-weight: 600; "><%= syzoj.config.title %></span></a>
             <% } %>
-            <a class="red item<% if (active === 'index') { %> active<% } %>" href="/index"><i class="home icon"></i> 首页</a>
+            <a class="red item<% if (active === '') { %> active<% } %>" href="/"><i class="home icon"></i> 首页</a>
             <a class="orange item<% if (active.startsWith('problem')) { %> active<% } %>" href="/problems"><i class="list icon"></i> 题库</a>
-            <a class="yellow item<% if (active.startsWith('contest')) { %> active<% } %>" href="/contests"><i class="calendar icon"></i> 训练</a>
-            <a class="yellow item<% if (active.startsWith('formal')) { %> active<% } %>" href="/formal_contests"><i class="certificate icon"></i> 竞赛</a>
+            <a class="yellow item<% if (active.startsWith('contest')) { %> active<% } %>" href="/contests"><i class="calendar icon"></i> 实验</a>
+            <a class="yellow item<% if (active.startsWith('formal')) { %> active<% } %>" href="/formal_contests"><i class="certificate icon"></i> 考试</a>
             <a class="olive item<% if (active.startsWith('submission')) { %> active<% } %>" href="/submissions"><i class="tasks icon"></i> 评测</a>
             <a class="green item<% if (active.startsWith('ranklist')) { %> active<% } %>" href="/ranklist"><i class="signal icon"></i> 排名</a>
             <a class="teal item<% if (active.startsWith('discussion') || active.startsWith('article')) { %> active<% } %>" href="/discussion/global"><i class="comments icon"></i> 讨论</a>
@@ -87,9 +87,9 @@
                     <a class="ui button" style="margin-right: 0.5em; " href="<%= syzoj.utils.makeUrl(['login'], { url: req.query['url'] || req.originalUrl }) %>">
                         登录
                     </a>
-                    <a class="ui primary button" href="<%= syzoj.utils.makeUrl(['sign_up'], { url: req.query['url'] || req.originalUrl }) %>">
+<!--                    <a class="ui primary button" href="<%= syzoj.utils.makeUrl(['sign_up'], { url: req.query['url'] || req.originalUrl }) %>">
                         注册
-                    </a>
+                    </a>-->
                 </div>
                 <% } %>
             </div>

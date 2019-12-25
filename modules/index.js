@@ -11,7 +11,7 @@ let zh = require('../libs/timeago');
 TimeAgo.locale(zh);
 const timeAgo = new TimeAgo('zh-CN');
 
-app.get('/', async (req, res) => {
+app.get('/start_page', async (req, res) => {
   try {
     let start_pages = syzoj.config.start_pages;
     let id = req.query.id ? parseInt(req.query.id) : (start_pages[0] ? start_pages[0].article_id : 1);
@@ -34,7 +34,7 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.get('/index', async (req, res) => {
+app.get('/', async (req, res) => {
   try {
     let ranklist = await User.query([1, syzoj.config.page.ranklist_index], { is_show: true }, [[syzoj.config.sorting.ranklist.field, syzoj.config.sorting.ranklist.order]]);
     await ranklist.forEachAsync(async x => x.renderInformation());

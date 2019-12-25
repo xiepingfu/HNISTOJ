@@ -9,7 +9,7 @@ let privileges = {
   manage_contest: '管理比赛',
   manage_user: '管理用户（基础）',
   manage_user_advanced: '管理用户（高级）',
-  manage_blog: '管理讨论区',
+  manage_blog: 'set admin',
 };
 %>
 <% include admin_header %>
@@ -27,11 +27,11 @@ let privileges = {
 <tbody>
   <% for (let user of users) { %>
     <tr>
-      <td><%= user.id %></td>
-      <td><%= user.username %></td>
+      <td><%= user.user.id %></td>
+      <td><%= user.user.username %></td>
       <% for (let privilege in privileges) { %>
         <td>
-          <div class="ui fitted toggle checkbox checkbox_privilege" data-user="<%= user.id %>" data-name="<%= privilege %>">
+          <div class="ui fitted toggle checkbox checkbox_privilege" data-user="<%= user.user.id %>" data-name="<%= privilege %>">
             <input type="checkbox"<% if (user.privileges.includes(privilege)) { %> checked<% } %>>
             <label></label>
           </div>

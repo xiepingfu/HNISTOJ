@@ -21,13 +21,13 @@
             </select>
         </div>
         <div class="field">
-            <label>报名时就读班级</label>
+            <label>Comment</label>
             <input type="text" placeholder="" id="cur_class1" name="cur_class1">
         </div>
     </div>
     <div class="two fields" id="new_password_field">
         <div class="field">
-            <label>培训类型</label>
+            <label>专业</label>
             <select class="ui dropdown" id="training_type1" name="training_type1">
                 <option value="" selected>未选择</option>
                 <% for (let training_type of training_types) { %>
@@ -36,7 +36,7 @@
             </select>
         </div>
         <div class="field">
-            <label>培训班级</label>
+            <label>班级</label>
             <select class="ui dropdown" id="training_class1" name="training_class1">
                 <option value="" selected>未选择</option>
                 <% for (let training_class of training_classs) { %>
@@ -71,13 +71,13 @@
             </select>
         </div>
         <div class="field">
-            <label>报名时就读班级</label>
+            <label>Comment</label>
             <input type="text" placeholder="" id="cur_class2" name="cur_class2">
         </div>
     </div>
     <div class="two fields" id="new_password_field">
         <div class="field">
-            <label>培训类型</label>
+            <label>专业</label>
             <select class="ui dropdown" id="training_type2" name="training_type2">
                 <option value="" selected>未选择</option>
                 <% for (let training_type of training_types) { %>
@@ -86,7 +86,7 @@
             </select>
         </div>
         <div class="field">
-            <label>培训班级</label>
+            <label>班级</label>
             <select class="ui dropdown" id="training_class2" name="training_class2">
                 <option value="" selected>未选择</option>
                 <% for (let training_class of training_classs) { %>
@@ -118,7 +118,7 @@
     <div class="two fields">
         <div class="field">
             <label for="sex">报名时就读学校</label>
-            <select class="ui dropdown" name="school" id="school">
+            <select class="ui dropdown" name="school3" id="school3">
                 <option value="" selected>未选择</option>
                 <% for (let school of schools) { %>
                 <option value="<%= school.id %>"><%= school.name %></option>
@@ -126,14 +126,14 @@
             </select>
         </div>
         <div class="field">
-            <label>报名时就读班级</label>
-            <input type="text" placeholder="" id="cur_class" name="cur_class">
+            <label>Comment</label>
+            <input type="text" placeholder="" id="cur_class3" name="cur_class3">
         </div>
     </div>
     <div class="two fields" id="new_password_field">
         <div class="field">
-            <label>培训类型</label>
-            <select class="ui dropdown" id="training_type" name="training_type">
+            <label>专业</label>
+            <select class="ui dropdown" id="training_type3" name="training_type3">
                 <option value="" selected>未选择</option>
                 <% for (let training_type of training_types) { %>
                 <option value="<%= training_type.id %>"><%= training_type.name %></option>
@@ -141,8 +141,8 @@
             </select>
         </div>
         <div class="field">
-            <label>培训班级</label>
-            <select class="ui dropdown" id="training_class" name="training_class">
+            <label>班级</label>
+            <select class="ui dropdown" id="training_class3" name="training_class3">
                 <option value="" selected>未选择</option>
                 <% for (let training_class of training_classs) { %>
                 <option value="<%= training_class.id %>"><%= training_class.name %></option>

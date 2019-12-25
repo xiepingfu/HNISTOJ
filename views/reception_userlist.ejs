@@ -4,6 +4,7 @@
         <th>#</th>
         <th><%- createSortableTitle('username', '用户名', true) %></th>
         <th><%- createSortableTitle('realname', '真实姓名', false) %></th>
+	<th>AC</th>
         <th>手机号</th>
         <th><%- createSortableTitle('register_time', '注册时间', false) %></th>
     </tr>
@@ -29,7 +30,8 @@
         <tr>
             <td><b><%= i %></b></td>
             <td><a href="<%= syzoj.utils.makeUrl(['reception', 'manage', user.id]) %>"><%= user.username %></a></td>
-            <td><%= user.realname %></td>
+	    <td><%= user.realname %></td>
+	    <td><a href="<%= syzoj.utils.makeUrl(['user', user.id]) %>"><%= user.ac_num %></a></td>
             <td><%= user.phone %></td>
             <td><%= syzoj.utils.formatDate(user.register_time) %></td>
         </tr>

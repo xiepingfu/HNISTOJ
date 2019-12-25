@@ -38,6 +38,7 @@ app.get('/contests', async (req, res) => {
     await contests.forEachAsync(async x => x.subtitle = await syzoj.utils.markdown(x.subtitle));
 
     res.render('contests', {
+	allowedAddContest: res.locals.user && await res.locals.user.hasPrivilege('add_contest'),
       contests: contests,
       paginate: paginate,
       form: req.query,
@@ -79,6 +80,7 @@ app.get('/formal_contests', async (req, res) => {
     await contests.forEachAsync(async x => x.subtitle = await syzoj.utils.markdown(x.subtitle));
 
     res.render('contests', {
+	allowedAddContest: res.locals.user && await res.locals.user.hasPrivilege('add_contest'),
       contests: contests,
       paginate: paginate,
       form: req.query,
@@ -95,7 +97,7 @@ app.get('/formal_contests', async (req, res) => {
 
 app.get('/contest/:id/edit', async (req, res) => {
   try {
-    if (!res.locals.user || !res.locals.user.is_admin) throw new ErrorMessage('您没有权限进行此操作。');
+    if (!res.locals.user || !(res.locals.user.is_admin || res.locals.user.hasPrivilege('add_contest'))) throw new ErrorMessage('您没有权限进行此操作。');
 
     let contest_id = parseInt(req.params.id);
     let contest = await Contest.fromID(contest_id);

@@ -1,0 +1,69 @@
+<%
+this.adminPage = 'privilege';
+let privileges = {
+  add_problem: '添加题目',
+  manage_problem: '管理题目',
+  add_problem_tag: '添加题目标签',
+  manage_problem_tag: '管理题目标签',
+  add_contest: '添加比赛',
+  manage_contest: '管理比赛',
+  manage_user: '管理用户（基础）',
+  manage_user_advanced: '管理用户（高级）',
+  manage_blog: '管理员',
+};
+%>
+<% include admin_header %>
+<table class="ui center aligned celled table">
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>用户名</th>
+    <% for (let privilege in privileges) { %>
+      <th width="20%"><%= privileges[privilege] %></th>
+    <% } %>
+  </tr>
+</thead>
+
+<tbody>
+  <% for (let user of users) { %>
+    <tr>
+      <td><%= user.user.id %></td>
+      <td><%= user.user.username %></td>
+      <% for (let privilege in privileges) { %>
+        <td>
+          <div class="ui fitted toggle checkbox checkbox_privilege" data-user="<%= user.id %>" data-name="<%= privilege %>">
+            <input type="checkbox"<% if (user.privileges.includes(privilege)) { %> checked<% } %>>
+            <label></label>
+          </div>
+        </td>
+      <% } %>
+    </tr>
+  <% } %>
+</tbody>
+</table>
+
+<div style="text-align: center; ">
+  <button class="ui blue labeled icon button" onclick="submit()"><i class="ui edit icon"></i>提交</button>
+</div>
+
+<form method="post" id="submit_form">
+  <input type="hidden" name="data" id="submit_data">
+</form>
+
+<script>
+function submit() {
+  var users = {};
+  $('.checkbox_privilege').each(function () {
+    var user = $(this).data('user');
+    var name = $(this).data('name');
+    if (!users[user]) users[user] = [];
+    if ($(this).checkbox('is checked')) {
+      users[user].push(name);
+    }
+  });
+
+  $('#submit_data').val(JSON.stringify(users));
+  $('#submit_form').submit();
+}
+</script>
+<% include admin_footer %>

@@ -159,10 +159,10 @@ app.post('/api_reception/reception_batch_register/preview/:type', async (req, re
           username: element,
           password: password_array.length>i ? password_array[i]:randPassword(),
           realname: realname_array.length>i ? realname_array[i]:'',
-          school: school,
-          cur_class: cur_class,
-          training_type: training_type,
-          training_class: training_class
+          school: school.length>0 ? school:'',
+          cur_class: cur_class.length>0 ? cur_class:'',
+          training_type: training_type.length>0 ? training_type: '',
+          training_class: training_class.length>0 ? training_class: ''
         });
       });
     }
@@ -185,6 +185,7 @@ app.post('/api_reception/reception_batch_register/comfirm', async (req, res) => 
       user = await User.create({
         username: element.username,
         password: element.password,
+	realname: element.realname,
         public_email: true
       });
       await user.save();

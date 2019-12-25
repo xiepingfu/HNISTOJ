@@ -55,7 +55,7 @@ app.get('/login', async (req, res) => {
 });
 
 // Sign up
-app.get('/sign_up', async (req, res) => {
+app.get('/sign_up_youcant', async (req, res) => {
   if (res.locals.user) {
     res.render('error', {
       err: new ErrorMessage('您已经登录了，请先注销。', { '注销': syzoj.utils.makeUrl(['logout'], { 'url': req.originalUrl }) })
@@ -199,7 +199,14 @@ app.post('/user/:id/edit', async (req, res) => {
       } else if (!Array.isArray(req.body.privileges)) {
         req.body.privileges = [req.body.privileges];
       }
+	for (let privilege of req.body.privileges) {
+		if(privilege == "manage_blog") {
+			user.is_admin = 1;
+		} else {
+			user.is_admin = 0;
+		}
 
+	}
       let privileges = req.body.privileges;
       await user.setPrivileges(privileges);
     }

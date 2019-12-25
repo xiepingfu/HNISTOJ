@@ -48,13 +48,15 @@ app.get('/reception/register', async (req, res) => {
     let prefix = parseInt(parseInt(date.getFullYear().toString()) % 100);
     let lastuser = await User.query([1, 1], {username: { $like: prefix.toString()+`%` }}, [['id', 'desc']]);
     let username;
+try{
     if (lastuser) {
       username = lastuser[0].username;
     }
     if (username && /^[0-9]+$/.test(username)) {
       username = parseInt(username) + 1;
     }
-    else {
+}
+    catch (e) {
       username = prefix * 10000;
     }
     res.render('reception_register', {
